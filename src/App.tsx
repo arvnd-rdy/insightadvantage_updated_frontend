@@ -74,6 +74,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/logout" element={<Home />} />
             
             {/* Static Pages */}
             <Route path="/about" element={<About />} />
