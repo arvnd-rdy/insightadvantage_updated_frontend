@@ -34,6 +34,34 @@ import ConsultantPreferences from "@/pages/Consultant/Preferences";
 import ConsultantMessages from "@/pages/Consultant/Messages";
 import ConsultantOrganizations from "@/pages/Consultant/Organizations";
 import ConsultantGigDetail from "@/pages/Consultant/GigDetail";
+import ConsultantNewProfile from '@/pages/Consultant/NewProfile';
+import LinkedInJobs from './pages/Consultant/LinkedInJobs';
+
+// Onboarding - Consultant
+import ConsultantStep1PersonalDetails from "@/pages/Onboarding/Consultant/Step1PersonalDetails";
+import ConsultantStep2Education from "@/pages/Onboarding/Consultant/Step2Education";
+import ConsultantStep3WorkExperience from "@/pages/Onboarding/Consultant/Step3WorkExperience";
+import ConsultantStep4ProfessionalBio from "@/pages/Onboarding/Consultant/Step4ProfessionalBio";
+import ConsultantStep5SkillsServices from "@/pages/Onboarding/Consultant/Step5SkillsServices";
+import ConsultantStep6Certifications from "@/pages/Onboarding/Consultant/Step6Certifications";
+import ConsultantStep7Licenses from "@/pages/Onboarding/Consultant/Step7Licenses";
+import ConsultantStep8PreferencesPricing from "@/pages/Onboarding/Consultant/Step8PreferencesPricing";
+import ConsultantStep9Review from "@/pages/Onboarding/Consultant/Step9Review";
+import ConsultantStep10Verification from "@/pages/Onboarding/Consultant/Step10Verification";
+import ConsultantStep11CompleteRegistration from "@/pages/Onboarding/Consultant/Step11CompleteRegistration";
+
+// Onboarding - Organization
+import OrganizationStep1BasicInfo from "@/pages/Onboarding/Organization/Step1BasicInfo";
+import OrganizationStep2Contacts from "@/pages/Onboarding/Organization/Step2Contacts";
+import OrganizationStep3aJobBasics from "@/pages/Onboarding/Organization/Step3aJobBasics";
+import OrganizationStep3bDefaults from "@/pages/Onboarding/Organization/Step3bDefaults";
+import OrganizationStep4aJobDescription from "@/pages/Onboarding/Organization/Step4aJobDescription";
+import OrganizationStep4bSkillsExpertise from "@/pages/Onboarding/Organization/Step4bSkillsExpertise";
+import OrganizationStep4cScopeDuration from "@/pages/Onboarding/Organization/Step4cScopeDuration";
+import OrganizationStep4dBudgetTerms from "@/pages/Onboarding/Organization/Step4dBudgetTerms";
+import OrganizationStep5Review from "@/pages/Onboarding/Organization/Step5Review";
+import OrganizationStep6Verification from "@/pages/Onboarding/Organization/Step6Verification";
+import OrganizationStep7CompleteRegistration from "@/pages/Onboarding/Organization/Step7CompleteRegistration";
 
 // Organization pages
 import OrganizationDashboard from "@/pages/Organization/Dashboard";
@@ -78,7 +106,6 @@ const App = () => (
             
             {/* Static Pages */}
             <Route path="/about" element={<About />} />
-            <Route path="/solutions" element={<Solutions />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
@@ -89,15 +116,42 @@ const App = () => (
             {/* Account Management */}
             <Route path="/account/settings" element={<AccountSettings />} />
             
+            {/* Onboarding - Consultant */}
+            <Route path="/onboarding/consultant/step-1" element={<ConsultantStep1PersonalDetails />} />
+            <Route path="/onboarding/consultant/step-2" element={<ConsultantStep2Education />} />
+            <Route path="/onboarding/consultant/step-3" element={<ConsultantStep3WorkExperience />} />
+            <Route path="/onboarding/consultant/step-4" element={<ConsultantStep4ProfessionalBio />} />
+            <Route path="/onboarding/consultant/step-5" element={<ConsultantStep5SkillsServices />} />
+            <Route path="/onboarding/consultant/step-6" element={<ConsultantStep6Certifications />} />
+            <Route path="/onboarding/consultant/step-7" element={<ConsultantStep7Licenses />} />
+            <Route path="/onboarding/consultant/step-8" element={<ConsultantStep8PreferencesPricing />} />
+            <Route path="/onboarding/consultant/step-9" element={<ConsultantStep9Review />} />
+            <Route path="/onboarding/consultant/step-10" element={<ConsultantStep10Verification />} />
+            <Route path="/onboarding/consultant/step-11" element={<ConsultantStep11CompleteRegistration />} />
+            {/* Onboarding - Organization */}
+            <Route path="/onboarding/organization/step-1" element={<OrganizationStep1BasicInfo />} />
+            <Route path="/onboarding/organization/step-2" element={<OrganizationStep2Contacts />} />
+            <Route path="/onboarding/organization/step-3a" element={<OrganizationStep3aJobBasics />} />
+            <Route path="/onboarding/organization/step-3b" element={<OrganizationStep3bDefaults />} />
+            <Route path="/onboarding/organization/step-4a" element={<OrganizationStep4aJobDescription />} />
+            <Route path="/onboarding/organization/step-4b" element={<OrganizationStep4bSkillsExpertise />} />
+            <Route path="/onboarding/organization/step-4c" element={<OrganizationStep4cScopeDuration />} />
+            <Route path="/onboarding/organization/step-4d" element={<OrganizationStep4dBudgetTerms />} />
+            <Route path="/onboarding/organization/step-5" element={<OrganizationStep5Review />} />
+            <Route path="/onboarding/organization/step-6" element={<OrganizationStep6Verification />} />
+            <Route path="/onboarding/organization/step-7" element={<OrganizationStep7CompleteRegistration />} />
+            
             {/* Consultant Routes */}
             <Route path="/consultant/dashboard" element={<ConsultantDashboard />} />
             <Route path="/consultant/profile" element={<ConsultantProfile />} />
+            <Route path="/consultant/new-profile" element={<ConsultantNewProfile />} />
             <Route path="/consultant/documents" element={<ConsultantDocuments />} />
             <Route path="/consultant/availability" element={<ConsultantAvailability />} />
             <Route path="/consultant/preferences" element={<ConsultantPreferences />} />
             <Route path="/consultant/messages" element={<ConsultantMessages />} />
-            <Route path="/consultant/organizations" element={<ConsultantOrganizations />} />
+            <Route path="/consultant/findjobs" element={<ConsultantOrganizations />} />
             <Route path="/consultant/gig/:gigId" element={<ConsultantGigDetail />} />
+            <Route path="/consultant/linkedin-jobs" element={<LinkedInJobs />} />
             
             {/* Organization Routes */}
             <Route path="/organization/dashboard" element={<OrganizationDashboard />} />

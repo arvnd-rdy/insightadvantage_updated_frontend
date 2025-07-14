@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, Send, Clock, CheckCircle } from 'lucide-react';
+import ConsultantLayout from '@/components/ConsultantLayout';
 
 const ConsultantMessages = () => {
   // Mock data for messages
@@ -90,7 +91,7 @@ const ConsultantMessages = () => {
   };
 
   return (
-    <SidebarProvider>
+    <ConsultantLayout>
       <div className="min-h-screen flex w-full">
         <DashboardSidebar role="consultant" />
         
@@ -217,7 +218,7 @@ const ConsultantMessages = () => {
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </ConsultantLayout>
   );
 };
 

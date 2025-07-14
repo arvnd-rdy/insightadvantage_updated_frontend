@@ -10,6 +10,8 @@ import { Progress } from '@/components/ui/progress';
 import { Search, Clock, Building, Users, Plus, FolderOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+import OrganizationNavBar from '@/components/OrganizationNavBar';
+
 const OrganizationDashboard = () => {
   // Mock organization data
   const organizationData = {
@@ -43,7 +45,9 @@ const OrganizationDashboard = () => {
   };
 
   return (
-    <SidebarProvider>
+    <>
+      <OrganizationNavBar />
+      <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <DashboardSidebar role="organization" />
         
@@ -196,6 +200,7 @@ const OrganizationDashboard = () => {
         </div>
       </div>
     </SidebarProvider>
+    </>
   );
 };
 

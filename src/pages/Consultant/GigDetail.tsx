@@ -21,6 +21,9 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const GigDetail = () => {
   const { gigId } = useParams();
@@ -93,7 +96,7 @@ const GigDetail = () => {
           
           <main className="p-6 max-w-6xl mx-auto">
             <div className="mb-6">
-              <Link to="/consultant/organizations" className="text-blue-600 hover:text-blue-800 text-sm">
+              <Link to="/consultant/findjobs" className="text-blue-600 hover:text-blue-800 text-sm">
                 ← Back to Gigs
               </Link>
             </div>
@@ -115,7 +118,6 @@ const GigDetail = () => {
                             </Badge>
                           )}
                         </div>
-                        
                         <div className="flex items-center gap-2 mb-4">
                           <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                             <Building className="h-5 w-5 text-gray-400" />
@@ -125,7 +127,6 @@ const GigDetail = () => {
                             <p className="text-sm text-gray-600">{gig.organization.industry} • {gig.organization.size}</p>
                           </div>
                         </div>
-
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <MapPin className="h-4 w-4" />
@@ -144,48 +145,28 @@ const GigDetail = () => {
                             <span>{gig.duration}</span>
                           </div>
                         </div>
-
                         <div className="flex flex-wrap gap-2 mb-4">
                           {gig.specializations.map((spec, index) => (
                             <Badge key={index} variant="secondary">{spec}</Badge>
                           ))}
                         </div>
-
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <span>Posted {gig.posted}</span>
-                          <span>•</span>
-                          <span>{gig.applicants} applicants</span>
-                          <span>•</span>
-                          <span>{gig.views} views</span>
                           <span>•</span>
                           <span>Deadline: {new Date(gig.applicationDeadline).toLocaleDateString()}</span>
                         </div>
                       </div>
-
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Heart className={`h-4 w-4 mr-2 ${gig.isSaved ? 'fill-red-500 text-red-500' : ''}`} />
-                          Save
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Share2 className="h-4 w-4 mr-2" />
-                          Share
-                        </Button>
-                      </div>
                     </div>
                   </CardContent>
                 </Card>
-
                 {/* Description */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>About this gig</CardTitle>
+                    <CardTitle>About this job</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-700 mb-6">{gig.description}</p>
-                    
                     <Separator className="my-6" />
-                    
                     <div className="space-y-6">
                       <div>
                         <h3 className="font-semibold text-gray-900 mb-3">Key Responsibilities</h3>
@@ -198,125 +179,81 @@ const GigDetail = () => {
                           ))}
                         </ul>
                       </div>
-
                       <div>
                         <h3 className="font-semibold text-gray-900 mb-3">Requirements</h3>
                         <ul className="space-y-2">
-                          {gig.requirements.map((requirement, index) => (
+                          {gig.requirements.map((req, index) => (
                             <li key={index} className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-blue-500 mt-1 flex-shrink-0" />
-                              <span className="text-gray-700">{requirement}</span>
+                              <span className="text-gray-700">{req}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
-
-                      <div>
-                        <h3 className="font-semibold text-gray-900 mb-3">Preferred Qualifications</h3>
-                        <ul className="space-y-2">
-                          {gig.preferredQualifications.map((qualification, index) => (
-                            <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
-                              <span className="text-gray-700">{qualification}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h3 className="font-semibold text-gray-900 mb-3">What We Offer</h3>
-                        <ul className="space-y-2">
-                          {gig.benefits.map((benefit, index) => (
-                            <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-gray-700">{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* About Organization */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>About {gig.organization.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 mb-4">{gig.organization.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium text-gray-900">Founded:</span>
-                        <span className="text-gray-600 ml-2">{gig.organization.founded}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-900">Website:</span>
-                        <span className="text-blue-600 ml-2">{gig.organization.website}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-900">Industry:</span>
-                        <span className="text-gray-600 ml-2">{gig.organization.industry}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-900">Location:</span>
-                        <span className="text-gray-600 ml-2">{gig.organization.location}</span>
-                      </div>
+                      {gig.preferredQualifications && gig.preferredQualifications.length > 0 && (
+                        <div>
+                          <h3 className="font-semibold text-gray-900 mb-3">Preferred Qualifications</h3>
+                          <ul className="space-y-2">
+                            {gig.preferredQualifications.map((qual, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <CheckCircle className="h-4 w-4 text-purple-500 mt-1 flex-shrink-0" />
+                                <span className="text-gray-700">{qual}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {gig.benefits && gig.benefits.length > 0 && (
+                        <div>
+                          <h3 className="font-semibold text-gray-900 mb-3">Benefits</h3>
+                          <ul className="space-y-2">
+                            {gig.benefits.map((benefit, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <CheckCircle className="h-4 w-4 text-emerald-500 mt-1 flex-shrink-0" />
+                                <span className="text-gray-700">{benefit}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               </div>
-
-              {/* Sidebar */}
-              <div className="space-y-6">
-                {/* Application Card */}
-                <Card className="sticky top-6">
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">{gig.budget}</div>
-                      <div className="text-sm text-gray-600">Project Budget</div>
-                    </div>
-                    
-                    <div className="space-y-4 mb-6">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Duration:</span>
-                        <span className="font-medium">{gig.duration}</span>
+              {/* Right Side: Apply Button */}
+              <div className="flex flex-col gap-6">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="w-full">Apply</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Apply for this Job</DialogTitle>
+                      <DialogDescription>Submit your application for this consulting opportunity.</DialogDescription>
+                    </DialogHeader>
+                    <form className="space-y-4">
+                      <div>
+                        <label className="block font-medium mb-1">Resume <span className="text-red-500">*</span></label>
+                        <Input type="file" accept=".pdf,.doc,.docx" required />
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Work Mode:</span>
-                        <span className="font-medium">{gig.workMode}</span>
+                      <div>
+                        <label className="block font-medium mb-1">Cover Letter</label>
+                        <Input type="file" accept=".pdf,.doc,.docx" />
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Applicants:</span>
-                        <span className="font-medium">{gig.applicants}</span>
+                      <div>
+                        <label className="block font-medium mb-1">Availability for Interview</label>
+                        <Input type="text" placeholder="e.g., Weekdays after 2pm, or specific dates" />
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Deadline:</span>
-                        <span className="font-medium">{new Date(gig.applicationDeadline).toLocaleDateString()}</span>
+                      <div>
+                        <label className="block font-medium mb-1">Short Note (optional)</label>
+                        <Textarea placeholder="Anything you'd like the organization to know?" />
                       </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <Button className="w-full" size="lg">
-                        Apply for this Gig
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <MessageCircle className="h-4 w-4 mr-2" />
-                        Contact Organization
-                      </Button>
-                    </div>
-                    
-                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <div className="flex items-start gap-2">
-                        <AlertTriangle className="h-4 w-4 text-yellow-600 mt-1 flex-shrink-0" />
-                        <div className="text-xs text-yellow-800">
-                          <strong>Application Tip:</strong> Make sure your profile highlights your vocational assessment experience and relevant certifications.
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                      <DialogFooter>
+                        <Button type="submit" className="w-full">Apply</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </main>

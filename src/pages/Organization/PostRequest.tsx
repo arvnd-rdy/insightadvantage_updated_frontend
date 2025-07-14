@@ -1,5 +1,6 @@
 
 import React from 'react';
+import OrganizationNavBar from '@/components/OrganizationNavBar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import DashboardHeader from '@/components/DashboardHeader';
@@ -13,7 +14,7 @@ const PostConsultingRequest = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <DashboardSidebar role="organization" />
+        <DashboardSidebar />
         
         <div className="flex-1">
           <DashboardHeader 
@@ -52,4 +53,11 @@ const PostConsultingRequest = () => {
   );
 };
 
-export default PostConsultingRequest;
+const PageWithNav = () => (
+  <>
+    <OrganizationNavBar />
+    <PostConsultingRequest />
+  </>
+);
+
+export default PageWithNav;

@@ -44,7 +44,11 @@ const Register = () => {
         title: "Registration successful",
         description: `Your ${role} account has been created.`,
       });
-      navigate(`/${role}/profile`);
+      if (role === 'consultant') {
+        navigate('/onboarding/consultant/step-1');
+      } else {
+        navigate('/onboarding/organization/step-1');
+      }
     }, 1500);
   };
 

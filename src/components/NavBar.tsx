@@ -45,8 +45,8 @@ const NavBar = ({ isLoggedIn = false, userRole }: NavBarProps) => {
             <Link to="/how-it-works" className={`${isActive('/how-it-works') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
               How It Works
             </Link>
-            <Link to="/solutions" className={`${isActive('/solutions') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
-              Solutions
+            <Link to="/consultant/linkedin-jobs" className={`${isActive('/consultant/linkedin-jobs') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
+              LinkedIn Jobs
             </Link>
             <Link to="/pricing" className={`${isActive('/pricing') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
               Pricing
@@ -99,7 +99,7 @@ const NavBar = ({ isLoggedIn = false, userRole }: NavBarProps) => {
                 <Link to="/how-it-works" className="w-full">How It Works</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/solutions" className="w-full">Solutions</Link>
+                <Link to="/consultant/linkedin-jobs" className="w-full">LinkedIn Jobs</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/pricing" className="w-full">Pricing</Link>

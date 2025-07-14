@@ -33,7 +33,7 @@ const PricingSection = ({ tiers }: PricingSectionProps) => {
           {tiers.map((tier, index) => (
             <Card 
               key={index} 
-              className={`border ${
+              className={`relative border ${
                 tier.isPopular ? 'border-brand-teal shadow-lg ring-1 ring-brand-teal' : 'border-gray-200'
               } hover-scale`}
             >

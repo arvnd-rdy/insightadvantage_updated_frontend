@@ -30,6 +30,9 @@ import {
   Users,
   Eye
 } from 'lucide-react';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 // Mock data for request details
 const mockRequest = {
@@ -111,7 +114,7 @@ const RequestDetail = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <DashboardSidebar role="organization" />
+        <DashboardSidebar />
         
         <div className="flex-1">
           <DashboardHeader 
@@ -163,12 +166,10 @@ const RequestDetail = () => {
                       <h4 className="font-medium text-gray-900 mb-2">Type of Consulting</h4>
                       <p className="text-gray-600">{mockRequest.type}</p>
                     </div>
-                    
                     <div>
                       <h4 className="font-medium text-gray-900 mb-2">Description</h4>
                       <p className="text-gray-600">{mockRequest.description}</p>
                     </div>
-                    
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <h4 className="font-medium text-gray-900 mb-2">Expertise Level</h4>
@@ -179,7 +180,6 @@ const RequestDetail = () => {
                         <p className="text-gray-600">{mockRequest.duration}</p>
                       </div>
                     </div>
-                    
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <h4 className="font-medium text-gray-900 mb-2">Budget Range</h4>
@@ -192,7 +192,6 @@ const RequestDetail = () => {
                         <p className="text-gray-600">{mockRequest.workModes.join(', ')}</p>
                       </div>
                     </div>
-                    
                     {mockRequest.location && (
                       <div>
                         <h4 className="font-medium text-gray-900 mb-2">Location</h4>
@@ -202,158 +201,56 @@ const RequestDetail = () => {
                         </p>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-
-                {/* Applicants Table */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      Applicants ({mockRequest.applicants.length})
-                      <Select>
-                        <SelectTrigger className="w-40">
-                          <SelectValue placeholder="Filter by status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Status</SelectItem>
-                          <SelectItem value="applied">Applied</SelectItem>
-                          <SelectItem value="viewed">Viewed</SelectItem>
-                          <SelectItem value="shortlisted">Shortlisted</SelectItem>
-                          <SelectItem value="interviewing">Interviewing</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Consultant</TableHead>
-                          <TableHead>Experience</TableHead>
-                          <TableHead>Applied Date</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {mockRequest.applicants.map((applicant) => (
-                          <TableRow key={applicant.id}>
-                            <TableCell>
-                              <div className="flex items-center space-x-3">
-                                <Avatar>
-                                  <AvatarFallback>
-                                    {applicant.name.substring(0, 2).toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <p className="font-medium">{applicant.name}</p>
-                                  <p className="text-sm text-gray-600">{applicant.title}</p>
-                                  <p className="text-sm text-gray-500">{applicant.hourlyRate}/hour</p>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div>
-                                <p className="font-medium">{applicant.experience}</p>
-                                <p className="text-sm text-gray-600">
-                                  {applicant.specializations.slice(0, 2).join(', ')}
-                                  {applicant.specializations.length > 2 && '...'}
-                                </p>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              {new Date(applicant.appliedDate).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell>
-                              <Select 
-                                value={applicant.status}
-                                onValueChange={(value) => handleStatusUpdate(applicant.id, value)}
-                              >
-                                <SelectTrigger className="w-32">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Applied">Applied</SelectItem>
-                                  <SelectItem value="Viewed">Viewed</SelectItem>
-                                  <SelectItem value="Shortlisted">Shortlisted</SelectItem>
-                                  <SelectItem value="Interviewing">Interviewing</SelectItem>
-                                  <SelectItem value="Hired">Hired</SelectItem>
-                                  <SelectItem value="Rejected">Rejected</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
-                                  <User className="h-4 w-4 mr-1" />
-                                  Profile
-                                </Button>
-                                <Button variant="outline" size="sm">
-                                  <MessageSquare className="h-4 w-4 mr-1" />
-                                  Message
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Application Deadline</h4>
+                      <p className="text-gray-600 flex items-center">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {new Date(mockRequest.deadline).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Status</h4>
+                      <Badge className={getStatusColor(mockRequest.status)}>
+                        {mockRequest.status}
+                      </Badge>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
-
-              {/* Sidebar with quick stats and contact info */}
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Quick Stats</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Total Applicants</span>
-                      <span className="font-bold text-2xl">{mockRequest.applicants.length}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Shortlisted</span>
-                      <span className="font-bold text-green-600">
-                        {mockRequest.applicants.filter(a => a.status === 'Shortlisted').length}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Days Remaining</span>
-                      <span className="font-bold text-blue-600">
-                        {Math.ceil((new Date(mockRequest.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Contact Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <p className="font-medium">{mockRequest.contactPerson}</p>
-                      <p className="text-sm text-gray-600">{mockRequest.contactEmail}</p>
-                      <p className="text-sm text-gray-600">{mockRequest.contactPhone}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Application Deadline</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center">
-                      <Calendar className="h-5 w-5 mr-2 text-gray-400" />
-                      <span className="font-medium">
-                        {new Date(mockRequest.deadline).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
+              {/* Right Side: Apply Button */}
+              <div className="flex flex-col gap-6">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="w-full">Apply</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Apply for this Job</DialogTitle>
+                      <DialogDescription>Submit your application for this consulting opportunity.</DialogDescription>
+                    </DialogHeader>
+                    <form className="space-y-4">
+                      <div>
+                        <label className="block font-medium mb-1">Resume <span className="text-red-500">*</span></label>
+                        <Input type="file" accept=".pdf,.doc,.docx" required />
+                      </div>
+                      <div>
+                        <label className="block font-medium mb-1">Cover Letter</label>
+                        <Input type="file" accept=".pdf,.doc,.docx" />
+                      </div>
+                      <div>
+                        <label className="block font-medium mb-1">Availability for Interview</label>
+                        <Input type="text" placeholder="e.g., Weekdays after 2pm, or specific dates" />
+                      </div>
+                      <div>
+                        <label className="block font-medium mb-1">Short Note (optional)</label>
+                        <Textarea placeholder="Anything you'd like the organization to know?" />
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit" className="w-full">Apply</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </main>

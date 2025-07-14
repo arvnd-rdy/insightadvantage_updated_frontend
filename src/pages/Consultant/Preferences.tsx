@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
+import ConsultantLayout from '@/components/ConsultantLayout';
 
 const ConsultantPreferences = () => {
   const { toast } = useToast();
@@ -23,7 +24,7 @@ const ConsultantPreferences = () => {
   };
 
   return (
-    <SidebarProvider>
+    <ConsultantLayout>
       <div className="min-h-screen flex w-full">
         <DashboardSidebar role="consultant" />
         
@@ -213,7 +214,7 @@ const ConsultantPreferences = () => {
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </ConsultantLayout>
   );
 };
 

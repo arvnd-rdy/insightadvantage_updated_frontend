@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import OrganizationNavBar from '@/components/OrganizationNavBar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import DashboardHeader from '@/components/DashboardHeader';
@@ -85,7 +86,7 @@ const ManageRequests = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <DashboardSidebar role="organization" />
+        <DashboardSidebar />
         
         <div className="flex-1">
           <DashboardHeader 
@@ -233,4 +234,12 @@ const ManageRequests = () => {
   );
 };
 
-export default ManageRequests;
+
+const PageWithNav = () => (
+  <>
+    <OrganizationNavBar />
+    <ManageRequests />
+  </>
+);
+
+export default PageWithNav;
