@@ -133,16 +133,14 @@ export default function LinkedInJobs() {
     return (
         <div className="min-h-screen bg-gray-50">
             <ConsultantTopNav />
-            <main className="container mx-auto py-8 px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column: Search, Filters, Job List */}
-                    <div className="lg:col-span-1 space-y-6">
-                        <div className="relative">
-                            <Input placeholder="Job title, keyword, or company" className="pl-10" />
+            <header className="bg-white shadow-sm sticky top-0 z-10">
+                <div className="container mx-auto py-4 px-4">
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-grow">
+                            <Input placeholder="Job title, keyword, or company" className="pl-10 w-full" />
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <Select>
                                 <SelectTrigger><SelectValue placeholder="Location" /></SelectTrigger>
                                 <SelectContent>
@@ -159,8 +157,23 @@ export default function LinkedInJobs() {
                                     <SelectItem value="on-site">On-site</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Salary" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="50">$50k+</SelectItem>
+                                    <SelectItem value="75">$75k+</SelectItem>
+                                    <SelectItem value="100">$100k+</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline">All Filters</Button>
                         </div>
-
+                    </div>
+                </div>
+            </header>
+            <main className="container mx-auto py-8 px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left Column: Job List */}
+                    <div className="lg:col-span-1 space-y-6">
                         <div className="flex border-b">
                             <button
                                 className={`py-2 px-4 text-sm font-medium ${activeTab === 'search' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
@@ -176,7 +189,7 @@ export default function LinkedInJobs() {
                             </button>
                         </div>
 
-                        <div className="space-y-4 h-[calc(100vh-20rem)] overflow-y-auto pr-2">
+                        <div className="space-y-4 h-[calc(100vh-16rem)] overflow-y-auto pr-2">
                             {(activeTab === 'search' ? jobs : jobs.filter(j => j.isSaved)).map(job => (
                                 <JobCard
                                     key={job.id}
