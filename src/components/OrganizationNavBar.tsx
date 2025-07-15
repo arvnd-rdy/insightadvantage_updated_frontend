@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Building, Users, MessageSquare, FileText, Settings, Search, Plus, User, LogOut, Briefcase } from 'lucide-react';
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator } from '@/components/ui/menubar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -17,8 +17,18 @@ const ORG_LINKS = [
 
 export default function OrganizationNavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const userName = "Organization User"; // Replace with actual user name from auth context
   const userAvatar = ""; // Replace with actual user avatar URL from auth context
+
+  // Logout handler
+  const handleLogout = () => {
+    // Clear authentication tokens or user data
+    localStorage.clear();
+    sessionStorage.clear();
+    // Redirect to login page
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 px-6 py-3 w-full z-40 sticky top-0 shadow-sm">
@@ -80,7 +90,7 @@ export default function OrganizationNavBar() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

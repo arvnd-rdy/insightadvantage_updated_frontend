@@ -52,7 +52,287 @@ const jobs = [
         description: 'Develop and implement disability management programs for corporate clients.',
         skills: ['Disability Management', 'Workplace Accommodation', 'Program Development'],
     },
-    // Add more mock jobs as needed
+    // 20 more mock jobs
+    {
+        id: '4',
+        title: 'Rehabilitation Case Manager',
+        organization: 'HealthFirst',
+        location: 'Ottawa, ON',
+        workMode: 'Remote',
+        budget: '$50/hour',
+        posted: '5d ago',
+        applicants: 5,
+        isNew: false,
+        isSaved: false,
+        description: 'Coordinate rehabilitation plans for injured workers.',
+        skills: ['Case Management', 'Rehabilitation', 'Client Coordination'],
+    },
+    {
+        id: '5',
+        title: 'Occupational Therapist',
+        organization: 'Active Life',
+        location: 'Edmonton, AB',
+        workMode: 'On-site',
+        budget: '$60/hour',
+        posted: '1w ago',
+        applicants: 7,
+        isNew: false,
+        isSaved: false,
+        description: 'Assist clients in regaining daily living skills.',
+        skills: ['Occupational Therapy', 'Client Assessment', 'Rehabilitation'],
+    },
+    {
+        id: '6',
+        title: 'Return-to-Work Coordinator',
+        organization: 'WorkSafe Solutions',
+        location: 'Halifax, NS',
+        workMode: 'Hybrid',
+        budget: '$52/hour',
+        posted: '2w ago',
+        applicants: 3,
+        isNew: false,
+        isSaved: false,
+        description: 'Coordinate return-to-work programs for employees.',
+        skills: ['Return-to-Work', 'Program Coordination', 'HR'],
+    },
+    {
+        id: '7',
+        title: 'Vocational Evaluator',
+        organization: 'Pathways Consulting',
+        location: 'Montreal, QC',
+        workMode: 'Remote',
+        budget: '$58/hour',
+        posted: '4d ago',
+        applicants: 4,
+        isNew: true,
+        isSaved: false,
+        description: 'Conduct vocational evaluations for disability claims.',
+        skills: ['Vocational Evaluation', 'Report Writing', 'Assessment'],
+    },
+    {
+        id: '8',
+        title: 'Job Placement Specialist',
+        organization: 'CareerBridge',
+        location: 'Winnipeg, MB',
+        workMode: 'On-site',
+        budget: '$48/hour',
+        posted: '3d ago',
+        applicants: 6,
+        isNew: false,
+        isSaved: false,
+        description: 'Help clients secure suitable employment.',
+        skills: ['Job Placement', 'Employer Relations', 'Interview Coaching'],
+    },
+    {
+        id: '9',
+        title: 'Ergonomics Consultant',
+        organization: 'ErgoPro',
+        location: 'Victoria, BC',
+        workMode: 'Hybrid',
+        budget: '$70/hour',
+        posted: '1w ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Assess and improve workplace ergonomics.',
+        skills: ['Ergonomics', 'Workplace Assessment', 'Injury Prevention'],
+    },
+    {
+        id: '10',
+        title: 'Labour Market Analyst',
+        organization: 'Market Insights',
+        location: 'Toronto, ON',
+        workMode: 'Remote',
+        budget: '$62/hour',
+        posted: '2w ago',
+        applicants: 1,
+        isNew: false,
+        isSaved: false,
+        description: 'Analyze labour market trends for consulting clients.',
+        skills: ['Labour Market Analysis', 'Data Analysis', 'Reporting'],
+    },
+    {
+        id: '11',
+        title: 'Disability Claims Consultant',
+        organization: 'ClaimCare',
+        location: 'Calgary, AB',
+        workMode: 'On-site',
+        budget: '$66/hour',
+        posted: '3d ago',
+        applicants: 8,
+        isNew: false,
+        isSaved: false,
+        description: 'Advise on complex disability claims.',
+        skills: ['Disability Claims', 'Case Review', 'Client Advocacy'],
+    },
+    {
+        id: '12',
+        title: 'Medical-Legal Expert',
+        organization: 'LegalMed',
+        location: 'Vancouver, BC',
+        workMode: 'Remote',
+        budget: '$120/hour',
+        posted: '1w ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Provide expert testimony for legal cases.',
+        skills: ['Medical-Legal', 'Expert Testimony', 'Report Writing'],
+    },
+    {
+        id: '13',
+        title: 'Rehabilitation Support Worker',
+        organization: 'Supportive Steps',
+        location: 'Ottawa, ON',
+        workMode: 'On-site',
+        budget: '$35/hour',
+        posted: '2w ago',
+        applicants: 5,
+        isNew: false,
+        isSaved: false,
+        description: 'Support clients in rehabilitation programs.',
+        skills: ['Rehabilitation', 'Client Support', 'Documentation'],
+    },
+    {
+        id: '14',
+        title: 'Functional Capacity Evaluator',
+        organization: 'Capacity Assessors',
+        location: 'Edmonton, AB',
+        workMode: 'Hybrid',
+        budget: '$75/hour',
+        posted: '1w ago',
+        applicants: 3,
+        isNew: false,
+        isSaved: false,
+        description: 'Conduct functional capacity evaluations for insurance claims.',
+        skills: ['Functional Capacity', 'Assessment', 'Insurance'],
+    },
+    {
+        id: '15',
+        title: 'Job Coach',
+        organization: 'EmpowerWorks',
+        location: 'Halifax, NS',
+        workMode: 'Remote',
+        budget: '$40/hour',
+        posted: '3d ago',
+        applicants: 4,
+        isNew: false,
+        isSaved: false,
+        description: 'Coach clients through job search and onboarding.',
+        skills: ['Job Coaching', 'Resume Writing', 'Interview Prep'],
+    },
+    {
+        id: '16',
+        title: 'Workplace Accommodation Specialist',
+        organization: 'Inclusive Solutions',
+        location: 'Montreal, QC',
+        workMode: 'On-site',
+        budget: '$68/hour',
+        posted: '2w ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Advise employers on workplace accommodations.',
+        skills: ['Accommodation', 'Accessibility', 'HR Consulting'],
+    },
+    {
+        id: '17',
+        title: 'Life Care Planner',
+        organization: 'FutureCare',
+        location: 'Toronto, ON',
+        workMode: 'Remote',
+        budget: '$110/hour',
+        posted: '1w ago',
+        applicants: 1,
+        isNew: false,
+        isSaved: false,
+        description: 'Develop life care plans for clients with disabilities.',
+        skills: ['Life Care Planning', 'Disability', 'Client Advocacy'],
+    },
+    {
+        id: '18',
+        title: 'Case Management Supervisor',
+        organization: 'HealthFirst',
+        location: 'Calgary, AB',
+        workMode: 'Hybrid',
+        budget: '$80/hour',
+        posted: '3d ago',
+        applicants: 6,
+        isNew: false,
+        isSaved: false,
+        description: 'Supervise a team of case managers.',
+        skills: ['Supervision', 'Case Management', 'Team Leadership'],
+    },
+    {
+        id: '19',
+        title: 'Expert Witness (Rehabilitation)',
+        organization: 'LegalMed',
+        location: 'Vancouver, BC',
+        workMode: 'Remote',
+        budget: '$130/hour',
+        posted: '2w ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Provide expert witness services for rehabilitation cases.',
+        skills: ['Expert Witness', 'Rehabilitation', 'Legal'],
+    },
+    {
+        id: '20',
+        title: 'Coaching Specialist',
+        organization: 'EmpowerWorks',
+        location: 'Ottawa, ON',
+        workMode: 'On-site',
+        budget: '$42/hour',
+        posted: '1w ago',
+        applicants: 3,
+        isNew: false,
+        isSaved: false,
+        description: 'Provide coaching for career transitions.',
+        skills: ['Coaching', 'Career Transition', 'Client Support'],
+    },
+    {
+        id: '21',
+        title: 'Labour Market Surveyor',
+        organization: 'Market Insights',
+        location: 'Edmonton, AB',
+        workMode: 'Hybrid',
+        budget: '$60/hour',
+        posted: '3d ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Conduct labour market surveys for consulting projects.',
+        skills: ['Labour Market Survey', 'Data Collection', 'Reporting'],
+    },
+    {
+        id: '22',
+        title: 'Disability Management Advisor',
+        organization: 'Workplace Solutions',
+        location: 'Halifax, NS',
+        workMode: 'Remote',
+        budget: '$72/hour',
+        posted: '2w ago',
+        applicants: 1,
+        isNew: false,
+        isSaved: false,
+        description: 'Advise organizations on disability management best practices.',
+        skills: ['Disability Management', 'Consulting', 'Policy'],
+    },
+    {
+        id: '23',
+        title: 'Psycho Vocational Evaluator',
+        organization: 'Pathways Consulting',
+        location: 'Montreal, QC',
+        workMode: 'On-site',
+        budget: '$90/hour',
+        posted: '1w ago',
+        applicants: 2,
+        isNew: false,
+        isSaved: false,
+        description: 'Conduct psycho-vocational evaluations for clients.',
+        skills: ['Psycho Vocational', 'Assessment', 'Reporting'],
+    },
 ];
 
 const JobCard = ({ job, isSelected, onClick }) => (
@@ -129,43 +409,65 @@ const JobDetails = ({ job }) => {
 export default function LinkedInJobs() {
     const [selectedJob, setSelectedJob] = useState(jobs[0]);
     const [activeTab, setActiveTab] = useState('search'); // 'search' or 'saved'
+    const [currentPage, setCurrentPage] = useState(1);
+    const JOBS_PER_PAGE = 20;
+
+    // Filter jobs based on tab
+    const filteredJobs = activeTab === 'search' ? jobs : jobs.filter(j => j.isSaved);
+    const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE);
+    const paginatedJobs = filteredJobs.slice((currentPage - 1) * JOBS_PER_PAGE, currentPage * JOBS_PER_PAGE);
+
+    // Handle page change
+    const goToPage = (page) => {
+        if (page < 1 || page > totalPages) return;
+        setCurrentPage(page);
+        // Optionally, scroll to top of job list
+    };
+
+    // Reset to page 1 when tab changes or filter changes
+    React.useEffect(() => {
+        setCurrentPage(1);
+    }, [activeTab]);
 
     return (
         <div className="min-h-screen bg-gray-50">
             <ConsultantTopNav />
             <header className="bg-white shadow-sm sticky top-0 z-10">
                 <div className="container mx-auto py-4 px-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="relative flex-grow">
-                            <Input placeholder="Job title, keyword, or company" className="pl-10 w-full" />
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <Select>
-                                <SelectTrigger><SelectValue placeholder="Location" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="toronto">Toronto, ON</SelectItem>
-                                    <SelectItem value="vancouver">Vancouver, BC</SelectItem>
-                                    <SelectItem value="calgary">Calgary, AB</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Select>
-                                <SelectTrigger><SelectValue placeholder="Work Mode" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="remote">Remote</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="on-site">On-site</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Select>
-                                <SelectTrigger><SelectValue placeholder="Salary" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="50">$50k+</SelectItem>
-                                    <SelectItem value="75">$75k+</SelectItem>
-                                    <SelectItem value="100">$100k+</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button variant="outline">All Filters</Button>
+                    {/* Filters Bar - make sticky */}
+                    <div className="sticky top-16 z-20 bg-white pb-2">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="relative flex-grow">
+                                <Input placeholder="Job title, keyword, or company" className="pl-10 w-full" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <Select>
+                                    <SelectTrigger><SelectValue placeholder="Location" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="toronto">Toronto, ON</SelectItem>
+                                        <SelectItem value="vancouver">Vancouver, BC</SelectItem>
+                                        <SelectItem value="calgary">Calgary, AB</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <Select>
+                                    <SelectTrigger><SelectValue placeholder="Work Mode" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="remote">Remote</SelectItem>
+                                        <SelectItem value="hybrid">Hybrid</SelectItem>
+                                        <SelectItem value="on-site">On-site</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <Select>
+                                    <SelectTrigger><SelectValue placeholder="Salary" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="50">$50k+</SelectItem>
+                                        <SelectItem value="75">$75k+</SelectItem>
+                                        <SelectItem value="100">$100k+</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <Button variant="outline">All Filters</Button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -190,7 +492,7 @@ export default function LinkedInJobs() {
                         </div>
 
                         <div className="space-y-4 h-[calc(100vh-16rem)] overflow-y-auto pr-2">
-                            {(activeTab === 'search' ? jobs : jobs.filter(j => j.isSaved)).map(job => (
+                            {paginatedJobs.map(job => (
                                 <JobCard
                                     key={job.id}
                                     job={job}
@@ -199,6 +501,23 @@ export default function LinkedInJobs() {
                                 />
                             ))}
                         </div>
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="flex justify-center items-center gap-2 mt-4">
+                                <Button variant="outline" size="sm" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>&lt; Prev</Button>
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <Button
+                                        key={i + 1}
+                                        variant={currentPage === i + 1 ? 'default' : 'outline'}
+                                        size="sm"
+                                        onClick={() => goToPage(i + 1)}
+                                    >
+                                        {i + 1}
+                                    </Button>
+                                ))}
+                                <Button variant="outline" size="sm" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>Next &gt;</Button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column: Job Details */}
