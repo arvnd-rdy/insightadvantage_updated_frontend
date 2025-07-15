@@ -406,7 +406,7 @@ const JobDetails = ({ job }) => {
     );
 };
 
-export default function LinkedInJobs() {
+export default function Jobs() {
     const [selectedJob, setSelectedJob] = useState(jobs[0]);
     const [activeTab, setActiveTab] = useState('search'); // 'search' or 'saved'
     const [currentPage, setCurrentPage] = useState(1);
@@ -434,40 +434,37 @@ export default function LinkedInJobs() {
             <ConsultantTopNav />
             <header className="bg-white shadow-sm sticky top-0 z-10">
                 <div className="container mx-auto py-4 px-4">
-                    {/* Filters Bar - make sticky */}
-                    <div className="sticky top-16 z-20 bg-white pb-2">
-                        <div className="flex flex-col md:flex-row gap-4">
-                            <div className="relative flex-grow">
-                                <Input placeholder="Job title, keyword, or company" className="pl-10 w-full" />
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Location" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="toronto">Toronto, ON</SelectItem>
-                                        <SelectItem value="vancouver">Vancouver, BC</SelectItem>
-                                        <SelectItem value="calgary">Calgary, AB</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Work Mode" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="remote">Remote</SelectItem>
-                                        <SelectItem value="hybrid">Hybrid</SelectItem>
-                                        <SelectItem value="on-site">On-site</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Salary" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="50">$50k+</SelectItem>
-                                        <SelectItem value="75">$75k+</SelectItem>
-                                        <SelectItem value="100">$100k+</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <Button variant="outline">All Filters</Button>
-                            </div>
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-grow">
+                            <Input placeholder="Job title, keyword, or company" className="pl-10 w-full" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Location" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="toronto">Toronto, ON</SelectItem>
+                                    <SelectItem value="vancouver">Vancouver, BC</SelectItem>
+                                    <SelectItem value="calgary">Calgary, AB</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Work Mode" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="remote">Remote</SelectItem>
+                                    <SelectItem value="hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="on-site">On-site</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Salary" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="50">$50k+</SelectItem>
+                                    <SelectItem value="75">$75k+</SelectItem>
+                                    <SelectItem value="100">$100k+</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline">All Filters</Button>
                         </div>
                     </div>
                 </div>

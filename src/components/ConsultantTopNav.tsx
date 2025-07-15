@@ -8,7 +8,7 @@ const navLinks = [
   { title: 'Dashboard', url: '/consultant/dashboard', icon: <Home size={20} /> },
   { title: 'My Jobs', url: '/consultant/my-jobs', icon: <Briefcase size={20} /> },
   { title: 'Messages', url: '/consultant/messages', icon: <MessageSquare size={20} /> },
-  { title: 'LinkedIn Jobs', url: '/consultant/linkedin-jobs', icon: <Linkedin size={20} /> },
+  { title: 'Jobs', url: '/consultant/jobs', icon: <Briefcase size={20} /> },
   { title: 'Availability', url: '/consultant/availability', icon: <Calendar size={20} /> },
 ];
 

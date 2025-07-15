@@ -36,7 +36,7 @@ import ConsultantMyJobs from "@/pages/Consultant/MyJobs";
 import ConsultantOrganizations from "@/pages/Consultant/Organizations";
 import ConsultantGigDetail from "@/pages/Consultant/GigDetail";
 import ConsultantNewProfile from '@/pages/Consultant/NewProfile';
-import LinkedInJobs from './pages/Consultant/LinkedInJobs';
+import Jobs from './pages/Consultant/LinkedInJobs';
 
 // Onboarding - Consultant
 import ConsultantStep1PersonalDetails from "@/pages/Onboarding/Consultant/Step1PersonalDetails";
@@ -155,7 +155,7 @@ const App = () => (
             <Route path="/consultant/messages" element={<ConsultantMessages />} />
             <Route path="/consultant/my-jobs" element={<ConsultantMyJobs />} />
             <Route path="/consultant/gig/:gigId" element={<ConsultantGigDetail />} />
-            <Route path="/consultant/linkedin-jobs" element={<LinkedInJobs />} />
+            <Route path="/consultant/jobs" element={<Jobs />} />
             
             {/* Organization Routes */}
             <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
