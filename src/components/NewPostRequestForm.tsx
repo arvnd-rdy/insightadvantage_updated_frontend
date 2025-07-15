@@ -324,7 +324,7 @@ const NewPostRequestForm = () => {
 
   const nextStep = async () => {
     const fields = steps[currentStep].fields;
-    const isValid = await trigger(fields as any);
+    const isValid = await trigger(fields as (keyof FormData)[]);
     if (isValid) {
       setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
     }

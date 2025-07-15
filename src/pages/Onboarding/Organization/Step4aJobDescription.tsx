@@ -49,7 +49,19 @@ const Step4aJobDescription = () => {
   const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
-    handleFileUpload({ target: { files } } as any);
+    const validFiles = files.filter(file => {
+      const isValidType = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'image/jpeg', 'image/png'].includes(file.type);
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      return isValidType && isValidSize;
+    });
+    
+    if (validFiles.length !== files.length) {
+      setBanner('Some files were rejected. Only PDF, DOC, DOCX, TXT, JPG, PNG files ≤10MB are allowed.');
+    } else {
+      setBanner('');
+    }
+    
+    setAttachments(prev => [...prev, ...validFiles].slice(0, 5)); // Limit to 5 files
   };
 
   const removeFile = (index: number) => {

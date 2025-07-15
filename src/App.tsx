@@ -110,7 +110,7 @@ const App = () => (
             
             {/* Static Pages */}
             <Route path="/about" element={<About />} />
-            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/pricing" element={<SubscriptionPlans />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/faq" element={<FAQ />} />
