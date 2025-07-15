@@ -125,52 +125,47 @@ const Step4bSkillsExpertise = () => {
   const handleBack = () => navigate('/onboarding/organization/step-4a');
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-white border-b flex items-center h-16 px-6">
-        <div className="flex-1 flex items-center">
-          <img src="/favicon.ico" alt="Logo" className="h-8 w-8 mr-3" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="text-gray-500 text-sm font-medium">Step 3 of 7 <span className="ml-2">●●●<span className="text-gray-300">○○○○</span></span></div>
-        </div>
-        <div className="flex-1"></div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      
 
       {/* Banner */}
       {banner && <div className="bg-red-100 text-red-700 text-center py-2 font-medium">{banner}</div>}
 
-      {/* Main Form */}
-      <form onSubmit={handleSubmit} className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow p-10 mt-8 mb-8">
-          <h1 className="text-2xl font-bold mb-2 text-center">What skills and expertise do you need?</h1>
-          <p className="text-gray-500 text-center mb-8">Specify the required skills and experience level to help us match you with the right consultants.</p>
-
-          <div className="space-y-8">
+      {/* Main Form Content */}
+      <main className="flex-1 container mx-auto py-16 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+        <div className="w-full max-w-4xl bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="px-8 pt-8 pb-4 text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">What skills and expertise do you need?</h1>
+            <p className="text-gray-600 text-lg">Specify the required skills and experience level to help us match you with the right consultants.</p>
+          </div>
+          <form id="onboarding-form" onSubmit={handleSubmit} className="p-8 pt-0">
+            <div className="space-y-8">
             {/* Required Skills */}
             <div>
-              <Label className="text-base font-semibold">
+              <Label htmlFor="requiredSkills" className="text-sm font-medium text-gray-700 mb-1">
                 Required Skills <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Info className="w-4 h-4" />
                 Select all the skills that are essential for your project. You can add custom skills if needed.
-              </div>
+              </p>
 
               {/* Selected Skills */}
               {requiredSkills.length > 0 && (
-                <div className="mb-4">
-                  <div className="text-sm font-medium text-gray-700 mb-2">Selected Skills ({requiredSkills.length})</div>
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Selected Skills ({requiredSkills.length})</p>
                   <div className="flex flex-wrap gap-2">
                     {requiredSkills.map(skill => (
-                      <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                      <Badge key={skill} variant="secondary" className="flex items-center gap-1 pr-1 bg-blue-100 text-blue-800">
                         {skill}
                         <button
                           type="button"
                           className="ml-1 text-gray-500 hover:text-red-500"
                           onClick={() => removeSkill(skill)}
                         >
-                          ×
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
                         </button>
                       </Badge>
                     ))}
@@ -178,18 +173,22 @@ const Step4bSkillsExpertise = () => {
                 </div>
               )}
 
-              {/* Skills Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+              {/* Skills Grid - Refined Tag Style */}
+              <div className="mt-4 flex flex-wrap gap-2">
                 {REQUIRED_SKILLS.map(skill => (
                   <button
                     key={skill}
                     type="button"
-                    className={`px-3 py-2 rounded-lg border text-sm text-left transition-colors ${
-                      requiredSkills.includes(skill)
-                        ? 'bg-green-600 text-white border-green-600'
-                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                    } ${skill === 'Other' ? 'font-semibold' : ''}`}
                     onClick={() => handleSkillClick(skill)}
+                    className={`
+                      px-4 py-2 rounded-full border text-sm font-medium
+                      transition-colors duration-200 ease-in-out
+                      ${requiredSkills.includes(skill)
+                        ? 'bg-blue-600 text-white border-blue-600' // Selected state
+                        : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200' // Unselected state
+                      }
+                      ${skill === 'Other' ? 'font-semibold' : ''}
+                    `}
                   >
                     {skill === 'Other' ? '+ Add Custom Skill' : skill}
                   </button>
@@ -198,12 +197,12 @@ const Step4bSkillsExpertise = () => {
 
               {/* Custom Skill Input */}
               {showOtherInput && (
-                <div className="flex gap-2 items-center mb-4">
+                <div className="mt-4 flex gap-3 items-center">
                   <Input
                     value={otherSkill}
                     onChange={e => setOtherSkill(e.target.value)}
-                    placeholder="Enter custom skill"
-                    className="flex-1"
+                    placeholder="Enter custom skill (e.g., 'Change Management')"
+                    className="flex-grow"
                     maxLength={50}
                   />
                   <Button 
@@ -211,69 +210,74 @@ const Step4bSkillsExpertise = () => {
                     size="sm" 
                     onClick={handleOtherAdd} 
                     disabled={!otherSkill.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     Add
                   </Button>
                   <Button 
                     type="button" 
                     size="sm" 
-                    variant="ghost" 
+                    variant="outline" 
                     onClick={() => { 
                       setShowOtherInput(false); 
                       setOtherSkill(''); 
                       setRequiredSkills(prev => prev.filter(s => s !== 'Other')); 
                     }}
+                    className="text-gray-600 border-gray-300 hover:bg-gray-50"
                   >
                     Cancel
                   </Button>
                 </div>
               )}
 
-              {errors.requiredSkills && <div className="text-red-500 text-xs mt-1">{errors.requiredSkills}</div>}
-              {errors.otherSkill && <div className="text-red-500 text-xs mt-1">{errors.otherSkill}</div>}
+              {errors.requiredSkills && <p className="mt-2 text-sm text-red-600">{errors.requiredSkills}</p>}
+              {errors.otherSkill && <p className="mt-2 text-sm text-red-600">{errors.otherSkill}</p>}
             </div>
 
             {/* Expertise Level */}
             <div>
-              <Label className="text-base font-semibold">
+              <Label htmlFor="expertiseLevel" className="text-sm font-medium text-gray-700 mb-1">
                 Required Expertise Level <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Info className="w-4 h-4" />
                 Choose the experience level that best matches your project requirements and budget.
-              </div>
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"> {/* Increased top margin */}
                 {EXPERTISE_LEVELS.map(level => (
-                  <label 
-                    key={level.value} 
-                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                      expertiseLevel === level.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                  <label
+                    key={level.value}
+                    className={`
+                      relative flex flex-col p-5 rounded-lg border-2 cursor-pointer
+                      transition-all duration-200 ease-in-out
+                      ${expertiseLevel === level.value
+                        ? 'border-blue-600 bg-blue-50 shadow-md' // Selected state with subtle shadow
+                        : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm' // Unselected state with hover effects
+                      }
+                    `}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <input
-                        type="radio"
-                        name="expertiseLevel"
-                        value={level.value}
-                        checked={expertiseLevel === level.value}
-                        onChange={() => { 
-                          setExpertiseLevel(level.value); 
-                          setErrors(prev => ({ ...prev, expertiseLevel: '' })); 
-                        }}
-                        required
-                        className="text-green-600"
-                      />
-                      <span className="font-semibold text-base">{level.label}</span>
+                    <input
+                      type="radio"
+                      name="expertiseLevel"
+                      value={level.value}
+                      checked={expertiseLevel === level.value}
+                      onChange={() => {
+                        setExpertiseLevel(level.value);
+                        setErrors(prev => ({ ...prev, expertiseLevel: '' }));
+                      }}
+                      required
+                      className="absolute top-4 right-4 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 cursor-pointer" // Positioned top-right
+                    />
+                    <div className="flex items-center mb-2">
+                      <span className="font-semibold text-lg text-gray-900">{level.label}</span> {/* Larger label */}
                     </div>
-                    <span className="text-sm text-gray-600 ml-6">{level.desc}</span>
+                    <p className="text-sm text-gray-600">{level.desc}</p>
                   </label>
                 ))}
               </div>
 
-              {errors.expertiseLevel && <div className="text-red-500 text-xs mt-2">{errors.expertiseLevel}</div>}
+              {errors.expertiseLevel && <p className="mt-2 text-sm text-red-600">{errors.expertiseLevel}</p>}
             </div>
 
             {/* Help Text */}
@@ -281,36 +285,42 @@ const Step4bSkillsExpertise = () => {
               <div className="flex items-start gap-3">
                 <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div className="font-medium text-blue-900 mb-1">Matching Tips</div>
-                  <div className="text-sm text-blue-800">
-                    <ul className="list-disc list-inside space-y-1">
-                      <li>Be specific about required skills to get better matches</li>
-                      <li>Consider your budget when selecting expertise level</li>
-                      <li>You can always adjust requirements after posting</li>
-                      <li>More specific requirements often lead to better consultant matches</li>
-                    </ul>
-                  </div>
+                  <p className="font-medium text-blue-900 mb-1">Matching Tips</p>
+                  <ul className="list-disc list-inside space-y-1 text-sm text-blue-800">
+                    <li>Be specific about required skills to get better matches</li>
+                    <li>Consider your budget when selecting expertise level</li>
+                    <li>You can always adjust requirements after posting</li>
+                    <li>More specific requirements often lead to better consultant matches</li>
+                  </ul>
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </form>
         </div>
-      </form>
+      </main>
 
       {/* Sticky Footer */}
-      <footer className="sticky bottom-0 w-full bg-white border-t py-4 px-4 flex flex-col z-20 shadow">
-        {footerError && <div className="text-red-500 text-center text-sm mb-2">{footerError}</div>}
-        <div className="flex justify-between items-center w-full">
-          <Button variant="outline" type="button" onClick={handleBack}>Back</Button>
-          <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting}>Skip for Now</Button>
-          <Button
-            type="submit"
-            className={isValid ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
-            disabled={!isValid || submitting}
-          >
-            Save & Next
+      <footer className="sticky bottom-0 z-40 w-full bg-white border-t shadow-md">
+        {footerError && <div className="text-red-500 text-center text-sm py-2">{footerError}</div>}
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Button variant="outline" type="button" onClick={handleBack} className="text-gray-600 border-gray-300 hover:bg-gray-50">
+            Back
           </Button>
-      </div>
+          <div className="flex space-x-4">
+            <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting} className="text-gray-600 hover:bg-gray-50">
+              Skip for Now
+            </Button>
+            <Button
+              type="submit"
+              className={isValid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
+              disabled={!isValid || submitting}
+              form="onboarding-form"
+            >
+              Save & Next
+            </Button>
+          </div>
+        </div>
       </footer>
     </div>
   );

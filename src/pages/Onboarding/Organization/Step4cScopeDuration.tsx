@@ -119,46 +119,39 @@ const Step4cScopeDuration = () => {
   const handleBack = () => navigate('/onboarding/organization/step-4b');
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-white border-b flex items-center h-16 px-6">
-        <div className="flex-1 flex items-center">
-          <img src="/favicon.ico" alt="Logo" className="h-8 w-8 mr-3" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="text-gray-500 text-sm font-medium">Step 3 of 7 <span className="ml-2">●●●<span className="text-gray-300">○○○○</span></span></div>
-        </div>
-        <div className="flex-1"></div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      
 
       {/* Banner */}
       {banner && <div className="bg-red-100 text-red-700 text-center py-2 font-medium">{banner}</div>}
 
-      {/* Main Form */}
-      <form onSubmit={handleSubmit} className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow p-10 mt-8 mb-8">
-          <h1 className="text-2xl font-bold mb-2 text-center">Define project scope and timeline</h1>
-          <p className="text-gray-500 text-center mb-8">Set the parameters for your engagement to help consultants understand the commitment required.</p>
-
-          <div className="space-y-8">
+      {/* Main Form Content */}
+      <main className="flex-1 container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+        <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-8 pt-8 pb-4 text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Define project scope and timeline</h1>
+            <p className="text-gray-600 text-lg">Set the parameters for your engagement to help consultants understand the commitment required.</p>
+          </div>
+          <form id="onboarding-form" onSubmit={handleSubmit} className="p-8 pt-0">
+            <div className="space-y-8">
             {/* Engagement Type */}
             <div>
-              <Label className="text-base font-semibold">
+              <Label htmlFor="engagementType" className="text-sm font-medium text-gray-700 mb-1">
                 Engagement Type <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Info className="w-4 h-4" />
                 Choose how you want to engage with consultants for this project.
-              </div>
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {ENGAGEMENT_TYPES.map(type => (
                   <label 
                     key={type.value} 
-                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors duration-200 ease-in-out ${
                       engagementType === type.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600'
+                        : 'border-gray-300 bg-white hover:border-gray-400'
                     }`}
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -172,36 +165,36 @@ const Step4cScopeDuration = () => {
                           setErrors(prev => ({ ...prev, engagementType: '' })); 
                         }}
                         required
-                        className="text-green-600"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                       />
-                      <span className="font-semibold text-base">{type.label}</span>
+                      <span className="font-semibold text-base text-gray-900">{type.label}</span>
                     </div>
-                    <span className="text-sm text-gray-600 ml-6">{type.desc}</span>
+                    <p className="text-sm text-gray-600 ml-7">{type.desc}</p>
                   </label>
                 ))}
               </div>
 
-              {errors.engagementType && <div className="text-red-500 text-xs mt-2">{errors.engagementType}</div>}
+              {errors.engagementType && <p className="mt-2 text-sm text-red-600">{errors.engagementType}</p>}
             </div>
 
             {/* Work Mode */}
             <div>
-              <Label className="text-base font-semibold">
+              <Label htmlFor="workMode" className="text-sm font-medium text-gray-700 mb-1">
                 Work Mode <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Info className="w-4 h-4" />
                 Specify how you prefer the consultant to work with your team.
-              </div>
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {WORK_MODES.map(mode => (
                   <label 
                     key={mode.value} 
-                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors duration-200 ease-in-out ${
                       workMode === mode.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600'
+                        : 'border-gray-300 bg-white hover:border-gray-400'
                     }`}
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -215,37 +208,37 @@ const Step4cScopeDuration = () => {
                           setErrors(prev => ({ ...prev, workMode: '' })); 
                         }}
                         required
-                        className="text-green-600"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                       />
                       <span className="text-2xl">{mode.icon}</span>
-                      <span className="font-semibold text-base">{mode.label}</span>
+                      <span className="font-semibold text-base text-gray-900">{mode.label}</span>
                     </div>
-                    <span className="text-sm text-gray-600 ml-6">{mode.desc}</span>
+                    <p className="text-sm text-gray-600 ml-7">{mode.desc}</p>
                   </label>
                 ))}
               </div>
 
-              {errors.workMode && <div className="text-red-500 text-xs mt-2">{errors.workMode}</div>}
+              {errors.workMode && <p className="mt-2 text-sm text-red-600">{errors.workMode}</p>}
             </div>
 
             {/* Project Scope */}
             <div>
-              <Label className="text-base font-semibold">
+              <Label htmlFor="projectScope" className="text-sm font-medium text-gray-700 mb-1">
                 Project Scope <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Info className="w-4 h-4" />
                 Estimate the size and complexity of your project.
-              </div>
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {PROJECT_SCOPES.map(scope => (
                   <label 
                     key={scope.value} 
-                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors duration-200 ease-in-out ${
                       projectScope === scope.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600'
+                        : 'border-gray-300 bg-white hover:border-gray-400'
                     }`}
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -259,28 +252,28 @@ const Step4cScopeDuration = () => {
                           setErrors(prev => ({ ...prev, projectScope: '' })); 
                         }}
                         required
-                        className="text-green-600"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                       />
-                      <span className="font-semibold text-base">{scope.label}</span>
+                      <span className="font-semibold text-base text-gray-900">{scope.label}</span>
                     </div>
-                    <span className="text-sm text-gray-600 ml-6">{scope.desc}</span>
+                    <p className="text-sm text-gray-600 ml-7">{scope.desc}</p>
                   </label>
                 ))}
               </div>
 
-              {errors.projectScope && <div className="text-red-500 text-xs mt-2">{errors.projectScope}</div>}
+              {errors.projectScope && <p className="mt-2 text-sm text-red-600">{errors.projectScope}</p>}
             </div>
 
             {/* Timeline */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
               <div>
-                <Label htmlFor="startDate" className="text-base font-semibold">
+                <Label htmlFor="startDate" className="text-sm font-medium text-gray-700 mb-1">
                   Project Start Date <span className="text-red-500">*</span>
                 </Label>
-                <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   When do you want the project to begin?
-                </div>
+                </p>
                 <Input
                   id="startDate"
                   type="date"
@@ -291,18 +284,19 @@ const Step4cScopeDuration = () => {
                   }}
                   min={new Date().toISOString().split('T')[0]}
                   required
+                  className="mt-2"
                 />
-                {errors.startDate && <div className="text-red-500 text-xs mt-1">{errors.startDate}</div>}
+                {errors.startDate && <p className="mt-2 text-sm text-red-600">{errors.startDate}</p>}
               </div>
 
               <div>
-                <Label htmlFor="endDate" className="text-base font-semibold">
+                <Label htmlFor="endDate" className="text-sm font-medium text-gray-700 mb-1">
                   Project End Date
                 </Label>
-                <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   When do you expect the project to be completed?
-                </div>
+                </p>
                 <Input
                   id="endDate"
                   type="date"
@@ -312,20 +306,21 @@ const Step4cScopeDuration = () => {
                     setErrors(prev => ({ ...prev, endDate: '' })); 
                   }}
                   min={startDate || new Date().toISOString().split('T')[0]}
+                  className="mt-2"
                 />
-                {errors.endDate && <div className="text-red-500 text-xs mt-1">{errors.endDate}</div>}
+                {errors.endDate && <p className="mt-2 text-sm text-red-600">{errors.endDate}</p>}
               </div>
             </div>
 
             {/* Application Deadline */}
             <div>
-              <Label htmlFor="applicationDeadline" className="text-base font-semibold">
+              <Label htmlFor="applicationDeadline" className="text-sm font-medium text-gray-700 mb-1">
                 Application Deadline <span className="text-red-500">*</span>
               </Label>
-              <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Clock className="w-4 h-4" />
                 When should consultants submit their applications?
-              </div>
+              </p>
               <Input
                 id="applicationDeadline"
                 type="date"
@@ -336,20 +331,21 @@ const Step4cScopeDuration = () => {
                 }}
                 min={new Date().toISOString().split('T')[0]}
                 required
+                className="mt-2"
               />
-              {errors.applicationDeadline && <div className="text-red-500 text-xs mt-1">{errors.applicationDeadline}</div>}
+              {errors.applicationDeadline && <p className="mt-2 text-sm text-red-600">{errors.applicationDeadline}</p>}
             </div>
 
             {/* Location (conditional) */}
             {workMode === 'onsite' && (
               <div>
-                <Label htmlFor="location" className="text-base font-semibold">
+                <Label htmlFor="location" className="text-sm font-medium text-gray-700 mb-1">
                   Work Location <span className="text-red-500">*</span>
                 </Label>
-                <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
                   Where will the consultant need to work?
-                </div>
+                </p>
                 <Input
                   id="location"
                   type="text"
@@ -360,46 +356,56 @@ const Step4cScopeDuration = () => {
                     setErrors(prev => ({ ...prev, location: '' })); 
                   }}
                   required
+                  className="mt-2"
                 />
-                {errors.location && <div className="text-red-500 text-xs mt-1">{errors.location}</div>}
+                {errors.location && <p className="mt-2 text-sm text-red-600">{errors.location}</p>}
               </div>
             )}
 
             {/* Team Size */}
             <div>
-              <Label htmlFor="teamSize" className="text-base font-semibold">
+              <Label htmlFor="teamSize" className="text-sm font-medium text-gray-700 mb-1">
                 Team Size
               </Label>
-              <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+              <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
                 <Users className="w-4 h-4" />
                 How many people will the consultant be working with?
-              </div>
+              </p>
               <Input
                 id="teamSize"
                 type="text"
                 placeholder="e.g., 5-10 people, Department of 25, etc."
                 value={teamSize}
                 onChange={e => setTeamSize(e.target.value)}
+                className="mt-2"
               />
             </div>
-          </div>
+            </div>
+          </form>
         </div>
-      </form>
+      </main>
 
       {/* Sticky Footer */}
-      <footer className="sticky bottom-0 w-full bg-white border-t py-4 px-4 flex flex-col z-20 shadow">
+      <footer className="sticky bottom-0 z-40 w-full bg-white border-t shadow-lg">
         {footerError && <div className="text-red-500 text-center text-sm mb-2">{footerError}</div>}
-        <div className="flex justify-between items-center w-full">
-          <Button variant="outline" type="button" onClick={handleBack}>Back</Button>
-          <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting}>Skip for Now</Button>
-          <Button
-            type="submit"
-            className={isValid ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
-            disabled={!isValid || submitting}
-          >
-            Save & Next
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Button variant="outline" type="button" onClick={handleBack} className="text-gray-600 border-gray-300 hover:bg-gray-50">
+            Back
           </Button>
-      </div>
+          <div className="flex space-x-4">
+            <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting} className="text-gray-600 hover:bg-gray-50">
+              Skip for Now
+            </Button>
+            <Button
+              type="submit"
+              className={isValid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
+              disabled={!isValid || submitting}
+              form="onboarding-form"
+            >
+              Save & Next
+            </Button>
+          </div>
+        </div>
       </footer>
     </div>
   );

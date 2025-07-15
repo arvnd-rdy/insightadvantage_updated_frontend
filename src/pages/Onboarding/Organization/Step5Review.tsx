@@ -115,375 +115,373 @@ const Step5Review = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-white border-b flex items-center h-16 px-6">
-        <div className="flex-1 flex items-center">
-          <img src="/favicon.ico" alt="Logo" className="h-8 w-8 mr-3" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="text-gray-500 text-sm font-medium">Step 5 of 7 <span className="ml-2">●●●●●<span className="text-gray-300">○○</span></span></div>
-        </div>
-        <div className="flex-1"></div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      
 
       {/* Banner */}
       {banner && <div className="bg-green-100 text-green-700 text-center py-2 font-medium">{banner}</div>}
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow p-10 mt-8 mb-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold mb-2">Review your information</h1>
-            <p className="text-gray-500">Review all the information you've provided and make any necessary changes before completing your registration.</p>
+      <main className="flex-1 container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+        <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-8 pt-8 pb-4 text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Review your information</h1>
+            <p className="text-gray-600 text-lg">Review all the information you've provided and make any necessary changes before completing your registration.</p>
           </div>
 
-          <Accordion type="single" collapsible className="space-y-4">
-            {/* Basic Company Information */}
-            <AccordionItem value="basic-info" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <Building className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Basic Company Information</div>
-                    <div className="text-sm text-gray-500">{mockData.basicInfo.orgName} • {mockData.basicInfo.companySize}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-1'); }}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Organization:</span> {mockData.basicInfo.orgName}
-                  </div>
-                  <div>
-                    <span className="font-medium">Size:</span> {mockData.basicInfo.companySize}
-                  </div>
-                  <div>
-                    <span className="font-medium">Industry:</span> {mockData.basicInfo.industry.join(', ')}
-                  </div>
-                  <div>
-                    <span className="font-medium">Website:</span> {mockData.basicInfo.website}
-                  </div>
-                  <div className="md:col-span-2">
-                    <span className="font-medium">Address:</span> {mockData.basicInfo.street}, {mockData.basicInfo.city}, {mockData.basicInfo.state} {mockData.basicInfo.zip}, {mockData.basicInfo.country}
-                  </div>
-                  <div>
-                    <span className="font-medium">Timezone:</span> {mockData.basicInfo.timezone}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Contact & Key Personnel */}
-            <AccordionItem value="contacts" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <Users className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Contact & Key Personnel</div>
-                    <div className="text-sm text-gray-500">{mockData.contacts.length} contact{mockData.contacts.length !== 1 ? 's' : ''} added</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-2'); }}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="space-y-3">
-                  {mockData.contacts.map((contact, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3">
-                      <div className="font-medium">{contact.firstName} {contact.lastName}, {contact.jobTitle}</div>
-                      <div className="text-sm text-gray-600">{contact.email} • {contact.phone}</div>
-                      <div className="text-xs text-gray-500">Preferred: {contact.preferred}</div>
-                    </div>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Service Needs & Project Preferences */}
-            <AccordionItem value="job-basics" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <FileText className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Service Needs & Project Preferences</div>
-                    <div className="text-sm text-gray-500">{mockData.jobDetails.consultingTypes.length} service types • {mockData.jobDetails.budgetAmount} {mockData.jobDetails.currency}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3a'); }}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Services:</span> {mockData.jobDetails.consultingTypes.join(', ')}
-                  </div>
-                  <div>
-                    <span className="font-medium">Duration:</span> {mockData.jobDetails.duration}
-                  </div>
-                  <div>
-                    <span className="font-medium">Budget:</span> {mockData.jobDetails.budgetAmount} {mockData.jobDetails.currency} ({mockData.jobDetails.budgetType})
-                  </div>
-                  <div>
-                    <span className="font-medium">Work Mode:</span> {mockData.jobDetails.workModes.join(', ')}
-                  </div>
-                  <div>
-                    <span className="font-medium">Expertise Level:</span> {mockData.jobDetails.expertiseLevel}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Job Description & Attachments */}
-            <AccordionItem value="description" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <FileText className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Job Description & Attachments</div>
-                    <div className="text-sm text-gray-500">{mockData.description.jobTitle}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3b'); }}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <span className="font-medium">Job Title:</span> {mockData.description.jobTitle}
-                  </div>
-                  <div>
-                    <span className="font-medium">Description:</span> {mockData.description.description.substring(0, 100)}...
-                  </div>
-                  <div>
-                    <span className="font-medium">Attachments:</span> {mockData.description.attachments.join(', ')}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Skills & Expertise */}
-            <AccordionItem value="skills" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <Settings className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Skills & Expertise</div>
-                    <div className="text-sm text-gray-500">{mockData.skills.requiredSkills.length} skills • {mockData.skills.expertiseLevel}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3c'); }}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <span className="font-medium">Required Skills:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {mockData.skills.requiredSkills.map((skill, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">{skill}</Badge>
-                      ))}
+          <div className="p-8 pt-0">
+            <Accordion type="single" collapsible className="space-y-4">
+              {/* Basic Company Information */}
+              <AccordionItem value="basic-info" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <Building className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Basic Company Information</p>
+                      <p className="text-sm text-gray-500">{mockData.basicInfo.orgName} • {mockData.basicInfo.companySize}</p>
                     </div>
                   </div>
-                  <div>
-                    <span className="font-medium">Expertise Level:</span> {mockData.skills.expertiseLevel}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Scope & Duration */}
-            <AccordionItem value="scope" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <Calendar className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Scope & Duration</div>
-                    <div className="text-sm text-gray-500">{mockData.scope.engagementType} • {mockData.scope.projectScope}</div>
-                  </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                       <CheckCircle className="w-3 h-3 mr-1" />
                       Complete
                     </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3d'); }}>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-1'); }} className="text-gray-600 hover:bg-gray-100">
                       <Edit className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Engagement:</span> {mockData.scope.engagementType}
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Organization:</span> {mockData.basicInfo.orgName}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Size:</span> {mockData.basicInfo.companySize}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Industry:</span> {mockData.basicInfo.industry.join(', ')}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Website:</span> {mockData.basicInfo.website}
+                    </div>
+                    <div className="md:col-span-2">
+                      <span className="font-medium text-gray-900">Address:</span> {mockData.basicInfo.street}, {mockData.basicInfo.city}, {mockData.basicInfo.state} {mockData.basicInfo.zip}, {mockData.basicInfo.country}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Timezone:</span> {mockData.basicInfo.timezone}
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium">Work Mode:</span> {mockData.scope.workMode}
-                  </div>
-                  <div>
-                    <span className="font-medium">Scope:</span> {mockData.scope.projectScope}
-                  </div>
-                  <div>
-                    <span className="font-medium">Timeline:</span> {mockData.scope.startDate} to {mockData.scope.endDate}
-                  </div>
-                  <div>
-                    <span className="font-medium">Deadline:</span> {mockData.scope.applicationDeadline}
-                  </div>
-                  <div>
-                    <span className="font-medium">Location:</span> {mockData.scope.location}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+                </AccordionContent>
+              </AccordionItem>
 
-            {/* Budget & Terms */}
-            <AccordionItem value="budget" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <DollarSign className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Budget & Terms</div>
-                    <div className="text-sm text-gray-500">{mockData.budget.budgetAmount} {mockData.budget.currency} • {mockData.budget.budgetStructure}</div>
+              {/* Contact & Key Personnel */}
+              <AccordionItem value="contacts" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <Users className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Contact & Key Personnel</p>
+                      <p className="text-sm text-gray-500">{mockData.contacts.length} contact{mockData.contacts.length !== 1 ? 's' : ''} added</p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                       <CheckCircle className="w-3 h-3 mr-1" />
                       Complete
                     </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3e'); }}>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-2'); }} className="text-gray-600 hover:bg-gray-100">
                       <Edit className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Structure:</span> {mockData.budget.budgetStructure}
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="space-y-3 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    {mockData.contacts.map((contact, index) => (
+                      <div key={index} className="rounded-md bg-gray-50 p-3 border border-gray-100">
+                        <p className="font-medium text-gray-900">{contact.firstName} {contact.lastName}, {contact.jobTitle}</p>
+                        <p className="text-sm text-gray-600">{contact.email} • {contact.phone}</p>
+                        <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800 mt-1">
+                          Preferred: {contact.preferred}
+                        </Badge>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <span className="font-medium">Amount:</span> {mockData.budget.budgetAmount} {mockData.budget.currency}
-                  </div>
-                  <div>
-                    <span className="font-medium">Payment Terms:</span> {mockData.budget.paymentTerms}
-                  </div>
-                  <div>
-                    <span className="font-medium">NDA Required:</span> {mockData.budget.ndaRequired ? 'Yes' : 'No'}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+                </AccordionContent>
+              </AccordionItem>
 
-            {/* Service Defaults */}
-            <AccordionItem value="defaults" className="border rounded-lg">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                <div className="flex items-center gap-3 w-full">
-                  <Shield className="w-5 h-5 text-gray-600" />
-                  <div className="flex-1 text-left">
-                    <div className="font-semibold">Service & Collaboration Defaults</div>
-                    <div className="text-sm text-gray-500">{mockData.defaults.defaultBudget} {mockData.defaults.defaultCurrency} • {mockData.defaults.reportingFrequency}</div>
+              {/* Service Needs & Project Preferences */}
+              <AccordionItem value="job-basics" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Service Needs & Project Preferences</p>
+                      <p className="text-sm text-gray-500">{mockData.jobDetails.consultingTypes.length} service types • {mockData.jobDetails.budgetAmount} {mockData.jobDetails.currency}</p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                       <CheckCircle className="w-3 h-3 mr-1" />
                       Complete
                     </Badge>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-4'); }}>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3a'); }} className="text-gray-600 hover:bg-gray-100">
                       <Edit className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium">Default Budget:</span> {mockData.defaults.defaultBudget} {mockData.defaults.defaultCurrency}
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Services:</span> {mockData.jobDetails.consultingTypes.join(', ')}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Duration:</span> {mockData.jobDetails.duration}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Budget:</span> {mockData.jobDetails.budgetAmount} {mockData.jobDetails.currency} ({mockData.jobDetails.budgetType})
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Work Mode:</span> {mockData.jobDetails.workModes.join(', ')}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Expertise Level:</span> {mockData.jobDetails.expertiseLevel}
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium">Payment Terms:</span> {mockData.defaults.defaultPaymentTerms}
-                  </div>
-                  <div>
-                    <span className="font-medium">Communication:</span> {mockData.defaults.communicationPreferences.join(', ')}
-                  </div>
-                  <div>
-                    <span className="font-medium">Reporting:</span> {mockData.defaults.reportingFrequency}
-                  </div>
-                  <div>
-                    <span className="font-medium">NDA Default:</span> {mockData.defaults.ndaRequired ? 'Required' : 'Optional'}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                </AccordionContent>
+              </AccordionItem>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={saving}
-              className="flex-1"
-            >
-              {saving ? 'Saving...' : 'Save Draft & Continue Later'}
-            </Button>
-            <Button
-              onClick={handleComplete}
-              disabled={saving}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-            >
-              {saving ? 'Processing...' : 'Complete Registration'}
-            </Button>
+              {/* Job Description & Attachments */}
+              <AccordionItem value="description" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Job Description & Attachments</p>
+                      <p className="text-sm text-gray-500">{mockData.description.jobTitle}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Complete
+                    </Badge>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-4a'); }} className="text-gray-600 hover:bg-gray-100">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="space-y-3 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Job Title:</span> {mockData.description.jobTitle}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Description:</span> {mockData.description.description.substring(0, 150)}...
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Attachments:</span> {mockData.description.attachments.join(', ')}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Skills & Expertise */}
+              <AccordionItem value="skills" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <Settings className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Skills & Expertise</p>
+                      <p className="text-sm text-gray-500">{mockData.skills.requiredSkills.length} skills • {mockData.skills.expertiseLevel}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Complete
+                    </Badge>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-4b'); }} className="text-gray-600 hover:bg-gray-100">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="space-y-3 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Required Skills:</span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {mockData.skills.requiredSkills.map((skill, index) => (
+                          <Badge key={index} variant="outline" className="text-xs bg-gray-100 text-gray-700">{skill}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Expertise Level:</span> {mockData.skills.expertiseLevel}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Scope & Duration */}
+              <AccordionItem value="scope" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Scope & Duration</p>
+                      <p className="text-sm text-gray-500">{mockData.scope.engagementType} • {mockData.scope.projectScope}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Complete
+                    </Badge>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-4c'); }} className="text-gray-600 hover:bg-gray-100">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Engagement:</span> {mockData.scope.engagementType}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Work Mode:</span> {mockData.scope.workMode}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Scope:</span> {mockData.scope.projectScope}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Timeline:</span> {mockData.scope.startDate} to {mockData.scope.endDate}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Deadline:</span> {mockData.scope.applicationDeadline}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Location:</span> {mockData.scope.location}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Budget & Terms */}
+              <AccordionItem value="budget" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <DollarSign className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Budget & Terms</p>
+                      <p className="text-sm text-gray-500">{mockData.budget.budgetAmount} {mockData.budget.currency} • {mockData.budget.budgetStructure}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Complete
+                    </Badge>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-4d'); }} className="text-gray-600 hover:bg-gray-100">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Structure:</span> {mockData.budget.budgetStructure}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Amount:</span> {mockData.budget.budgetAmount} {mockData.budget.currency}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Payment Terms:</span> {mockData.budget.paymentTerms}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">NDA Required:</span> {mockData.budget.ndaRequired ? 'Yes' : 'No'}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Service Defaults */}
+              <AccordionItem value="defaults" className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline flex items-center justify-between w-full text-left">
+                  <div className="flex items-center gap-3">
+                    <Shield className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Service & Collaboration Defaults</p>
+                      <p className="text-sm text-gray-500">{mockData.defaults.defaultBudget} {mockData.defaults.defaultCurrency} • {mockData.defaults.reportingFrequency}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Complete
+                    </Badge>
+                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); navigate('/onboarding/organization/step-3b'); }} className="text-gray-600 hover:bg-gray-100">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 pt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
+                    <div>
+                      <span className="font-medium text-gray-900">Default Budget:</span> {mockData.defaults.defaultBudget} {mockData.defaults.defaultCurrency}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Payment Terms:</span> {mockData.defaults.defaultPaymentTerms}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Communication:</span> {mockData.defaults.communicationPreferences.join(', ')}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Reporting:</span> {mockData.defaults.reportingFrequency}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">NDA Default:</span> {mockData.defaults.ndaRequired ? 'Required' : 'Optional'}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t border-gray-200">
+              <Button
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={saving}
+                className="flex-1 text-gray-700 border-gray-300 hover:bg-gray-100"
+              >
+                {saving ? 'Saving...' : 'Save Draft & Continue Later'}
+              </Button>
+              <Button
+                onClick={handleComplete}
+                disabled={saving}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {saving ? 'Processing...' : 'Complete Registration'}
+              </Button>
+            </div>
+
+            {footerError && <p className="text-red-500 text-center text-sm mt-4">{footerError}</p>}
           </div>
-
-          {footerError && <div className="text-red-500 text-center text-sm mt-4">{footerError}</div>}
         </div>
       </main>
 
       {/* Sticky Footer */}
-      <footer className="sticky bottom-0 w-full bg-white border-t py-4 px-4 flex flex-col z-20 shadow">
-        <div className="flex justify-between items-center w-full">
-          <Button variant="outline" type="button" onClick={handleBack}>Back</Button>
-          <div className="text-sm text-gray-500">
-            All sections completed ✓
+      <footer className="sticky bottom-0 z-40 w-full bg-white border-t shadow-lg">
+        {footerError && <div className="text-red-500 text-center text-sm mb-2">{footerError}</div>}
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Button variant="outline" type="button" onClick={handleBack} className="text-gray-600 border-gray-300 hover:bg-gray-50">
+            Back
+          </Button>
+          <div className="text-sm text-gray-600 font-medium">
+            All sections completed <CheckCircle className="w-4 h-4 inline-block ml-1 text-blue-600" />
           </div>
-      </div>
+        </div>
       </footer>
     </div>
   );

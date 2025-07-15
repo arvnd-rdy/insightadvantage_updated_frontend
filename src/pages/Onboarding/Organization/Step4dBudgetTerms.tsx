@@ -138,278 +138,281 @@ const Step4dBudgetTerms = () => {
   const handleBack = () => navigate('/onboarding/organization/step-4c');
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-white border-b flex items-center h-16 px-6">
-        <div className="flex-1 flex items-center">
-          <img src="/favicon.ico" alt="Logo" className="h-8 w-8 mr-3" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="text-gray-500 text-sm font-medium">Step 3 of 7 <span className="ml-2">●●●<span className="text-gray-300">○○○○</span></span></div>
-        </div>
-        <div className="flex-1"></div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      
 
       {/* Banner */}
       {banner && <div className="bg-red-100 text-red-700 text-center py-2 font-medium">{banner}</div>}
 
-      {/* Main Form */}
-      <form onSubmit={handleSubmit} className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow p-10 mt-8 mb-8">
-          <h1 className="text-2xl font-bold mb-2 text-center">Set budget and terms</h1>
-          <p className="text-gray-500 text-center mb-8">Define your budget structure and any legal requirements for the engagement.</p>
-
-          <div className="space-y-8">
-            {/* Budget Structure */}
-            <div>
-              <Label className="text-base font-semibold">
-                Budget Structure <span className="text-red-500">*</span>
-              </Label>
-              <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
-                <DollarSign className="w-4 h-4" />
-                Choose how you want to structure payment for this project.
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {BUDGET_STRUCTURES.map(structure => (
-                  <label 
-                    key={structure.value} 
-                    className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                      budgetStructure === structure.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <input
-                        type="radio"
-                        name="budgetStructure"
-                        value={structure.value}
-                        checked={budgetStructure === structure.value}
-                        onChange={() => { 
-                          setBudgetStructure(structure.value); 
-                          setErrors(prev => ({ ...prev, budgetStructure: '', budgetAmount: '', budgetRange: '' })); 
-                        }}
-                        required
-                        className="text-green-600"
-                      />
-                      <span className="font-semibold text-base">{structure.label}</span>
-                    </div>
-                    <span className="text-sm text-gray-600 ml-6">{structure.desc}</span>
-                  </label>
-                ))}
-              </div>
-
-              {errors.budgetStructure && <div className="text-red-500 text-xs mt-2">{errors.budgetStructure}</div>}
-            </div>
-
-            {/* Budget Amount */}
-            {budgetStructure && budgetStructure !== 'milestone' && (
+      {/* Main Form Content */}
+      <main className="flex-1 container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+        <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-8 pt-8 pb-4 text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Set budget and terms</h1>
+            <p className="text-gray-600 text-lg">Define your budget structure and any legal requirements for the engagement.</p>
+          </div>
+          <form id="onboarding-form" onSubmit={handleSubmit} className="p-8 pt-0">
+            <div className="space-y-8">
+              {/* Budget Structure */}
               <div>
-                <Label className="text-base font-semibold">
-                  Budget Amount <span className="text-red-500">*</span>
+                <Label htmlFor="budgetStructure" className="text-sm font-medium text-gray-700 mb-1">
+                  Budget Structure <span className="text-red-500">*</span>
                 </Label>
-                <div className="flex items-center gap-3">
-                  <span className="text-lg font-medium">{currency}</span>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={budgetAmount}
-                    onChange={e => { 
-                      setBudgetAmount(e.target.value); 
-                      setErrors(prev => ({ ...prev, budgetAmount: '' })); 
-                    }}
-                    className="w-48"
-                    placeholder={
-                      budgetStructure === 'hourly' ? 'Hourly rate' :
-                      budgetStructure === 'fixed' ? 'Total project fee' :
-                      budgetStructure === 'retainer' ? 'Monthly retainer amount' : ''
-                    }
-                  />
-                  <span className="text-sm text-gray-500">
-                    {budgetStructure === 'hourly' && 'per hour'}
-                    {budgetStructure === 'fixed' && 'total'}
-                    {budgetStructure === 'retainer' && 'per month'}
-                  </span>
-                </div>
-                {errors.budgetAmount && <div className="text-red-500 text-xs mt-1">{errors.budgetAmount}</div>}
-              </div>
-            )}
-
-            {/* Budget Range for Milestone */}
-            {budgetStructure === 'milestone' && (
-              <div>
-                <Label className="text-base font-semibold">
-                  Budget Range <span className="text-red-500">*</span>
-                </Label>
-                <div className="flex items-center gap-3">
-                  <span className="text-lg font-medium">{currency}</span>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={budgetRange.min}
-                    onChange={e => { 
-                      setBudgetRange(prev => ({ ...prev, min: e.target.value })); 
-                      setErrors(prev => ({ ...prev, budgetRange: '' })); 
-                    }}
-                    className="w-32"
-                    placeholder="Min"
-                  />
-                  <span className="text-sm text-gray-500">to</span>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={budgetRange.max}
-                    onChange={e => { 
-                      setBudgetRange(prev => ({ ...prev, max: e.target.value })); 
-                      setErrors(prev => ({ ...prev, budgetRange: '' })); 
-                    }}
-                    className="w-32"
-                    placeholder="Max"
-                  />
-                  <span className="text-sm text-gray-500">total</span>
-                </div>
-                {errors.budgetRange && <div className="text-red-500 text-xs mt-1">{errors.budgetRange}</div>}
-              </div>
-            )}
-
-            {/* Currency */}
-            <div>
-              <Label htmlFor="currency" className="text-base font-semibold">
-                Currency
-              </Label>
-              <select
-                id="currency"
-                className="w-32 border rounded px-3 py-2"
-                value={currency}
-                onChange={e => setCurrency(e.target.value)}
-              >
-                {CURRENCIES.map(cur => (
-                  <option key={cur} value={cur}>{cur}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* NDA Requirement */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <Label className="text-base font-semibold">
-                    Non-Disclosure Agreement (NDA)
-                  </Label>
-                  <div className="text-xs text-gray-500 flex items-center gap-1">
-                    <Shield className="w-4 h-4" />
-                    Require consultants to sign an NDA before starting work
-                  </div>
-                </div>
-                <Switch
-                  checked={ndaRequired}
-                  onCheckedChange={setNdaRequired}
-                />
-              </div>
-
-              {ndaRequired && (
-                <div className="space-y-4">
-                  {ndaFile ? (
-                    <div className="flex items-center justify-between bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-center gap-3">
-                        <FileCheck className="w-5 h-5 text-green-600" />
-                        <div>
-                          <div className="font-medium text-sm">{ndaFile.name}</div>
-                          <div className="text-xs text-gray-500">{(ndaFile.size / 1024 / 1024).toFixed(2)} MB</div>
-                        </div>
-                      </div>
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant="ghost"
-                        onClick={removeNdaFile}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors"
-                      onClick={() => fileInputRef.current?.click()}
-                      onDrop={handleNdaDrop}
-                      onDragOver={e => e.preventDefault()}
+                <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
+                  <DollarSign className="w-4 h-4" />
+                  Choose how you want to structure payment for this project.
+                </p>
+                <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {BUDGET_STRUCTURES.map(structure => (
+                    <label 
+                      key={structure.value} 
+                      className={`flex flex-col p-4 rounded-lg border-2 cursor-pointer transition-colors duration-200 ease-in-out ${
+                        budgetStructure === structure.value
+                          ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600'
+                          : 'border-gray-300 bg-white hover:border-gray-400'
+                      }`}
                     >
-                      <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                      <div className="text-gray-600 font-medium mb-1">Upload NDA Document</div>
-                      <div className="text-xs text-gray-400">PDF, DOC, DOCX files up to 5MB</div>
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        className="hidden"
-                        ref={fileInputRef}
-                        onChange={handleNdaUpload}
-                      />
-                    </div>
-                  )}
-                  {errors.ndaFile && <div className="text-red-500 text-xs">{errors.ndaFile}</div>}
+                      <div className="flex items-center gap-3 mb-2">
+                        <input
+                          type="radio"
+                          name="budgetStructure"
+                          value={structure.value}
+                          checked={budgetStructure === structure.value}
+                          onChange={() => { 
+                            setBudgetStructure(structure.value); 
+                            setErrors(prev => ({ ...prev, budgetStructure: '', budgetAmount: '', budgetRange: '' })); 
+                          }}
+                          required
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                        />
+                        <span className="font-semibold text-base text-gray-900">{structure.label}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 ml-7">{structure.desc}</p>
+                    </label>
+                  ))}
+                </div>
+                {errors.budgetStructure && <p className="mt-2 text-sm text-red-600">{errors.budgetStructure}</p>}
+              </div>
+
+              {/* Budget Amount */}
+              {budgetStructure && budgetStructure !== 'milestone' && (
+                <div>
+                  <Label htmlFor="budgetAmount" className="text-sm font-medium text-gray-700 mb-1">
+                    Budget Amount <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="mt-2 flex items-center gap-3">
+                    <span className="text-lg font-semibold text-gray-700">{currency}</span>
+                    <Input
+                      id="budgetAmount"
+                      type="number"
+                      min="1"
+                      value={budgetAmount}
+                      onChange={e => { 
+                        setBudgetAmount(e.target.value); 
+                        setErrors(prev => ({ ...prev, budgetAmount: '' })); 
+                      }}
+                      className="flex-grow"
+                      placeholder={
+                        budgetStructure === 'hourly' ? 'Hourly rate' :
+                        budgetStructure === 'fixed' ? 'Total project fee' :
+                        budgetStructure === 'retainer' ? 'Monthly retainer amount' : ''
+                      }
+                    />
+                    <span className="text-sm text-gray-500">
+                      {budgetStructure === 'hourly' && 'per hour'}
+                      {budgetStructure === 'fixed' && 'total'}
+                      {budgetStructure === 'retainer' && 'per month'}
+                    </span>
+                  </div>
+                  {errors.budgetAmount && <p className="mt-2 text-sm text-red-600">{errors.budgetAmount}</p>}
                 </div>
               )}
-            </div>
 
-            {/* Payment Terms */}
-            <div>
-              <Label htmlFor="paymentTerms" className="text-base font-semibold">
-                Payment Terms <span className="text-red-500">*</span>
-              </Label>
-              <div className="text-xs text-gray-500 mb-2">
-                Specify when and how payments will be made (e.g., "Net 30", "50% upfront, 50% on completion").
-              </div>
-              <Input
-                id="paymentTerms"
-                type="text"
-                placeholder="e.g., Net 30 days, 50% upfront and 50% upon completion"
-                value={paymentTerms}
-                onChange={e => { 
-                  setPaymentTerms(e.target.value); 
-                  setErrors(prev => ({ ...prev, paymentTerms: '' })); 
-                }}
-                required
-              />
-              {errors.paymentTerms && <div className="text-red-500 text-xs mt-1">{errors.paymentTerms}</div>}
-            </div>
+              {/* Budget Range for Milestone */}
+              {budgetStructure === 'milestone' && (
+                <div>
+                  <Label htmlFor="budgetRangeMin" className="text-sm font-medium text-gray-700 mb-1">
+                    Budget Range <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="mt-2 flex items-center gap-3">
+                    <span className="text-lg font-semibold text-gray-700">{currency}</span>
+                    <Input
+                      id="budgetRangeMin"
+                      type="number"
+                      min="1"
+                      value={budgetRange.min}
+                      onChange={e => { 
+                        setBudgetRange(prev => ({ ...prev, min: e.target.value })); 
+                        setErrors(prev => ({ ...prev, budgetRange: '' })); 
+                      }}
+                      className="w-32"
+                      placeholder="Min"
+                    />
+                    <span className="text-sm text-gray-500">to</span>
+                    <Input
+                      id="budgetRangeMax"
+                      type="number"
+                      min="1"
+                      value={budgetRange.max}
+                      onChange={e => { 
+                        setBudgetRange(prev => ({ ...prev, max: e.target.value })); 
+                        setErrors(prev => ({ ...prev, budgetRange: '' })); 
+                      }}
+                      className="w-32"
+                      placeholder="Max"
+                    />
+                    <span className="text-sm text-gray-500">total</span>
+                  </div>
+                  {errors.budgetRange && <p className="mt-2 text-sm text-red-600">{errors.budgetRange}</p>}
+                </div>
+              )}
 
-            {/* Additional Terms */}
-            <div>
-              <Label htmlFor="additionalTerms" className="text-base font-semibold">
-                Additional Terms & Conditions
-              </Label>
-              <div className="text-xs text-gray-500 mb-2">
-                Any additional terms, conditions, or special requirements for this engagement.
+              {/* Currency */}
+              <div>
+                <Label htmlFor="currency" className="text-sm font-medium text-gray-700 mb-1">
+                  Currency
+                </Label>
+                <select
+                  id="currency"
+                  className="mt-2 block w-32 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  value={currency}
+                  onChange={e => setCurrency(e.target.value)}
+                >
+                  {CURRENCIES.map(cur => (
+                    <option key={cur} value={cur}>{cur}</option>
+                  ))}
+                </select>
               </div>
-              <Textarea
-                id="additionalTerms"
-                placeholder="e.g., Travel expenses covered, specific reporting requirements, etc."
-                value={additionalTerms}
-                onChange={e => setAdditionalTerms(e.target.value)}
-                rows={4}
-                className="resize-none"
-              />
+
+              {/* NDA Requirement */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="ndaRequired" className="text-sm font-medium text-gray-700">Non-Disclosure Agreement (NDA)</Label>
+                    <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                      <Shield className="w-4 h-4" />
+                      Require consultants to sign an NDA before starting work
+                    </p>
+                  </div>
+                  <Switch
+                    id="ndaRequired"
+                    checked={ndaRequired}
+                    onCheckedChange={setNdaRequired}
+                    className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-200"
+                  />
+                </div>
+                {ndaRequired && (
+                  <div className="mt-4 space-y-4">
+                    {ndaFile ? (
+                      <div className="flex items-center justify-between rounded-md border border-gray-200 bg-white p-3 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <FileCheck className="w-5 h-5 text-blue-600" />
+                          <div>
+                            <p className="font-medium text-sm text-gray-900">{ndaFile.name}</p>
+                            <p className="text-xs text-gray-500">{(ndaFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                          </div>
+                        </div>
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          onClick={removeNdaFile}
+                          className="text-red-500 hover:bg-red-50/50"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 hover:border-gray-400 transition-colors duration-200 ease-in-out cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
+                        onDrop={handleNdaDrop}
+                        onDragOver={e => e.preventDefault()}
+                      >
+                        <div className="space-y-1 text-center">
+                          <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                          <div className="flex text-sm text-gray-600">
+                            <label htmlFor="nda-file-upload" className="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500">
+                              <span>Upload a file</span>
+                              <input id="nda-file-upload" name="nda-file-upload" type="file" className="sr-only" accept=".pdf,.doc,.docx" ref={fileInputRef} onChange={handleNdaUpload} />
+                            </label>
+                            <p className="pl-1">or drag and drop</p>
+                          </div>
+                          <p className="text-xs text-gray-500">PDF, DOC, DOCX files up to 5MB</p>
+                        </div>
+                      </div>
+                    )}
+                    {errors.ndaFile && <p className="mt-2 text-sm text-red-600">{errors.ndaFile}</p>}
+                  </div>
+                )}
+              </div>
+
+              {/* Payment Terms */}
+              <div>
+                <Label htmlFor="paymentTerms" className="text-sm font-medium text-gray-700 mb-1">
+                  Payment Terms <span className="text-red-500">*</span>
+                </Label>
+                <p className="mt-1 text-sm text-gray-500">
+                  Specify when and how payments will be made (e.g., "Net 30", "50% upfront, 50% on completion").
+                </p>
+                <Input
+                  id="paymentTerms"
+                  type="text"
+                  placeholder="e.g., Net 30 days, 50% upfront and 50% upon completion"
+                  value={paymentTerms}
+                  onChange={e => { 
+                    setPaymentTerms(e.target.value); 
+                    setErrors(prev => ({ ...prev, paymentTerms: '' })); 
+                  }}
+                  required
+                  className="mt-2"
+                />
+                {errors.paymentTerms && <p className="mt-2 text-sm text-red-600">{errors.paymentTerms}</p>}
+              </div>
+
+              {/* Additional Terms */}
+              <div>
+                <Label htmlFor="additionalTerms" className="text-sm font-medium text-gray-700 mb-1">
+                  Additional Terms & Conditions
+                </Label>
+                <p className="mt-1 text-sm text-gray-500">
+                  Any additional terms, conditions, or special requirements for this engagement.
+                </p>
+                <Textarea
+                  id="additionalTerms"
+                  placeholder="e.g., Travel expenses covered, specific reporting requirements, etc."
+                  value={additionalTerms}
+                  onChange={e => setAdditionalTerms(e.target.value)}
+                  rows={4}
+                  className="mt-2 resize-none"
+                />
+              </div>
             </div>
-          </div>
+          </form>
         </div>
-      </form>
+      </main>
 
       {/* Sticky Footer */}
-      <footer className="sticky bottom-0 w-full bg-white border-t py-4 px-4 flex flex-col z-20 shadow">
+      <footer className="sticky bottom-0 z-40 w-full bg-white border-t shadow-lg">
         {footerError && <div className="text-red-500 text-center text-sm mb-2">{footerError}</div>}
-        <div className="flex justify-between items-center w-full">
-          <Button variant="outline" type="button" onClick={handleBack}>Back</Button>
-          <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting}>Skip for Now</Button>
-          <Button
-            type="submit"
-            className={isValid ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
-            disabled={!isValid || submitting}
-          >
-            Save & Next
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Button variant="outline" type="button" onClick={handleBack} className="text-gray-600 border-gray-300 hover:bg-gray-50">
+            Back
           </Button>
-      </div>
+          <div className="flex space-x-4">
+            <Button type="button" variant="ghost" onClick={handleSkip} disabled={submitting} className="text-gray-600 hover:bg-gray-50">
+              Skip for Now
+            </Button>
+            <Button
+              type="submit"
+              className={isValid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}
+              disabled={!isValid || submitting}
+              form="onboarding-form"
+            >
+              Save & Next
+            </Button>
+          </div>
+        </div>
       </footer>
     </div>
   );
