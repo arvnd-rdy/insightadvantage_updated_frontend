@@ -2,7 +2,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -67,10 +67,7 @@ const AdminSubscriptions = () => {
         <DashboardSidebar role="admin" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName="Admin"
-            userRole="admin"
-          />
+          
           
           <main className="p-6">
             <div className="mb-6">

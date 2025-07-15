@@ -147,10 +147,10 @@ const ConsultantDetail = () => {
             userRole="organization"
           />
           
-          <main className="p-8">
+          <main className="p-8 max-w-7xl mx-auto">
             {/* Breadcrumb */}
             <div className="mb-8">
-              <Link to="/organization/search" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+              <Link to="/organization/find-consultants" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to search results
               </Link>

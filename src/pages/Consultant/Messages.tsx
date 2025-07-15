@@ -1,225 +1,168 @@
 
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+import React, { useState } from 'react';
+import ConsultantLayout from '@/components/ConsultantLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, Send, Clock, CheckCircle } from 'lucide-react';
-import ConsultantLayout from '@/components/ConsultantLayout';
+import { Search, Send, Paperclip, Smile, ArrowLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+// Mock Data
+const conversations = [
+  {
+    id: '1',
+    name: 'Innovatech Solutions',
+    avatar: '',
+    lastMessage: "Sounds great! Let's schedule a call for tomorrow.",
+    timestamp: '10:45 AM',
+    unread: 2,
+    messages: [
+      { id: '1', sender: 'them', content: "Hi Aravind, thanks for your interest in the Ergonomic Assessment project.", timestamp: '9:30 AM' },
+      { id: '2', sender: 'me', content: "Hello! Thanks for reaching out. I'm very interested. Can you share more details?", timestamp: '9:32 AM' },
+      { id: '3', sender: 'them', content: "We need a consultant to assess 50 workstations over 3 months. The budget is $X.", timestamp: '9:35 AM' },
+      { id: '4', sender: 'me', content: "That aligns perfectly with my expertise. I can start as early as next week.", timestamp: '9:38 AM' },
+      { id: '5', sender: 'them', content: "Sounds great! Let's schedule a call for tomorrow.", timestamp: '10:45 AM' },
+    ]
+  },
+  {
+    id: '2',
+    name: 'HealthBridge Wellness',
+    avatar: '',
+    lastMessage: "We have reviewed your application and...",
+    timestamp: 'Yesterday',
+    unread: 0,
+    messages: [
+      { id: '6', sender: 'them', content: "We have reviewed your application and would like to invite you for an interview.", timestamp: 'Yesterday, 3:00 PM' },
+      { id: '7', sender: 'me', content: "Thank you! I'm available on Tuesday or Wednesday.", timestamp: 'Yesterday, 3:05 PM' },
+    ]
+  },
+  // ... more conversations
+];
+
+const ConversationList = ({ conversations, selectedId, onSelect, isMobile }) => (
+    <div className={cn("h-full flex flex-col", { 'hidden md:flex': !isMobile, 'flex': isMobile } )}>
+        <div className="p-4">
+            <h1 className="text-2xl font-bold">Messages</h1>
+            <div className="relative mt-4">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input placeholder="Search or start new chat" className="pl-10" />
+            </div>
+        </div>
+        <div className="flex-1 overflow-y-auto border-t">
+            {conversations.map(convo => (
+                <div
+                    key={convo.id}
+                    className={cn(
+                        "flex items-center gap-3 p-3 cursor-pointer border-l-4",
+                        selectedId === convo.id
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-transparent hover:bg-gray-50'
+                    )}
+                    onClick={() => onSelect(convo.id)}
+                >
+                    <Avatar>
+                        <AvatarImage src={convo.avatar} />
+                        <AvatarFallback>{convo.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold truncate">{convo.name}</p>
+                            <p className="text-xs text-gray-500">{convo.timestamp}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <p className="text-sm text-gray-600 truncate">{convo.lastMessage}</p>
+                            {convo.unread > 0 && (
+                                <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    {convo.unread}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
+const ChatWindow = ({ conversation, isMobile, onBack }) => {
+    if (!conversation) return null;
+
+    return (
+        <div className={cn("h-full flex flex-col bg-white", { 'absolute inset-0 md:static': isMobile } )}>
+            {/* Chat Header */}
+            <div className="flex items-center gap-3 p-3 border-b">
+                {isMobile && <Button variant="ghost" size="icon" onClick={onBack}><ArrowLeft /></Button>}
+                <Avatar>
+                    <AvatarImage src={conversation.avatar} />
+                    <AvatarFallback>{conversation.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <p className="font-semibold">{conversation.name}</p>
+                    <p className="text-xs text-green-500">Online</p>
+                </div>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {conversation.messages.map(msg => (
+                    <div key={msg.id} className={cn("flex", msg.sender === 'me' ? 'justify-end' : 'justify-start')}>
+                        <div className={cn(
+                            "max-w-[70%] rounded-lg px-4 py-2",
+                            msg.sender === 'me' ? 'bg-blue-600 text-white' : 'bg-gray-100'
+                        )}>
+                            <p>{msg.content}</p>
+                            <p className="text-xs opacity-70 text-right mt-1">{msg.timestamp}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Message Input */}
+            <div className="p-4 border-t bg-gray-50">
+                <div className="relative">
+                    <Input placeholder="Type a message..." className="pr-24" />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+                        <Button variant="ghost" size="icon"><Smile className="h-5 w-5 text-gray-500" /></Button>
+                        <Button variant="ghost" size="icon"><Paperclip className="h-5 w-5 text-gray-500" /></Button>
+                        <Button size="sm" className="ml-2">Send <Send className="h-4 w-4 ml-2" /></Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const ConsultantMessages = () => {
-  // Mock data for messages
-  const conversations = [
-    {
-      id: '1',
-      name: 'Tech Solutions Inc.',
-      avatar: '',
-      lastMessage: "Thanks for your response. When would you be available for an interview?",
-      timestamp: '10:32 AM',
-      unread: true,
-    },
-    {
-      id: '2',
-      name: 'Global Finance',
-      avatar: '',
-      lastMessage: "We have reviewed your profile and would like to discuss a potential project.",
-      timestamp: 'Yesterday',
-      unread: false,
-    },
-    {
-      id: '3',
-      name: 'Healthcare Innovations',
-      avatar: '',
-      lastMessage: "Your experience in the healthcare sector is exactly what we need.",
-      timestamp: 'Mar 15',
-      unread: false,
-    },
-    {
-      id: '4',
-      name: 'Creative Solutions',
-      avatar: '',
-      lastMessage: "Could you share more details about your previous design project?",
-      timestamp: 'Mar 12',
-      unread: false,
-    },
-  ];
+    const [selectedConversationId, setSelectedConversationId] = useState(conversations[0].id);
+    const [isMobileView, setIsMobileView] = useState(false);
 
-  const activeConversation = {
-    id: '1',
-    name: 'Tech Solutions Inc.',
-    avatar: '',
-    messages: [
-      {
-        id: '1',
-        sender: 'them',
-        content: "Hi Alex, we came across your profile and are interested in your consulting services for our upcoming digital transformation project.",
-        timestamp: 'Mar 16, 9:30 AM',
-        read: true,
-      },
-      {
-        id: '2',
-        sender: 'me',
-        content: "Hello! Thank you for reaching out. I'd be happy to discuss your digital transformation project. Could you provide more details about your needs and timeline?",
-        timestamp: 'Mar 16, 10:15 AM',
-        read: true,
-      },
-      {
-        id: '3',
-        sender: 'them',
-        content: "Of course. We're looking to modernize our customer management systems and integrate with our existing ERP. The project timeline is approximately 6 months, starting next quarter.",
-        timestamp: 'Mar 16, 10:25 AM',
-        read: true,
-      },
-      {
-        id: '4',
-        sender: 'me',
-        content: "That sounds like a project that aligns well with my expertise. I've worked on similar transformations in the tech sector. Would you be available for a call this week to discuss further?",
-        timestamp: 'Mar 16, 10:30 AM',
-        read: true,
-      },
-      {
-        id: '5',
-        sender: 'them',
-        content: "Thanks for your response. When would you be available for an interview?",
-        timestamp: 'Today, 10:32 AM',
-        read: false,
-      },
-    ]
-  };
+    const handleSelectConversation = (id) => {
+        setSelectedConversationId(id);
+        setIsMobileView(true);
+    }
 
-  return (
-    <ConsultantLayout>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar role="consultant" />
-        
-        <div className="flex-1">
-          <DashboardHeader 
-            userName="Alex Johnson"
-            userRole="consultant"
-          />
-          
-          <main className="p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Messages</h2>
-              <p className="text-gray-600">
-                Communicate with organizations about potential opportunities.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-1 border overflow-hidden">
-                <div className="p-4 border-b">
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                    <Input 
-                      placeholder="Search conversations..." 
-                      className="pl-9"
+    return (
+        <ConsultantLayout>
+            <div className="h-[calc(100vh-5rem)] border bg-gray-50 rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+                <div className={cn("col-span-1 h-full border-r", { 'hidden md:block': isMobileView } )}>
+                    <ConversationList 
+                        conversations={conversations} 
+                        selectedId={selectedConversationId} 
+                        onSelect={handleSelectConversation}
+                        isMobile={false}
                     />
-                  </div>
                 </div>
-                
-                <div className="divide-y max-h-[600px] overflow-y-auto">
-                  {conversations.map((conversation) => (
-                    <div 
-                      key={conversation.id} 
-                      className={`flex items-start p-4 gap-3 cursor-pointer hover:bg-gray-50 ${
-                        conversation.id === activeConversation.id ? 'bg-gray-50' : ''
-                      }`}
-                    >
-                      <Avatar>
-                        <AvatarImage src={conversation.avatar} />
-                        <AvatarFallback className="bg-brand-blue text-white">
-                          {conversation.name.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start">
-                          <h4 className="font-medium truncate">{conversation.name}</h4>
-                          <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                            {conversation.timestamp}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-600 truncate">
-                          {conversation.lastMessage}
-                        </p>
-                      </div>
-                      {conversation.unread && (
-                        <span className="w-2 h-2 bg-brand-blue rounded-full flex-shrink-0 mt-2"></span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </Card>
-              
-              <Card className="lg:col-span-2 flex flex-col border overflow-hidden">
-                <div className="p-4 border-b flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={activeConversation.avatar} />
-                    <AvatarFallback className="bg-brand-blue text-white">
-                      {activeConversation.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-medium">{activeConversation.name}</h3>
-                    <div className="flex items-center text-xs text-green-600">
-                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></div>
-                      Online now
-                    </div>
-                  </div>
-                </div>
-                
-                <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[500px]">
-                  {activeConversation.messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div 
-                        className={`max-w-[80%] rounded-lg p-3 ${
-                          message.sender === 'me' 
-                            ? 'bg-brand-blue text-white rounded-br-none' 
-                            : 'bg-gray-100 text-gray-800 rounded-bl-none'
-                        }`}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                        <div 
-                          className={`flex items-center justify-end gap-1 mt-1 text-xs ${
-                            message.sender === 'me' ? 'text-blue-100' : 'text-gray-500'
-                          }`}
-                        >
-                          <span>{message.timestamp}</span>
-                          {message.sender === 'me' && (
-                            message.read 
-                              ? <CheckCircle className="h-3 w-3" /> 
-                              : <Clock className="h-3 w-3" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-                
-                <div className="p-4 border-t">
-                  <div className="flex gap-2">
-                    <Input 
-                      placeholder="Type a message..." 
-                      className="flex-1"
+                <div className={cn("col-span-1 md:col-span-2 lg:col-span-3 h-full", { 'block': isMobileView, 'hidden md:block': !isMobileView } )}>
+                    <ChatWindow 
+                        conversation={conversations.find(c => c.id === selectedConversationId)} 
+                        isMobile={isMobileView}
+                        onBack={() => setIsMobileView(false)}
                     />
-                    <Button>
-                      <Send className="h-4 w-4 mr-1" /> Send
-                    </Button>
-                  </div>
                 </div>
-              </Card>
             </div>
-          </main>
-        </div>
-      </div>
-    </ConsultantLayout>
-  );
+        </ConsultantLayout>
+    );
 };
 
 export default ConsultantMessages;

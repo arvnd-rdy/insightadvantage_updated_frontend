@@ -74,7 +74,7 @@ const Step5SkillsServices = () => {
   const handleSkip = () => navigate('/onboarding/consultant/step-6');
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    let newErrors: { skills?: string; services?: string } = {};
+    const newErrors: { skills?: string; services?: string } = {};
     if (skills.length === 0) newErrors.skills = 'Select at least one specialized skill.';
     if (services.length === 0) newErrors.services = 'Select at least one service offering.';
     setErrors(newErrors);

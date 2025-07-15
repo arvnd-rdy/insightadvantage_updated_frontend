@@ -2,7 +2,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -28,10 +28,7 @@ const AdminSettings = () => {
         <DashboardSidebar role="admin" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName="Admin"
-            userRole="admin"
-          />
+          
           
           <main className="p-6">
             <div className="mb-6">

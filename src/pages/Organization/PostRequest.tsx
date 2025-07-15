@@ -1,9 +1,9 @@
 
 import React from 'react';
 import OrganizationNavBar from '@/components/OrganizationNavBar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
+
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PostRequestForm from '@/components/PostRequestForm';
 import { ArrowLeft } from 'lucide-react';
@@ -12,17 +12,7 @@ import { Button } from '@/components/ui/button';
 
 const PostConsultingRequest = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        
-        <div className="flex-1">
-          <DashboardHeader 
-            userName="Tech Solutions Inc."
-            userRole="organization"
-          />
-          
-          <main className="p-6">
+    <main className="p-6 max-w-7xl mx-auto">
             <div className="mb-6">
               <div className="flex items-center gap-4 mb-4">
                 <Link to="/organization/dashboard">
@@ -47,9 +37,6 @@ const PostConsultingRequest = () => {
               </CardContent>
             </Card>
           </main>
-        </div>
-      </div>
-    </SidebarProvider>
   );
 };
 

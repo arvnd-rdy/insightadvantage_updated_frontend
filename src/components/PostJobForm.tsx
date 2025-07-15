@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,18 +11,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { format } from 'date-fns';
-import { CalendarIcon, Save, Send, Upload, X, Shield, Info, FileCheck } from 'lucide-react';
+import { CalendarIcon, Save, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+
+import { Upload, FileText, X, Download, Eye, Trash2, Plus, Info, DollarSign, Shield, FileCheck } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { useRef } from 'react';
 
 const formSchema = z.object({
-  requestTitle: z.string().min(5, 'Request title must be at least 5 characters').max(100, 'Request title must be less than 100 characters'),
-  requestType: z.string().min(1, 'Please select a request type'),
+  jobTitle: z.string().min(5, 'Job title must be at least 5 characters').max(100, 'Job title must be less than 100 characters'),
+  jobType: z.string().min(1, 'Please select a job type'),
   description: z.string().min(50, 'Description must be at least 50 characters').max(2000, 'Description must be less than 2000 characters'),
-  requiredExpertise: z.array(z.string()).min(1, 'Please select at least one required expertise area'),
+  requiredSkills: z.array(z.string()).min(1, 'Please select at least one required skill'),
   experienceLevel: z.string().min(1, 'Please select required experience level'),
   engagementType: z.string().min(1, 'Please select an engagement type'),
   workMode: z.string().min(1, 'Please select a work mode'),
@@ -33,11 +38,11 @@ const formSchema = z.object({
   applicationDeadline: z.date({
     required_error: 'Application deadline is required',
   }),
-  teamEnvironment: z.string().optional(),
+  teamSize: z.string().optional(),
   location: z.string().optional(),
-  budgetType: z.string().min(1, 'Please select budget type'),
-  budgetMin: z.string().optional(),
-  budgetMax: z.string().optional(),
+  salaryType: z.string().min(1, 'Please select salary type'),
+  salaryMin: z.string().optional(),
+  salaryMax: z.string().optional(),
   currency: z.string().min(1, 'Please select a currency'),
   ndaRequired: z.boolean(),
   paymentTerms: z.string().min(1, 'Payment terms are required'),
@@ -50,14 +55,14 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const PostRequestForm = () => {
+const PostJobForm = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ndaFileInputRef = useRef<HTMLInputElement>(null);
 
-  const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
-  const [otherExpertise, setOtherExpertise] = useState('');
-  const [showOtherExpertiseInput, setShowOtherExpertiseInput] = useState(false);
+  const [selectedRequiredSkills, setSelectedRequiredSkills] = useState<string[]>([]);
+  const [otherSkill, setOtherSkill] = useState('');
+  const [showOtherSkillInput, setShowOtherSkillInput] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [ndaFile, setNdaFile] = useState<File | null>(null);
   const [ndaFilePreview, setNdaFilePreview] = useState<string | null>(null);
@@ -68,14 +73,15 @@ const PostRequestForm = () => {
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      contactPerson: 'Organization Manager',
-      contactEmail: 'manager@example.com',
-      contactPhone: '(555) 111-2222',
+      contactPerson: 'Organization Recruiter',
+      contactEmail: 'recruiter@example.com',
+      contactPhone: '(555) 987-6543',
       communicationMethod: 'email',
-      requiredExpertise: [],
+      requiredSkills: [],
       ndaRequired: false,
       currency: 'CAD',
       paymentTerms: 'Net 30 days',
@@ -85,51 +91,53 @@ const PostRequestForm = () => {
   const applicationDeadline = watch('applicationDeadline');
   const startDate = watch('startDate');
   const workMode = watch('workMode');
-  const budgetType = watch('budgetType');
+  const salaryType = watch('salaryType');
 
-  const requestTypes = [
+  const jobTypes = [
     'Transferable Skills Analysis', 'Vocational Evaluation', 'Psycho Vocational Evaluation', 'Labour Market Survey',
     'Case Management', 'Job Development', 'Job Placement', 'Career Counselling', 'Return to Work Planning',
     'Disability Management', 'Functional Capacity Evaluation', 'Ergonomic Assessment', 'Medical-Legal Assessment',
     'Expert Testimony', 'Workplace Accommodation', 'Rehabilitation Planning', 'Life Care Planning', 'Coaching', 'Other'
   ];
 
-  const REQUIRED_EXPERTISE = [
-    'Vocational Assessment', 'Career Planning', 'Job Readiness Training', 'Return-to-Work Programs',
-    'Disability Accommodation', 'Ergonomics', 'Vocational Expert Testimony', 'Program Evaluation',
+  const REQUIRED_SKILLS = [
+    'Transferable Skills Analysis', 'Vocational Evaluation', 'Psycho Vocational Evaluation', 'Labour Market Survey',
+    'Case Management', 'Job Development', 'Job Placement', 'Career Counselling', 'Return to Work Planning',
+    'Disability Management', 'Functional Capacity Evaluation', 'Ergonomic Assessment', 'Medical-Legal Assessment',
+    'Expert Testimony', 'Workplace Accommodation', 'Rehabilitation Planning', 'Life Care Planning', 'Coaching',
     'Workers Compensation', 'Insurance Claims', 'Legal Support', 'Medical Documentation', 'Assessment Tools',
     'Report Writing', 'Client Communication', 'Project Management', 'Data Analysis', 'Research Methods'
   ];
 
   const experienceLevels = [
-    { value: 'entry', label: 'Entry Level', desc: '1-3 years experience, suitable for basic tasks.' },
-    { value: 'intermediate', label: 'Intermediate', desc: '3-7 years experience, can handle standard projects.' },
-    { value: 'senior', label: 'Senior Level', desc: '7+ years experience, for complex projects.' },
-    { value: 'expert', label: 'Expert/Specialist', desc: '10+ years experience, recognized authority.' }
+    { value: 'entry', label: 'Entry Level', desc: '1-3 years experience, suitable for basic tasks and support roles.' },
+    { value: 'intermediate', label: 'Intermediate', desc: '3-7 years experience, can handle most standard projects independently.' },
+    { value: 'senior', label: 'Senior Level', desc: '7+ years experience, expert-level skills for complex or high-stakes projects.' },
+    { value: 'expert', label: 'Expert/Specialist', desc: '10+ years experience, recognized authority in specific areas.' }
   ];
   
   const engagementTypes = [
-    { value: 'project', label: 'Project-based', desc: 'Specific project with defined scope' },
-    { value: 'ongoing', label: 'Ongoing Support', desc: 'Continuous consultation services' },
-    { value: 'retainer', label: 'Retainer', desc: 'Regular availability for support' },
-    { value: 'consultation', label: 'One-time Consultation', desc: 'Single assessment session' }
+    { value: 'project', label: 'Project-based', desc: 'Specific project with defined scope and deliverables' },
+    { value: 'ongoing', label: 'Ongoing Support', desc: 'Continuous support and consultation services' },
+    { value: 'retainer', label: 'Retainer', desc: 'Regular availability for consultation and support' },
+    { value: 'consultation', label: 'One-time Consultation', desc: 'Single consultation or assessment session' }
   ];
 
   const workModes = [
-    { value: 'remote', label: 'Remote Only', desc: 'Work done remotely' },
-    { value: 'onsite', label: 'On-site Only', desc: 'Work done at your location' },
-    { value: 'hybrid', label: 'Hybrid', desc: 'Combination of remote and on-site' },
-    { value: 'flexible', label: 'Flexible', desc: 'Open to consultant\'s preference' }
+    { value: 'remote', label: 'Remote Only', icon: '🌐', desc: 'All work done remotely via video calls and online tools' },
+    { value: 'onsite', label: 'On-site Only', icon: '🏢', desc: 'All work done at your location' },
+    { value: 'hybrid', label: 'Hybrid', icon: '↔️', desc: 'Combination of remote and on-site work' },
+    { value: 'flexible', label: 'Flexible', icon: '🎯', desc: 'Open to consultant\'s preferred work mode' }
   ];
 
   const projectScopes = [
-    { value: 'small', label: 'Small Scope', desc: '1-2 weeks' },
-    { value: 'medium', label: 'Medium Scope', desc: '2-8 weeks' },
-    { value: 'large', label: 'Large Scope', desc: '2-6 months' },
-    { value: 'enterprise', label: 'Enterprise', desc: '6+ months' }
+    { value: 'small', label: 'Small Scope', desc: '1-2 weeks, simple tasks or assessments' },
+    { value: 'medium', label: 'Medium Scope', desc: '2-8 weeks, standard projects with clear deliverables' },
+    { value: 'large', label: 'Large Scope', desc: '2-6 months, complex projects requiring extensive work' },
+    { value: 'enterprise', label: 'Enterprise', desc: '6+ months, major initiatives or ongoing programs' }
   ];
 
-  const budgetTypesOptions = [
+  const salaryTypesOptions = [
     { value: 'hourly', label: 'Hourly Rate' },
     { value: 'fixed', label: 'Fixed Project Fee' },
     { value: 'retainer', label: 'Monthly Retainer' },
@@ -140,42 +148,42 @@ const PostRequestForm = () => {
   
   const communicationMethods = ['Email', 'Phone', 'Video Call', 'In-Person Meeting'];
 
-  const handleExpertiseClick = (expertise: string) => {
-    if (expertise === 'Other') {
-      setShowOtherExpertiseInput(true);
-      if (!selectedExpertise.includes('Other')) {
-        setSelectedExpertise([...selectedExpertise, 'Other']);
+  const handleSkillClick = (skill: string) => {
+    if (skill === 'Other') {
+      setShowOtherSkillInput(true);
+      if (!selectedRequiredSkills.includes('Other')) {
+        setSelectedRequiredSkills([...selectedRequiredSkills, 'Other']);
       }
     } else {
-      setSelectedExpertise(prev => 
-        prev.includes(expertise) 
-          ? prev.filter(s => s !== expertise) 
-          : [...prev, expertise]
+      setSelectedRequiredSkills(prev => 
+        prev.includes(skill) 
+          ? prev.filter(s => s !== skill) 
+          : [...prev, skill]
       );
     }
-    setValue('requiredExpertise', selectedExpertise);
+    setValue('requiredSkills', selectedRequiredSkills);
   };
 
-  const handleOtherExpertiseAdd = () => {
-    if (otherExpertise.trim()) {
-      setSelectedExpertise(prev => 
-        prev.includes(otherExpertise.trim()) 
+  const handleOtherSkillAdd = () => {
+    if (otherSkill.trim()) {
+      setSelectedRequiredSkills(prev => 
+        prev.includes(otherSkill.trim()) 
           ? prev 
-          : [...prev, otherExpertise.trim()]
+          : [...prev, otherSkill.trim()]
       );
-      setOtherExpertise('');
-      setShowOtherExpertiseInput(false);
-      setValue('requiredExpertise', selectedExpertise);
+      setOtherSkill('');
+      setShowOtherSkillInput(false);
+      setValue('requiredSkills', selectedRequiredSkills);
     }
   };
 
-  const removeExpertise = (expertise: string) => {
-    setSelectedExpertise(prev => prev.filter(s => s !== expertise));
-    if (expertise === 'Other') {
-      setShowOtherExpertiseInput(false);
-      setOtherExpertise('');
+  const removeSkill = (skill: string) => {
+    setSelectedRequiredSkills(prev => prev.filter(s => s !== skill));
+    if (skill === 'Other') {
+      setShowOtherSkillInput(false);
+      setOtherSkill('');
     }
-    setValue('requiredExpertise', selectedExpertise);
+    setValue('requiredSkills', selectedRequiredSkills);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -279,12 +287,14 @@ const PostRequestForm = () => {
     setValue('ndaRequired', false);
   };
 
+
   const onSubmit = (data: FormData) => {
     console.log('Form submitted:', data);
     toast({
-      title: 'Request Published Successfully!',
-      description: 'Your request is now live and visible to consultants.',
+      title: 'Job Posted Successfully!',
+      description: 'Your job listing is now live and visible to candidates.',
     });
+    // Here you would typically send the data to your backend
   };
 
   const handleSaveDraft = () => {
@@ -292,42 +302,43 @@ const PostRequestForm = () => {
     console.log('Saving draft:', formData);
     toast({
       title: 'Draft Saved',
-      description: 'Your request has been saved as a draft.',
+      description: 'Your job listing has been saved as a draft.',
     });
+    // Here you would save the draft to your backend
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Request Title */}
+      {/* Job Title */}
       <div className="space-y-2">
-        <Label htmlFor="requestTitle">Request Title *</Label>
+        <Label htmlFor="jobTitle">Job Title *</Label>
         <Input
-          id="requestTitle"
-          placeholder="Enter a brief title for your request"
-          {...register('requestTitle')}
+          id="jobTitle"
+          placeholder="Enter a brief title for your job"
+          {...register('jobTitle')}
         />
-        {errors.requestTitle && (
-          <p className="text-sm text-red-600">{errors.requestTitle.message}</p>
+        {errors.jobTitle && (
+          <p className="text-sm text-red-600">{errors.jobTitle.message}</p>
         )}
       </div>
 
-      {/* Type of Request */}
+      {/* Type of Job */}
       <div className="space-y-2">
-        <Label htmlFor="requestType">Type of Request *</Label>
-        <Select onValueChange={(value) => setValue('requestType', value)}>
+        <Label htmlFor="jobType">Type of Job *</Label>
+        <Select onValueChange={(value) => setValue('jobType', value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Select request type" />
+            <SelectValue placeholder="Select job type" />
           </SelectTrigger>
           <SelectContent>
-            {requestTypes.map((type) => (
+            {jobTypes.map((type) => (
               <SelectItem key={type} value={type}>
                 {type}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {errors.requestType && (
-          <p className="text-sm text-red-600">{errors.requestType.message}</p>
+        {errors.jobType && (
+          <p className="text-sm text-red-600">{errors.jobType.message}</p>
         )}
       </div>
 
@@ -336,37 +347,37 @@ const PostRequestForm = () => {
         <Label htmlFor="description">Detailed Description *</Label>
         <Textarea
           id="description"
-          placeholder="Describe the project requirements, goals, and deliverables..."
+          placeholder="Describe the job responsibilities, requirements, and benefits in detail..."
           className="min-h-[120px]"
           {...register('description')}
         />
         <p className="text-xs text-gray-500">
-          Include project background, specific tasks, desired outcomes, and any other relevant information.
+          Include responsibilities, qualifications, benefits, and any other relevant information.
         </p>
         {errors.description && (
           <p className="text-sm text-red-600">{errors.description.message}</p>
         )}
       </div>
 
-      {/* Required Expertise */}
+      {/* Required Skills */}
       <div>
-        <Label className="text-base font-medium">Required Expertise *</Label>
+        <Label className="text-base font-medium">Required Skills *</Label>
         <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
           <Info className="w-4 h-4" />
-          Select all the expertise areas that are essential for this request.
+          Select all the skills that are essential for this job. You can add custom skills if needed.
         </div>
 
-        {selectedExpertise.length > 0 && (
+        {selectedRequiredSkills.length > 0 && (
           <div className="mb-4">
-            <div className="text-sm font-medium text-gray-700 mb-2">Selected Expertise ({selectedExpertise.length})</div>
+            <div className="text-sm font-medium text-gray-700 mb-2">Selected Skills ({selectedRequiredSkills.length})</div>
             <div className="flex flex-wrap gap-2">
-              {selectedExpertise.map(exp => (
-                <Badge key={exp} variant="secondary" className="flex items-center gap-1">
-                  {exp}
+              {selectedRequiredSkills.map(skill => (
+                <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                  {skill}
                   <button
                     type="button"
                     className="ml-1 text-gray-500 hover:text-red-500"
-                    onClick={() => removeExpertise(exp)}
+                    onClick={() => removeSkill(skill)}
                   >
                     ×
                   </button>
@@ -377,48 +388,36 @@ const PostRequestForm = () => {
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
-          {REQUIRED_EXPERTISE.map(exp => (
+          {REQUIRED_SKILLS.map(skill => (
             <button
-              key={exp}
+              key={skill}
               type="button"
               className={`px-3 py-2 rounded-lg border text-sm text-left transition-colors ${
-                selectedExpertise.includes(exp)
+                selectedRequiredSkills.includes(skill)
                   ? 'bg-blue-600 text-white border-blue-600'
                   : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-              }`}
-              onClick={() => handleExpertiseClick(exp)}
+              } ${skill === 'Other' ? 'font-semibold' : ''}`}
+              onClick={() => handleSkillClick(skill)}
             >
-              {exp}
+              {skill === 'Other' ? '+ Add Custom Skill' : skill}
             </button>
           ))}
-           <button
-              key="Other"
-              type="button"
-              className={`px-3 py-2 rounded-lg border text-sm text-left transition-colors font-semibold ${
-                selectedExpertise.includes('Other')
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-              }`}
-              onClick={() => handleExpertiseClick('Other')}
-            >
-              + Add Custom Expertise
-            </button>
         </div>
 
-        {showOtherExpertiseInput && (
+        {showOtherSkillInput && (
           <div className="flex gap-2 items-center mb-4">
             <Input
-              value={otherExpertise}
-              onChange={e => setOtherExpertise(e.target.value)}
-              placeholder="Enter custom expertise"
+              value={otherSkill}
+              onChange={e => setOtherSkill(e.target.value)}
+              placeholder="Enter custom skill"
               className="flex-1"
               maxLength={50}
             />
             <Button 
               type="button" 
               size="sm" 
-              onClick={handleOtherExpertiseAdd} 
-              disabled={!otherExpertise.trim()}
+              onClick={handleOtherSkillAdd} 
+              disabled={!otherSkill.trim()}
             >
               Add
             </Button>
@@ -427,9 +426,9 @@ const PostRequestForm = () => {
               size="sm" 
               variant="ghost" 
               onClick={() => { 
-                setShowOtherExpertiseInput(false); 
-                setOtherExpertise(''); 
-                setSelectedExpertise(prev => prev.filter(s => s !== 'Other')); 
+                setShowOtherSkillInput(false); 
+                setOtherSkill(''); 
+                setSelectedRequiredSkills(prev => prev.filter(s => s !== 'Other')); 
               }}
             >
               Cancel
@@ -437,7 +436,7 @@ const PostRequestForm = () => {
           </div>
         )}
 
-        {errors.requiredExpertise && <p className="text-sm text-red-600">{errors.requiredExpertise.message}</p>}
+        {errors.requiredSkills && <p className="text-sm text-red-600">{errors.requiredSkills.message}</p>}
       </div>
 
       {/* Required Experience Level */}
@@ -602,86 +601,86 @@ const PostRequestForm = () => {
         )}
       </div>
 
-      {/* Team Environment */}
+      {/* Team Size */}
       <div className="space-y-2">
-        <Label htmlFor="teamEnvironment">Team Environment</Label>
+        <Label htmlFor="teamSize">Team Size</Label>
         <Input
-          id="teamEnvironment"
-          placeholder="e.g., Working with a team of 5, Reporting to the department head"
-          {...register('teamEnvironment')}
+          id="teamSize"
+          placeholder="e.g., 5-10 people, Department of 25, etc."
+          {...register('teamSize')}
         />
-        {errors.teamEnvironment && (
-          <p className="text-sm text-red-600">{errors.teamEnvironment.message}</p>
+        {errors.teamSize && (
+          <p className="text-sm text-red-600">{errors.teamSize.message}</p>
         )}
       </div>
 
-      {/* Budget */}
+      {/* Salary Range */}
       <Card>
         <CardContent className="pt-6">
-          <Label className="text-base font-medium">Budget *</Label>
+          <Label className="text-base font-medium">Salary/Budget *</Label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             <div className="space-y-2">
-              <Label htmlFor="budgetType">Payment Type</Label>
+              <Label htmlFor="salaryType">Payment Type</Label>
               <Select onValueChange={(value) => {
-                setValue('budgetType', value);
-                setValue('budgetMin', '');
-                setValue('budgetMax', '');
-              }} value={budgetType}>
+                setValue('salaryType', value);
+                setValue('salaryMin', '');
+                setValue('salaryMax', '');
+              }} value={salaryType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {budgetTypesOptions.map((type) => (
+                  {salaryTypesOptions.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.budgetType && (
-                <p className="text-sm text-red-600">{errors.budgetType.message}</p>
+              {errors.salaryType && (
+                <p className="text-sm text-red-600">{errors.salaryType.message}</p>
               )}
             </div>
             
-            {(budgetType === 'hourly' || budgetType === 'fixed' || budgetType === 'retainer') && (
+            {(salaryType === 'hourly' || salaryType === 'fixed' || salaryType === 'retainer') && (
               <div className="space-y-2">
-                <Label htmlFor="budgetMin">Amount ($)</Label>
+                <Label htmlFor="salaryMin">Amount ($)</Label>
                 <Input
-                  id="budgetMin"
+                  id="salaryMin"
                   type="number"
-                  placeholder="e.g., 75"
-                  {...register('budgetMin')}
+                  placeholder="e.g., 50"
+                  {...register('salaryMin')}
                 />
-                {errors.budgetMin && (
-                  <p className="text-sm text-red-600">{errors.budgetMin.message}</p>
+                {errors.salaryMin && (
+                  <p className="text-sm text-red-600">{errors.salaryMin.message}</p>
                 )}
               </div>
             )}
 
-            {budgetType === 'milestone' && (
+            {salaryType === 'milestone' && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="budgetMin">Min ($)</Label>
+                  <Label htmlFor="salaryMin">Min ($)</Label>
                   <Input
-                    id="budgetMin"
+                    id="salaryMin"
                     type="number"
                     placeholder="e.g., 5000"
-                    {...register('budgetMin')}
+                    {...register('salaryMin')}
                   />
-                  {errors.budgetMin && (
-                    <p className="text-sm text-red-600">{errors.budgetMin.message}</p>
+                  {errors.salaryMin && (
+                    <p className="text-sm text-red-600">{errors.salaryMin.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="budgetMax">Max ($)</Label>
+                  <Label htmlFor="salaryMax">Max ($)</Label>
                   <Input
-                    id="budgetMax"
+                    id="salaryMax"
                     type="number"
                     placeholder="e.g., 10000"
-                    {...register('budgetMax')}
+                    {...register('salaryMax')}
                   />
-                  {errors.budgetMax && (
-                    <p className="text-sm text-red-600">{errors.budgetMax.message}</p>
+                  {errors.salaryMax && (
+                    <p className="text-sm text-red-600">{errors.salaryMax.message}</p>
                   )}
                 </div>
               </>
@@ -709,11 +708,11 @@ const PostRequestForm = () => {
         </CardContent>
       </Card>
 
-      {/* Supporting Documents */}
+      {/* File Attachments */}
       <div>
         <Label className="text-base font-medium">Supporting Documents</Label>
         <div className="text-xs text-gray-500 mb-2">
-          Upload any relevant documents (RFP, project brief, etc.) to help consultants understand your needs.
+          Upload any relevant documents (PDF, DOC, DOCX, TXT, JPG, PNG) to help candidates understand your needs better.
         </div>
 
         <div
@@ -803,7 +802,7 @@ const PostRequestForm = () => {
             </Label>
             <div className="text-xs text-gray-500 flex items-center gap-1">
               <Shield className="w-4 h-4" />
-              Require consultants to sign an NDA before engagement
+              Require candidates to sign an NDA before starting work
             </div>
           </div>
           <Switch
@@ -959,11 +958,11 @@ const PostRequestForm = () => {
         </Button>
         <Button type="submit" className="flex-1">
           <Send className="h-4 w-4 mr-2" />
-          Publish Request
+          Publish Job
         </Button>
       </div>
     </form>
   );
 };
 
-export default PostRequestForm;
+export default PostJobForm;

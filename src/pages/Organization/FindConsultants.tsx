@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import OrganizationNavBar from '@/components/OrganizationNavBar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
+
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -151,17 +151,8 @@ const ConsultantSearch = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        
-        <div className="flex-1">
-          <DashboardHeader 
-            userName="Emma Rodriguez"
-            userRole="organization"
-          />
-          
-          <main className="p-6">
+    <>
+      <main className="p-6 max-w-7xl mx-auto">
             {/* Search Header */}
             <div className="mb-6">
               <h1 className="text-3xl font-bold mb-2">Find the perfect consultant for your project</h1>
@@ -347,9 +338,7 @@ const ConsultantSearch = () => {
               </Button>
             </div>
           </main>
-        </div>
-      </div>
-    </SidebarProvider>
+        </>
   );
 };
 

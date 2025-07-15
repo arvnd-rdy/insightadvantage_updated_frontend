@@ -2,7 +2,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import DashboardCard from '@/components/DashboardCard';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -76,10 +76,7 @@ const AdminDashboard = () => {
         <DashboardSidebar role="admin" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName={adminData.name}
-            userRole="admin"
-          />
+          
           
           <main className="p-6">
             <div className="mb-8">

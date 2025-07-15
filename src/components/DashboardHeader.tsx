@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from 'react-router-dom';
 import { Bell, Settings, User, LogOut } from 'lucide-react';
+import { Button } from '../components/ui/button';
 
 interface DashboardHeaderProps {
   userName: string;
@@ -28,15 +29,33 @@ const DashboardHeader = ({ userName, userRole, userAvatar }: DashboardHeaderProp
   return (
     <header className="bg-white border-b border-gray-200 py-4 px-4">
       <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          {/* Removed SidebarTrigger */}
-          <h1 className="text-xl font-semibold text-gray-800 hidden md:block">Dashboard</h1>
-        </div>
+        {/* Removed SidebarTrigger and Dashboard title */}
+        <div />
         <div className="flex items-center space-x-4">
-          <button className="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-            <Bell size={20} />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full relative">
+                <Bell size={20} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex flex-col items-start space-y-1">
+                <p className="text-sm font-medium">New message from John Doe</p>
+                <p className="text-xs text-gray-500">2 hours ago</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex flex-col items-start space-y-1">
+                <p className="text-sm font-medium">Your profile was viewed</p>
+                <p className="text-xs text-gray-500">Yesterday</p>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link to="/notifications" className="text-sm text-blue-600 hover:underline">View All Notifications</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center space-x-3 focus:outline-none">

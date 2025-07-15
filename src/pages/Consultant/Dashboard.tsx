@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import DashboardCard from '@/components/DashboardCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -78,46 +78,50 @@ const ConsultantDashboard = () => {
       </Dialog>
       <main className="p-6">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">Welcome, {consultantData.name}</h2>
+          <h1 className="text-3xl font-bold mb-2">Welcome, {consultantData.name}!</h1>
           <p className="text-gray-600">
-            Here's an overview of your consultant profile and activity.
+            Here's a quick overview of your profile and recent activity.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <DashboardCard 
-            title="Profile Completion" 
-            description="Complete your profile to increase visibility"
+          {/* Profile Completion Card */}
+          <DashboardCard
+            title="Profile Completion"
+            description="Increase your visibility by completing your profile."
             icon={<BarChart2 size={20} />}
           >
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>{consultantData.profileCompletion}% Complete</span>
-                <span className="text-muted-foreground">25% to go</span>
+                <span className="text-muted-foreground">{100 - consultantData.profileCompletion}% to go</span>
               </div>
               <Progress value={consultantData.profileCompletion} className="h-2" />
               <Link to="/consultant/profile">
-                <Button variant="link" className="p-0 h-auto text-sm">
-                  Complete Profile
-                </Button>
+                <Button className="w-full mt-4">Complete Profile</Button>
               </Link>
             </div>
           </DashboardCard>
-          
-          <DashboardCard 
-            title="Documents Needed" 
-            description="Required documents to verify your profile"
+
+          {/* Documents Needed Card */}
+          <DashboardCard
+            title="Documents Needed"
+            description="Upload required documents to verify your profile."
             icon={<File size={20} />}
           >
             <div className="space-y-3">
-              {consultantData.documentsToUpload.map((doc, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm">{doc}</span>
-                  <Badge variant="outline" className="text-yellow-600 bg-yellow-50">
-                    Required
-                  </Badge>
-                </div>
-              ))}
+              {consultantData.documentsToUpload.length > 0 ? (
+                consultantData.documentsToUpload.map((doc, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <span className="text-sm">{doc}</span>
+                    <Badge variant="outline" className="text-yellow-600 bg-yellow-50">
+                      Required
+                    </Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">All required documents uploaded!</p>
+              )}
               <Link to="/consultant/documents">
                 <Button variant="link" className="p-0 h-auto text-sm">
                   Upload Documents
@@ -125,40 +129,35 @@ const ConsultantDashboard = () => {
               </Link>
             </div>
           </DashboardCard>
-          
-          <DashboardCard 
-            title="Recent Messages" 
-            description="Your recent communications"
-            icon={<Mail size={20} />}
+
+          {/* Quick Actions Card */}
+          <DashboardCard
+            title="Quick Actions"
+            description="Jump to common tasks."
+            icon={<Clock size={20} />}
           >
-            <div className="space-y-3">
-              {consultantData.messages.map((message) => (
-                <div key={message.id} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 mt-1">
-                    <div className={`w-2 h-2 rounded-full ${message.read ? 'bg-gray-300' : 'bg-brand-blue'}`}></div>
-                  </div>
-                  <div className="text-sm">
-                    <p className="font-medium">
-                      {message.sender} <span className="font-normal text-gray-500">({message.company})</span>
-                    </p>
-                    <p className="text-gray-500 truncate">{message.preview}</p>
-                    <p className="text-xs text-gray-400 mt-1">{message.time}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-3">
+              <Link to="/consultant/my-jobs">
+                <Button variant="outline" className="w-full">Find Jobs</Button>
+              </Link>
+              <Link to="/consultant/profile">
+                <Button variant="outline" className="w-full">Edit Profile</Button>
+              </Link>
               <Link to="/consultant/messages">
-                <Button variant="link" className="p-0 h-auto text-sm">
-                  View All Messages
-                </Button>
+                <Button variant="outline" className="w-full">View Messages</Button>
+              </Link>
+              <Link to="/consultant/availability">
+                <Button variant="outline" className="w-full">Set Availability</Button>
               </Link>
             </div>
           </DashboardCard>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <DashboardCard 
-            title="Next Steps" 
-            description="Complete these actions to get started"
+          {/* Next Steps Card */}
+          <DashboardCard
+            title="Next Steps"
+            description="Important actions to get you started."
             icon={<Bell size={20} />}
           >
             <div className="space-y-3">
@@ -187,21 +186,36 @@ const ConsultantDashboard = () => {
               ))}
             </div>
           </DashboardCard>
-          
-          <DashboardCard 
-            title="Upcoming Schedule" 
-            description="Your calendar for the next 7 days"
-            icon={<Calendar size={20} />}
+
+          {/* Recent Messages Card */}
+          <DashboardCard
+            title="Recent Messages"
+            description="Your latest communications."
+            icon={<Mail size={20} />}
           >
-            <div className="space-y-4">
-              <div className="text-center py-6">
-                <p className="text-muted-foreground">No upcoming meetings</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Your schedule is clear for the next 7 days
-                </p>
-              </div>
-              <Link to="/consultant/availability">
-                <Button className="w-full">Set Availability</Button>
+            <div className="space-y-3">
+              {consultantData.messages.length > 0 ? (
+                consultantData.messages.slice(0, 2).map((message) => ( // Show only top 2 messages
+                  <div key={message.id} className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className={`w-2 h-2 rounded-full ${message.read ? 'bg-gray-300' : 'bg-brand-blue'}`}></div>
+                    </div>
+                    <div className="text-sm">
+                      <p className="font-medium">
+                        {message.sender} <span className="font-normal text-gray-500">({message.company})</span>
+                      </p>
+                      <p className="text-gray-500 truncate">{message.preview}</p>
+                      <p className="text-xs text-gray-400 mt-1">{message.time}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No new messages.</p>
+              )}
+              <Link to="/consultant/messages">
+                <Button variant="link" className="p-0 h-auto text-sm">
+                  View All Messages
+                </Button>
               </Link>
             </div>
           </DashboardCard>

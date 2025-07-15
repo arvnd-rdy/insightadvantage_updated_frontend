@@ -2,7 +2,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -42,10 +42,7 @@ const AdminAnalytics = () => {
         <DashboardSidebar role="admin" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName="Admin"
-            userRole="admin"
-          />
+          
           
           <main className="p-6">
             <div className="flex items-center justify-between mb-6">

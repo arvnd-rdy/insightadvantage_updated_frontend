@@ -122,7 +122,7 @@ const RequestDetail = () => {
             userRole="organization"
           />
           
-          <main className="p-6">
+          <main className="p-6 max-w-7xl mx-auto">
             <div className="mb-6">
               <Link to="/organization/manage-requests">
                 <Button variant="ghost" size="sm" className="mb-4">

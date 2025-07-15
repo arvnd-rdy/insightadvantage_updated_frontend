@@ -21,7 +21,7 @@ const Step4ProfessionalBio = () => {
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     // Validate reg # for OT and Reg Psychologist
-    let newErrors: { [key: string]: string } = {};
+    const newErrors: { [key: string]: string } = {};
     designations.forEach(d => {
       if ((d === 'OT' || d === 'Reg Psychologist') && !regNumbers[d]) {
         newErrors[d] = 'Registration number required';

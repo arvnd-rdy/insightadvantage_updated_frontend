@@ -24,8 +24,15 @@ import { Badge } from '@/components/ui/badge';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Filter } from 'lucide-react';
 
+interface SearchFilterParams {
+  expertise: string[];
+  location: string;
+  rateRange: number[];
+  availability: string;
+}
+
 interface SearchFiltersProps {
-  onFilterChange: (filters: any) => void;
+  onFilterChange: (filters: SearchFilterParams) => void;
   className?: string;
 }
 
@@ -87,9 +94,11 @@ const SearchFilters = ({ onFilterChange, className = "" }: SearchFiltersProps) =
               variant={expertise.includes(option) ? "default" : "outline"}
               className="cursor-pointer"
               onClick={() => {
-                expertise.includes(option) 
-                  ? removeExpertise(option)
-                  : addExpertise(option);
+                if (expertise.includes(option)) {
+                  removeExpertise(option);
+                } else {
+                  addExpertise(option);
+                }
               }}
             >
               {option}

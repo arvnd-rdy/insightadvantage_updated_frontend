@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import OrganizationNavBar from '@/components/OrganizationNavBar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
+
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,45 +20,7 @@ import {
 import { Search, Plus, Filter, Eye, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Mock data for requests
-const mockRequests = [
-  {
-    id: '1',
-    title: 'Vocational Assessment Expert for Return-to-Work Program',
-    datePosted: '2024-01-15',
-    status: 'Open',
-    applicants: 8,
-    deadline: '2024-02-15',
-    type: 'Vocational Assessment Services',
-  },
-  {
-    id: '2',
-    title: 'Career Counselor for Youth Transition Services',
-    datePosted: '2024-01-10',
-    status: 'Hiring',
-    applicants: 12,
-    deadline: '2024-02-10',
-    type: 'Career Exploration and Planning',
-  },
-  {
-    id: '3',
-    title: 'Disability Accommodation Specialist',
-    datePosted: '2024-01-08',
-    status: 'Closed',
-    applicants: 5,
-    deadline: '2024-01-25',
-    type: 'Disability Accommodation Consulting',
-  },
-  {
-    id: '4',
-    title: 'Job Placement Coordinator - Remote',
-    datePosted: '2024-01-20',
-    status: 'Draft',
-    applicants: 0,
-    deadline: '2024-02-20',
-    type: 'Job Placement and Support',
-  },
-];
+import { mockRequests } from '@/mock-data/jobs';
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -77,24 +39,13 @@ const ManageRequests = () => {
   const [sortBy, setSortBy] = useState('datePosted');
 
   const filteredRequests = mockRequests.filter(request => {
-    const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         request.type.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || request.status.toLowerCase() === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        
-        <div className="flex-1">
-          <DashboardHeader 
-            userName="Tech Solutions Inc."
-            userRole="organization"
-          />
-          
-          <main className="p-6">
+    <main className="p-6 max-w-7xl mx-auto">
             <div className="mb-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -201,10 +152,13 @@ const ManageRequests = () => {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center">
-                              <span className="font-medium">{request.applicants}</span>
+                            <Link
+                              to={`/organization/request/${request.id}/applicants`}
+                              className="flex items-center font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              <span>{request.applicantsCount}</span>
                               <span className="text-gray-500 ml-1">applicants</span>
-                            </div>
+                            </Link>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center">
@@ -228,9 +182,6 @@ const ManageRequests = () => {
               </Card>
             </div>
           </main>
-        </div>
-      </div>
-    </SidebarProvider>
   );
 };
 

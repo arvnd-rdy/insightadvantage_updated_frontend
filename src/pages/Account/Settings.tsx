@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,10 +33,7 @@ const AccountSettings = () => {
         <DashboardSidebar role="consultant" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName="John Doe"
-            userRole="consultant"
-          />
+          
           
           <main className="p-6">
             <h1 className="text-3xl font-bold mb-8">Account Settings</h1>

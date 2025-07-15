@@ -116,7 +116,26 @@ const ConsultantOrganizations = () => {
     setSidebarOpen(false);
   };
 
-  const GigCard = ({ gig }: { gig: any }) => (
+  interface Gig {
+  id: string;
+  title: string;
+  organization: string;
+  organizationLogo: string;
+  location: string;
+  workMode: string;
+  budget: string;
+  duration: string;
+  posted: string;
+  applicants: number;
+  description: string;
+  specializations: string[];
+  isUrgent: boolean;
+  isSaved: boolean;
+  applicationDeadline: string;
+  requirements: string[];
+}
+
+  const GigCard = ({ gig }: { gig: Gig }) => (
     <Card className="hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group w-full max-w-[440px] min-w-[360px] aspect-square mx-auto">
       <CardContent className="p-6 h-full flex flex-col justify-between">
         <div>

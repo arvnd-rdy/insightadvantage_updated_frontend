@@ -1,9 +1,9 @@
 
 import React from 'react';
 import OrganizationNavBar from '@/components/OrganizationNavBar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
+
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -89,17 +89,7 @@ const OrganizationMessages = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        
-        <div className="flex-1">
-          <DashboardHeader 
-            userName="Tech Solutions Inc."
-            userRole="organization"
-          />
-          
-          <main className="p-6">
+    <main className="p-6 max-w-7xl mx-auto">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">Messages</h2>
               <p className="text-gray-600">
@@ -212,9 +202,6 @@ const OrganizationMessages = () => {
               </Card>
             </div>
           </main>
-        </div>
-      </div>
-    </SidebarProvider>
   );
 };
 

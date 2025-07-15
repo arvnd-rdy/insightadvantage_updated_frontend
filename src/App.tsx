@@ -32,6 +32,7 @@ import ConsultantDocuments from "@/pages/Consultant/Documents";
 import ConsultantAvailability from "@/pages/Consultant/Availability";
 import ConsultantPreferences from "@/pages/Consultant/Preferences";
 import ConsultantMessages from "@/pages/Consultant/Messages";
+import ConsultantMyJobs from "@/pages/Consultant/MyJobs";
 import ConsultantOrganizations from "@/pages/Consultant/Organizations";
 import ConsultantGigDetail from "@/pages/Consultant/GigDetail";
 import ConsultantNewProfile from '@/pages/Consultant/NewProfile';
@@ -66,14 +67,17 @@ import OrganizationStep7CompleteRegistration from "@/pages/Onboarding/Organizati
 // Organization pages
 import OrganizationDashboard from "@/pages/Organization/Dashboard";
 import OrganizationProfile from "@/pages/Organization/Profile";
-import ConsultantSearch from "@/pages/Organization/Search";
+import ConsultantSearch from "@/pages/Organization/FindConsultants";
 import ConsultantDetail from "@/pages/Organization/ConsultantDetail";
 import OrganizationPreferences from "@/pages/Organization/Preferences";
 import OrganizationMessages from "@/pages/Organization/Messages";
 import OrganizationConsultants from "@/pages/Organization/Consultants";
 import PostConsultingRequest from "@/pages/Organization/PostRequest";
+import PostJob from "@/pages/Organization/PostJob";
+import ManageJobs from "@/pages/Organization/ManageJobs";
 import ManageRequests from "@/pages/Organization/ManageRequests";
 import RequestDetail from "@/pages/Organization/RequestDetail";
+import ApplicantsList from "@/pages/Organization/ApplicantsList";
 
 // Admin pages
 import AdminDashboard from "@/pages/Admin/Dashboard";
@@ -149,21 +153,23 @@ const App = () => (
             <Route path="/consultant/availability" element={<ConsultantAvailability />} />
             <Route path="/consultant/preferences" element={<ConsultantPreferences />} />
             <Route path="/consultant/messages" element={<ConsultantMessages />} />
-            <Route path="/consultant/findjobs" element={<ConsultantOrganizations />} />
+            <Route path="/consultant/my-jobs" element={<ConsultantMyJobs />} />
             <Route path="/consultant/gig/:gigId" element={<ConsultantGigDetail />} />
             <Route path="/consultant/linkedin-jobs" element={<LinkedInJobs />} />
             
             {/* Organization Routes */}
             <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
             <Route path="/organization/profile" element={<OrganizationProfile />} />
-            <Route path="/organization/search" element={<ConsultantSearch />} />
+            <Route path="/organization/find-consultants" element={<ConsultantSearch />} />
             <Route path="/organization/consultant/:id" element={<ConsultantDetail />} />
+            <Route path="/organization/consultants/:id" element={<ConsultantProfile />} />
             <Route path="/organization/preferences" element={<OrganizationPreferences />} />
             <Route path="/organization/messages" element={<OrganizationMessages />} />
             <Route path="/organization/consultants" element={<OrganizationConsultants />} />
             <Route path="/organization/post-request" element={<PostConsultingRequest />} />
             <Route path="/organization/manage-requests" element={<ManageRequests />} />
             <Route path="/organization/request/:id" element={<RequestDetail />} />
+            <Route path="/organization/request/:id/applicants" element={<ApplicantsList />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

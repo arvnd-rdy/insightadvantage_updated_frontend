@@ -403,8 +403,8 @@ const ConsultantProfile = () => {
 
   // Sort experienceList by endYear, endMonth, startYear, startMonth (latest first)
   const sortedExperienceList = [...experienceList].sort((a, b) => {
-    const getYear = (exp: any) => parseInt(exp.endYear || exp.startYear || '0', 10);
-    const getMonth = (exp: any) => {
+    const getYear = (exp: WorkExperienceEntry) => parseInt(exp.endYear || exp.startYear || '0', 10);
+    const getMonth = (exp: WorkExperienceEntry) => {
       const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
       return months.indexOf(exp.endMonth || exp.startMonth || '');
     };

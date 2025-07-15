@@ -33,6 +33,16 @@ const months = [
 ];
 const years = Array.from({ length: 50 }, (_, i) => `${new Date().getFullYear() - i}`);
 
+interface CertificationErrors {
+  name?: string;
+  body?: string;
+  issueMonth?: string;
+  issueYear?: string;
+  expiration?: string;
+  url?: string;
+  file?: string;
+}
+
 const CertificationModal: React.FC<CertificationModalProps> = ({ open, onOpenChange, initialData, onSave, mode, existingCerts }) => {
   const [form, setForm] = useState<CertificationEntry>({
     name: '',
@@ -48,7 +58,7 @@ const CertificationModal: React.FC<CertificationModalProps> = ({ open, onOpenCha
   });
   const [file, setFile] = useState<File | null>(null);
   const [noExpiration, setNoExpiration] = useState(false);
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<CertificationErrors>({});
   const [duplicateWarning, setDuplicateWarning] = useState('');
 
   useEffect(() => {
@@ -74,7 +84,7 @@ const CertificationModal: React.FC<CertificationModalProps> = ({ open, onOpenCha
 
   // Inline validation
   const validate = () => {
-    const errs: any = {};
+    const errs: CertificationErrors = {};
     if (!form.name) errs.name = 'Certification name is required';
     if (!form.body) errs.body = 'Issuing body is required';
     if (!form.issueMonth) errs.issueMonth = 'Issue month required';
@@ -212,4 +222,4 @@ const CertificationModal: React.FC<CertificationModalProps> = ({ open, onOpenCha
   );
 };
 
-export default CertificationModal; 
+export default CertificationModal;

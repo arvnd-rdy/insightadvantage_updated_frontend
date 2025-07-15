@@ -24,8 +24,8 @@ import { z } from 'zod';
 
 interface ProfileFormProps {
   role: 'consultant' | 'organization';
-  onSubmit: (data: any) => void;
-  defaultValues?: any;
+  onSubmit: (data: z.infer<typeof ConsultantProfileSchema> | z.infer<typeof OrganizationProfileSchema>) => void;
+  defaultValues?: z.infer<typeof ConsultantProfileSchema> | z.infer<typeof OrganizationProfileSchema>;
 }
 
 const ConsultantProfileSchema = z.object({

@@ -300,7 +300,9 @@ const Step1PersonalDetails = () => {
             }));
           }
         }
-      } catch {}
+      } catch (error) {
+        // Intentionally left empty to suppress errors for failed API calls
+      }
     }
   };
 

@@ -40,7 +40,7 @@ const Step2Education = () => {
   const [education, setEducation] = useState<EducationEntry[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<EducationEntry>({
     degree: '',
     institution: '',
     fieldOfStudy: '',
@@ -53,8 +53,14 @@ const Step2Education = () => {
     currentlyStudying: false,
     description: '',
   });
-  const [formErrors, setFormErrors] = useState<any>({});
-  const [touched, setTouched] = useState<any>({});
+  interface FormErrors {
+    degree?: string;
+    institution?: string;
+    graduationYear?: string;
+    description?: string;
+  }
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [instSuggestions, setInstSuggestions] = useState<string[]>([]);
   const [showInstSuggestions, setShowInstSuggestions] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState('');
@@ -125,7 +131,7 @@ const Step2Education = () => {
   };
 
   const validateForm = (): boolean => {
-    const errors: any = {};
+    const errors: FormErrors = {};
     errors.degree = validateField('degree', form.degree);
     errors.institution = validateField('institution', form.institution);
     errors.graduationYear = validateField('graduationYear', form.endYear);
@@ -134,9 +140,9 @@ const Step2Education = () => {
     return !errors.degree && !errors.institution && !errors.graduationYear && !errors.description;
   };
 
-  const handleBlur = (name: string) => {
-    setTouched((prev: any) => ({ ...prev, [name]: true }));
-    setFormErrors((prev: any) => ({ ...prev, [name]: validateField(name, form[name as keyof typeof form]) }));
+  const handleBlur = (name: keyof typeof form) => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setFormErrors((prev) => ({ ...prev, [name]: validateField(name, form[name] as string) }));
   };
 
   const handleModalSave = () => {
@@ -306,7 +312,7 @@ const Step2Education = () => {
                             value={form.endMonth}
                             onChange={e => setForm(f => ({ ...f, endMonth: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
-                            required={!!(!form.currentlyStudying)}
+                            required={!form.currentlyStudying}
                             disabled={form.currentlyStudying}
                           >
                             <option value="">Month</option>
@@ -316,7 +322,7 @@ const Step2Education = () => {
                             value={form.endYear}
                             onChange={e => setForm(f => ({ ...f, endYear: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
-                            required={!!(!form.currentlyStudying)}
+                            required={!form.currentlyStudying}
                             disabled={form.currentlyStudying}
                             onBlur={() => handleBlur('graduationYear')}
                           >

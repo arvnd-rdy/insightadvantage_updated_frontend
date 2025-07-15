@@ -12,9 +12,20 @@ const PREFERRED_METHODS = [
   { value: 'message', label: 'In-platform Message', icon: <MessageSquare className="inline w-4 h-4 mr-1" /> },
 ];
 
+interface ContactEntry {
+  id: string;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  email: string;
+  phone: string;
+  preferred: string;
+}
+
 const Step2Contacts = () => {
   const navigate = useNavigate();
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<ContactEntry[]>([]);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -255,4 +266,4 @@ const Step2Contacts = () => {
   );
 };
 
-export default Step2Contacts; 
+export default Step2Contacts;

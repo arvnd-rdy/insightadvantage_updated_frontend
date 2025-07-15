@@ -2,7 +2,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
+
 import DashboardCard from '@/components/DashboardCard';
 import ConsultantCard from '@/components/ConsultantCard';
 import { Button } from '@/components/ui/button';
@@ -52,12 +52,9 @@ const OrganizationDashboard = () => {
         <DashboardSidebar role="organization" />
         
         <div className="flex-1">
-          <DashboardHeader 
-            userName={organizationData.name}
-            userRole="organization"
-          />
           
-          <main className="p-6">
+          
+          <main className="p-6 max-w-7xl mx-auto">
             <div className="mb-8">
               <div className="flex justify-between items-start">
                 <div>
@@ -120,7 +117,7 @@ const OrganizationDashboard = () => {
                       <Button variant="ghost" size="sm">View</Button>
                     </div>
                   ))}
-                  <Link to="/organization/search">
+                  <Link to="/organization/find-consultants">
                     <Button variant="link" className="p-0 h-auto text-sm">
                       New Search
                     </Button>

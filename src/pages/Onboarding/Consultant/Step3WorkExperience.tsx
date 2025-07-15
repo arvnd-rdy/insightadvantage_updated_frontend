@@ -46,9 +46,31 @@ const Step3WorkExperience = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [modalInitialData, setModalInitialData] = useState<any>({});
-  const [formErrors, setFormErrors] = useState<any>({});
-  const [touched, setTouched] = useState<any>({});
+  const [modalInitialData, setModalInitialData] = useState<WorkExperienceEntry>({
+    title: '',
+    company: '',
+    city: '',
+    country: '',
+    startMonth: '',
+    startYear: '',
+    endMonth: '',
+    endYear: '',
+    isCurrent: false,
+    bullets: [],
+    file: null,
+  });
+  interface FormErrors {
+    title?: string;
+    company?: string;
+    location?: string;
+    startMonth?: string;
+    startYear?: string;
+    endYear?: string;
+    bullets?: string;
+    file?: string;
+  }
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [orgSuggestionsList, setOrgSuggestionsList] = useState<string[]>([]);
   const [showOrgSuggestions, setShowOrgSuggestions] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState('');
@@ -85,7 +107,7 @@ const Step3WorkExperience = () => {
   };
 
   // Validation
-  const validateField = (name: string, value: any): string => {
+  const validateField = (name: string, value: string | string[] | File | null): string => {
     switch (name) {
       case 'title':
         if (!value) return 'Job title is required';
@@ -101,7 +123,7 @@ const Step3WorkExperience = () => {
         if (!value) return 'Start date is required';
         return '';
       case 'endYear':
-        if (!modalInitialData.isCurrent && modalInitialData.startYear && value && parseInt(value) < parseInt(modalInitialData.startYear)) {
+        if (!modalInitialData.isCurrent && modalInitialData.startYear && value && parseInt(value as string) < parseInt(modalInitialData.startYear)) {
           return 'End year must be after or equal to start year';
         }
         return '';
@@ -119,7 +141,7 @@ const Step3WorkExperience = () => {
   };
 
   const validateForm = (): boolean => {
-    const errors: any = {};
+    const errors: FormErrors = {};
     errors.title = validateField('title', modalInitialData.title);
     errors.company = validateField('company', modalInitialData.company);
     errors.location = validateField('location', modalInitialData.location);
@@ -132,12 +154,12 @@ const Step3WorkExperience = () => {
     return !errors.title && !errors.company && !errors.location && !errors.startMonth && !errors.startYear && !errors.endYear && !errors.bullets && !errors.file;
   };
 
-  const handleBlur = (name: string) => {
-    setTouched((prev: any) => ({ ...prev, [name]: true }));
-    setFormErrors((prev: any) => ({ ...prev, [name]: validateField(name, modalInitialData[name]) }));
+  const handleBlur = (name: keyof typeof modalInitialData) => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setFormErrors((prev) => ({ ...prev, [name]: validateField(name, modalInitialData[name] as string) }));
   };
 
-  const handleModalSave = (entry: any) => {
+  const handleModalSave = (entry: WorkExperienceEntry) => {
     setTouched({ title: true, company: true, location: true, startMonth: true, startYear: true, endYear: true, bullets: true, file: true });
     if (!validateForm()) return;
     // Duplicate prevention
@@ -210,14 +232,14 @@ const Step3WorkExperience = () => {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="title">Job Title</Label>
-                      <Input id="title" value={modalInitialData.title} onChange={e => setModalInitialData((prev: any) => ({ ...prev, title: e.target.value }))} onBlur={() => handleBlur('title')} required />
+                      <Input id="title" value={modalInitialData.title} onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, title: e.target.value }))} onBlur={() => handleBlur('title')} required />
                       {touched.title && formErrors.title && <div className="text-red-500 text-xs mt-1">{formErrors.title}</div>}
                     </div>
                     <div>
                       <Label htmlFor="company">Organization Name</Label>
                       <div className="relative">
                         <Input id="company" value={modalInitialData.company} onChange={e => {
-                          setModalInitialData((prev: any) => ({ ...prev, company: e.target.value }));
+                          setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, company: e.target.value }));
                           if (e.target.value.length > 1) {
                             setOrgSuggestionsList(orgSuggestions.filter(org => org.toLowerCase().includes(e.target.value.toLowerCase())).slice(0, 5));
                             setShowOrgSuggestions(true);
@@ -231,7 +253,7 @@ const Step3WorkExperience = () => {
                           <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1">
                             {orgSuggestionsList.map(org => (
                               <div key={org} className="px-3 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                                setModalInitialData((prev: any) => ({ ...prev, company: org }));
+                                setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, company: org }));
                                 setShowOrgSuggestions(false);
                               }}>{org}</div>
                             ))}
@@ -242,7 +264,7 @@ const Step3WorkExperience = () => {
                     </div>
                     <div>
                       <Label htmlFor="location">Location</Label>
-                      <Input id="location" value={modalInitialData.location} onChange={e => setModalInitialData((prev: any) => ({ ...prev, location: e.target.value }))} onBlur={() => handleBlur('location')} placeholder="City / Province or 'Remote'" required />
+                      <Input id="location" value={modalInitialData.location} onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, location: e.target.value }))} onBlur={() => handleBlur('location')} placeholder="City / Province or 'Remote'" required />
                       {touched.location && formErrors.location && <div className="text-red-500 text-xs mt-1">{formErrors.location}</div>}
                     </div>
                     <div className="flex items-center gap-2">
@@ -250,7 +272,7 @@ const Step3WorkExperience = () => {
                         type="checkbox"
                         id="isCurrent"
                         checked={modalInitialData.isCurrent}
-                        onChange={e => setModalInitialData((prev: any) => ({ ...prev, isCurrent: e.target.checked, endMonth: '', endYear: '' }))}
+                        onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, isCurrent: e.target.checked, endMonth: '', endYear: '' }))}
                       />
                       <Label htmlFor="isCurrent">I am currently working in this role</Label>
                     </div>
@@ -260,7 +282,7 @@ const Step3WorkExperience = () => {
                         <div className="flex gap-2">
                           <select
                             value={modalInitialData.startMonth}
-                            onChange={e => setModalInitialData((prev: any) => ({ ...prev, startMonth: e.target.value }))}
+                            onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, startMonth: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
                             required
                           >
@@ -269,7 +291,7 @@ const Step3WorkExperience = () => {
                           </select>
                           <select
                             value={modalInitialData.startYear}
-                            onChange={e => setModalInitialData((prev: any) => ({ ...prev, startYear: e.target.value }))}
+                            onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, startYear: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
                             required
                           >
@@ -285,7 +307,7 @@ const Step3WorkExperience = () => {
                         <div className="flex gap-2">
                           <select
                             value={modalInitialData.endMonth}
-                            onChange={e => setModalInitialData((prev: any) => ({ ...prev, endMonth: e.target.value }))}
+                            onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, endMonth: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
                             required={!modalInitialData.isCurrent}
                             disabled={modalInitialData.isCurrent}
@@ -295,7 +317,7 @@ const Step3WorkExperience = () => {
                           </select>
                           <select
                             value={modalInitialData.endYear}
-                            onChange={e => setModalInitialData((prev: any) => ({ ...prev, endYear: e.target.value }))}
+                            onChange={e => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, endYear: e.target.value }))}
                             className="border rounded-md px-2 py-2 w-1/2"
                             required={!modalInitialData.isCurrent}
                             disabled={modalInitialData.isCurrent}
@@ -319,7 +341,7 @@ const Step3WorkExperience = () => {
                               onChange={e => {
                                 const newBullets = [...modalInitialData.bullets];
                                 newBullets[idx] = e.target.value;
-                                setModalInitialData((prev: any) => ({ ...prev, bullets: newBullets }));
+                                setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, bullets: newBullets }));
                               }}
                               onBlur={() => handleBlur('bullets')}
                               placeholder={`Responsibility or achievement #${idx + 1}`}
@@ -327,13 +349,13 @@ const Step3WorkExperience = () => {
                             />
                             {modalInitialData.bullets.length > 1 && (
                               <Button type="button" variant="destructive" size="icon" onClick={() => {
-                                setModalInitialData((prev: any) => ({ ...prev, bullets: prev.bullets.filter((_: any, i: number) => i !== idx) }));
+                                setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, bullets: prev.bullets.filter((_: string, i: number) => i !== idx) }));
                               }}>–</Button>
                             )}
                           </div>
                         ))}
                         {modalInitialData.bullets && modalInitialData.bullets.length < 5 && (
-                          <Button type="button" variant="secondary" onClick={() => setModalInitialData((prev: any) => ({ ...prev, bullets: [...prev.bullets, ''] }))}>+ Add Bullet</Button>
+                          <Button type="button" variant="secondary" onClick={() => setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, bullets: [...prev.bullets, ''] }))}>+ Add Bullet</Button>
                         )}
                       </div>
                       {touched.bullets && formErrors.bullets && <div className="text-red-500 text-xs mt-1">{formErrors.bullets}</div>}
@@ -347,7 +369,7 @@ const Step3WorkExperience = () => {
                         accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
                         onChange={e => {
                           const file = e.target.files?.[0];
-                          setModalInitialData((prev: any) => ({ ...prev, file }));
+                          setModalInitialData((prev: WorkExperienceEntry) => ({ ...prev, file }));
                           handleBlur('file');
                         }}
                       />
