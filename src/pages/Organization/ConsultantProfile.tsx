@@ -3,7 +3,10 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Mail, Phone, MapPin, Briefcase, GraduationCap, Award, FileText } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, MapPin, Briefcase, GraduationCap, Award, FileText, User } from 'lucide-react';
+import ConsultantLayout from '@/components/ConsultantLayout';
+import { MapPin as MapPinIcon } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 
 // Mock data for a consultant's profile
 const mockConsultants = [
@@ -82,13 +85,114 @@ const mockConsultants = [
   },
 ];
 
+const mockProfile = {
+  name: 'Aravind Reddy',
+  title: 'Master’s in Applied Computing | University of Windsor | Focused on AI,XR, Software Development & Real-World Applications',
+  location: 'Windsor, Ontario, Canada',
+  email: 'reddyaravind898@gmail.com',
+  phone: '+1 555-123-4567',
+  banner: '',
+  photo: '',
+  pronouns: 'He/Him',
+  about: `Hey there! I'm currently in my 3rd semester of the Master of Applied Computing program at the University of Windsor.\nI enjoy building cool stuff with code — whether it’s AI-powered tools, smart web apps, or anything that solves real-world problems.\nI’m always exploring new tech, playing around with AI tools, and learning by doing.`,
+  skills: ['Python', 'Django', 'Machine Learning', 'React.js', 'Scikit-Learn'],
+  portfolio: [
+    { title: 'AI Chatbot Project using Dialogflow', url: '#', description: 'Designed and developed an AI chatbot using Dialogflow.' },
+    { title: 'Web Scraping Amazon E-commerce', url: '#', description: 'Automated web scraping for Amazon using AutoScrapper.' },
+  ],
+  experience: [
+    {
+      id: 1,
+      title: 'Technical Recruiter',
+      company: 'Dexian',
+      type: 'Full-time',
+      start: 'May 2023',
+      end: 'Aug 2023',
+      location: 'Pune, Maharashtra, India',
+      onsite: 'On-site',
+      description: '',
+      skills: ['HTML5', 'CSS', 'Recruitment'],
+      certificate: 'certificate.pdf',
+    },
+    {
+      id: 2,
+      title: 'Frontend Developer',
+      company: 'EPAM Systems',
+      type: 'Apprenticeship',
+      start: 'Jan 2023',
+      end: 'May 2023',
+      location: 'Remote',
+      onsite: 'Remote',
+      description: '',
+      skills: ['HTML5', 'CSS', 'JavaScript'],
+      certificate: 'certificate.pdf',
+    },
+  ],
+  education: [
+    {
+      id: 1,
+      school: 'University of Windsor',
+      degree: 'Master’s degree, Applied computing',
+      start: 'Sep 2024',
+      end: 'Sep 2026',
+      description: 'You are free: to share – to copy, distribute and transmit the work…',
+      logo: '',
+    },
+    {
+      id: 2,
+      school: 'Lovely Professional University',
+      degree: 'Bachelor of Technology - BTech, Computer Science',
+      start: '2019',
+      end: '2023',
+      description: 'Grade: 8.6',
+      logo: '',
+    },
+  ],
+  licenses: [
+    {
+      id: 1,
+      name: 'Getting Started with Microsoft Azure',
+      issuer: 'LinkedIn',
+      issued: 'Mar 2025',
+      credentialUrl: '#',
+      skills: ['Microsoft Azure'],
+    },
+    {
+      id: 2,
+      name: 'Learning Hadoop',
+      issuer: 'LinkedIn',
+      issued: 'Feb 2025',
+      credentialUrl: '#',
+      skills: ['Hadoop', 'Large-scale Data Processing'],
+    },
+  ],
+  certifications: [
+    {
+      id: 1,
+      name: 'Certified Project Manager',
+      body: 'Project Management Institute',
+      issueMonth: 'January',
+      issueYear: '2020',
+      expirationMonth: 'January',
+      expirationYear: '2025',
+      credentialId: 'PMI-123456',
+      url: '#',
+      description: 'Certification for advanced project management skills.',
+    },
+  ],
+  testimonials: [
+    { author: 'Jane Smith', text: 'Aravind is a fantastic collaborator and engineer.' },
+    { author: 'John Doe', text: 'Great work on the AI chatbot project!' },
+  ],
+};
+
 const ConsultantProfile = () => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(window.location.search);
   const jobId = queryParams.get('jobId');
 
   const consultant = mockConsultants.find(c => c.id === id);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   if (!consultant) {
     return (
@@ -108,164 +212,166 @@ const ConsultantProfile = () => {
   }
 
   return (
-    <main className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <div className="flex items-center gap-4 mb-4">
-          <Link to={jobId ? `/organization/request/${jobId}/applicants` : "/organization/dashboard"}>
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {jobId ? "Back to Applicants" : "Back to Dashboard"}
-            </Button>
-          </Link>
+    <ConsultantLayout>
+      {/* Banner and Profile Pic */}
+      <div className="relative mb-8">
+        <div className="h-40 md:h-56 bg-gradient-to-r from-blue-200 to-green-200 rounded-b-2xl overflow-hidden relative">
+          {mockProfile.banner && <img src={mockProfile.banner} alt="Banner" className="absolute inset-0 w-full h-full object-cover" />}
         </div>
-        <h1 className="text-3xl font-bold mb-2">{consultant.name}</h1>
-        <p className="text-gray-600">Consultant Profile</p>
+        <div className="absolute left-8 -bottom-12 flex items-end gap-4">
+          <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center text-5xl font-bold text-gray-500 overflow-hidden relative">
+            {mockProfile.photo ? <img src={mockProfile.photo} alt="Profile" className="w-full h-full object-cover" /> : mockProfile.name[0]}
+          </div>
+        </div>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Contact Information */}
-        <Card className="md:col-span-1">
-          <CardHeader>
-            <CardTitle>Contact Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="flex items-center"><Mail className="h-4 w-4 mr-2" /> {consultant.email}</p>
-            <p className="flex items-center"><Phone className="h-4 w-4 mr-2" /> {consultant.phone}</p>
-            <p className="flex items-center"><MapPin className="h-4 w-4 mr-2" /> {consultant.location}</p>
-          </CardContent>
-        </Card>
-
-        {/* Bio and Skills */}
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>About {consultant.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p>{consultant.bio}</p>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Skills</h3>
-              <div className="flex flex-wrap gap-2">
-                {consultant.skills.map(skill => (
-                  <span key={skill} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                    {skill}
-                  </span>
-                ))}
+      {/* Name, Title, Location, Request Button */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-16 mb-6 gap-4 px-4">
+        <div>
+          <div className="text-2xl font-bold flex items-center gap-2">{mockProfile.name} <span className="text-base font-normal text-gray-400">{mockProfile.pronouns}</span></div>
+          <div className="text-gray-700 font-medium mt-1">{mockProfile.title}</div>
+          <div className="text-gray-500 mt-1 flex items-center gap-2">
+            <MapPin size={16} /> {mockProfile.location}
+          </div>
+        </div>
+        <div>
+          <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition" onClick={() => setModalOpen(true)}>
+            Request Engagement
+          </button>
+        </div>
+      </div>
+      {/* About/Bio Card */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold text-lg">About</h3>
+        </div>
+        <div className="text-gray-700 whitespace-pre-line">{mockProfile.about}</div>
+      </div>
+      {/* Skills */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Skills</h3>
+        <div className="flex flex-wrap gap-2">
+          {mockProfile.skills.map(skill => (
+            <span key={skill} className="bg-gray-100 rounded-full px-3 py-1 text-sm text-gray-700">{skill}</span>
+          ))}
+        </div>
+      </div>
+      {/* Portfolio Section (Slider) */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-2xl mb-4">Portfolio</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {mockProfile.portfolio.map((item, idx) => (
+            <div key={idx} className="portfolio-card bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden transition hover:shadow-lg hover:-translate-y-0.5">
+              <div className="portfolio-content p-4 flex flex-col flex-1">
+                <h3 className="portfolio-title text-lg font-semibold mb-1 line-clamp-2">{item.title}</h3>
+                <p className="portfolio-snippet text-gray-700 text-sm mb-3">{item.description}</p>
+                {item.url && <a href={item.url} className="text-blue-600 underline text-xs" target="_blank" rel="noopener noreferrer">View Project</a>}
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Experience */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center"><Briefcase className="h-5 w-5 mr-2" /> Work Experience</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {consultant.experience.length > 0 ? (
-              consultant.experience.map((exp, index) => (
-                <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="font-semibold">{exp.title} at {exp.company}</h3>
-                  <p className="text-sm text-gray-600">{exp.years}</p>
-                  <p className="text-sm mt-1">{exp.description}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No work experience listed.</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Education */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center"><GraduationCap className="h-5 w-5 mr-2" /> Education</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {consultant.education.length > 0 ? (
-              consultant.education.map((edu, index) => (
-                <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="font-semibold">{edu.degree}</h3>
-                  <p className="text-sm text-gray-600">{edu.university}, {edu.years}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No education listed.</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Certifications */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center"><Award className="h-5 w-5 mr-2" /> Certifications</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {consultant.certifications.length > 0 ? (
-              consultant.certifications.map((cert, index) => (
-                <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="font-semibold">{cert.name}</h3>
-                  <p className="text-sm text-gray-600">Issuing Body: {cert.issuingBody}, Year: {cert.year}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No certifications listed.</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Licenses */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center"><FileText className="h-5 w-5 mr-2" /> Licenses</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {consultant.licenses.length > 0 ? (
-              consultant.licenses.map((license, index) => (
-                <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="font-semibold">{license.name}</h3>
-                  <p className="text-sm text-gray-600">Issuing Body: {license.issuingBody}, Number: {license.number}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No licenses listed.</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Documents */}
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center"><FileText className="h-5 w-5 mr-2" /> Documents</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {consultant.resumeUrl && (
-              <Button variant="outline" asChild>
-                <a href={consultant.resumeUrl} target="_blank" rel="noopener noreferrer">
-                  <FileText className="h-4 w-4 mr-2" /> View Resume
-                </a>
-              </Button>
-            )}
-            {consultant.coverLetterUrl && (
-              <Button variant="outline" asChild className="ml-2">
-                <a href={consultant.coverLetterUrl} target="_blank" rel="noopener noreferrer">
-                  <FileText className="h-4 w-4 mr-2" /> View Cover Letter
-                </a>
-              </Button>
-            )}
-            {consultant.portfolioUrl && (
-              <Button variant="outline" asChild className="ml-2">
-                <a href={consultant.portfolioUrl} target="_blank" rel="noopener noreferrer">
-                  <FileText className="h-4 w-4 mr-2" /> View Portfolio
-                </a>
-              </Button>
-            )}
-            {(!consultant.resumeUrl && !consultant.coverLetterUrl && !consultant.portfolioUrl) && (
-              <p className="text-gray-500">No documents available.</p>
-            )}
-          </CardContent>
-        </Card>
+          ))}
+        </div>
       </div>
-    </main>
+      {/* Work Experience */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Experience</h3>
+        <ul className="space-y-4">
+          {mockProfile.experience.map((exp, idx) => (
+            <li key={exp.id} className="flex gap-4 items-start border-b pb-4 last:border-b-0 last:pb-0">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-400">
+                <Briefcase size={24} />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">{exp.title}</div>
+                <div className="text-gray-600">{exp.company}</div>
+                <div className="text-gray-500 text-sm mb-1">{exp.start} - {exp.end}</div>
+                {exp.description && <div className="text-gray-700 text-sm mt-1">{exp.description}</div>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Education */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Education</h3>
+        <ul className="space-y-4">
+          {mockProfile.education.map((edu, idx) => (
+            <li key={edu.id} className="flex gap-4 items-start border-b pb-4 last:border-b-0 last:pb-0">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-400">
+                <User size={24} />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">{edu.school}</div>
+                <div className="text-gray-600">{edu.degree}</div>
+                <div className="text-gray-500 text-sm mb-1">{edu.start} - {edu.end}</div>
+                {edu.description && <div className="text-gray-700 text-sm">{edu.description}</div>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Licenses */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Licenses</h3>
+        <ul className="space-y-4">
+          {mockProfile.licenses.map((lic, idx) => (
+            <li key={lic.id} className="flex gap-4 items-start border-b pb-4 last:border-b-0 last:pb-0">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-400">
+                <User size={24} />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">{lic.name}</div>
+                <div className="text-gray-600">{lic.issuer}</div>
+                <div className="text-gray-500 text-sm mb-1">Issued {lic.issued}</div>
+                {lic.credentialUrl && <a href={lic.credentialUrl} className="text-blue-600 text-xs underline" target="_blank" rel="noopener noreferrer">Show credential</a>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Certifications */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Certifications</h3>
+        <ul className="space-y-4">
+          {mockProfile.certifications.map((cert, idx) => (
+            <li key={cert.id} className="flex gap-4 items-start border-b pb-4 last:border-b-0 last:pb-0">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-400">
+                <User size={24} />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">{cert.name}</div>
+                <div className="text-gray-600">{cert.body}</div>
+                <div className="text-gray-500 text-sm mb-1">Issued {cert.issueMonth} {cert.issueYear}</div>
+                {cert.url && <a href={cert.url} className="text-blue-600 text-xs underline" target="_blank" rel="noopener noreferrer">Show credential</a>}
+                <div className="text-gray-700 text-sm mt-1">{cert.description}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Testimonials */}
+      <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
+        <h3 className="font-semibold text-lg mb-2">Testimonials</h3>
+        <ul className="space-y-4">
+          {mockProfile.testimonials.map((t, idx) => (
+            <li key={idx} className="border-b pb-4 last:border-b-0 last:pb-0">
+              <div className="text-gray-700">"{t.text}"</div>
+              <div className="text-gray-500 text-sm mt-1">- {t.author}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Request Engagement Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request Sent</DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-6 text-lg">Your engagement request has been sent to this consultant.</div>
+          <DialogClose asChild>
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold w-full mt-4">Close</button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
+    </ConsultantLayout>
   );
 };
 

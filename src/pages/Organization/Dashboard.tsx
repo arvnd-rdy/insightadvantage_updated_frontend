@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import DashboardSidebar from '@/components/DashboardSidebar';
 
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Search, Clock, Building, Users, Plus, FolderOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 import OrganizationNavBar from '@/components/OrganizationNavBar';
 
@@ -43,6 +44,16 @@ const OrganizationDashboard = () => {
       },
     ],
   };
+
+  const [showCongrats, setShowCongrats] = useState(false);
+
+  useEffect(() => {
+    // Show modal only if not shown before
+    if (!localStorage.getItem('orgProfileCongratsShown')) {
+      setShowCongrats(true);
+      localStorage.setItem('orgProfileCongratsShown', 'true');
+    }
+  }, []);
 
   return (
     <>
@@ -196,6 +207,23 @@ const OrganizationDashboard = () => {
           </main>
         </div>
       </div>
+      {/* Congratulations Modal */}
+      <Dialog open={showCongrats} onOpenChange={setShowCongrats}>
+        <DialogContent className="max-w-md mx-auto text-center">
+          <DialogHeader>
+            <DialogTitle>Congratulations!</DialogTitle>
+          </DialogHeader>
+          <div className="text-lg text-gray-700 mb-4">Your organization profile is complete. Welcome to Insight Advantage!</div>
+          <DialogFooter>
+            <button
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+              onClick={() => setShowCongrats(false)}
+            >
+              Close
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SidebarProvider>
     </>
   );

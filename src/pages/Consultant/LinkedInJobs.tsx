@@ -417,18 +417,51 @@ const JobCard = ({ job, isSelected, onClick }) => (
     </Card>
 );
 
+// Update JobDetails component to render formatted sections:
 const JobDetails = ({ job }) => {
     if (!job) {
         return (
-            <Card className="h-full shadow-lg flex items-center justify-center">
+            <div className="h-full flex items-center justify-center">
                 <p className="text-gray-500">Select a job to see details</p>
-            </Card>
+            </div>
         );
     }
 
+    // Helper to render sections from description
+    const renderDescription = (desc) => {
+        // Split by double newlines for sections
+        const sections = desc.split(/\n\n+/);
+        return sections.map((section, idx) => {
+            // Section title: bold if starts with 'About', 'Key', 'Soft', 'Why', 'Ready', etc.
+            const match = section.match(/^(About the job|About the Role|Key Responsibilities|Key Requirements|Soft Skills|Why [^\n]+|About [^\n]+|Ready to Join the Team\?|Responsibilities|Requirements|About [^\n]+)/i);
+            if (match) {
+                const title = match[1];
+                const rest = section.replace(title, '').trim();
+                return (
+                    <div key={idx} className="mb-4">
+                        <div className="font-semibold text-lg text-gray-900 mb-1">{title}</div>
+                        {rest && rest.startsWith('-') ? (
+                            <ul className="list-disc pl-6 text-gray-700">
+                                {rest.split(/\n-/).map((item, i) => i === 0 ? null : <li key={i}>{item.trim()}</li>)}
+                            </ul>
+                        ) : rest && rest.startsWith('*') ? (
+                            <ul className="list-disc pl-6 text-gray-700">
+                                {rest.split(/\n\*/).map((item, i) => i === 0 ? null : <li key={i}>{item.trim()}</li>)}
+                            </ul>
+                        ) : rest ? (
+                            <p className="text-gray-700 whitespace-pre-line">{rest}</p>
+                        ) : null}
+                    </div>
+                );
+            }
+            // Otherwise, just render as paragraph
+            return <p key={idx} className="text-gray-700 mb-4 whitespace-pre-line">{section}</p>;
+        });
+    };
+
     return (
-        <Card className="h-full shadow-lg flex flex-col">
-            <CardHeader className="flex-shrink-0">
+        <Card className="h-full shadow-lg">
+            <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-2xl font-bold text-gray-900">{job.title}</CardTitle>
                     <Button>Apply Now</Button>
@@ -436,9 +469,10 @@ const JobDetails = ({ job }) => {
                 <p className="text-md text-gray-700 font-semibold">{job.organization}</p>
                 <p className="text-sm text-gray-500 flex items-center"><MapPin className="h-4 w-4 mr-2" />{job.location}</p>
             </CardHeader>
-            <ScrollArea className="flex-1">
             <CardContent>
-                <p className="text-gray-700 mb-6">{job.description}</p>
+                <div className="mb-6">
+                    {renderDescription(job.description)}
+                </div>
                 <div className="mb-6">
                     <h3 className="font-semibold text-gray-800 mb-2">Skills</h3>
                     <div className="flex flex-wrap gap-2">
@@ -452,7 +486,6 @@ const JobDetails = ({ job }) => {
                     <div className="flex items-center"><Users className="h-4 w-4 mr-2" /> {job.applicants} applicants</div>
                 </div>
             </CardContent>
-            </ScrollArea>
         </Card>
     );
 };

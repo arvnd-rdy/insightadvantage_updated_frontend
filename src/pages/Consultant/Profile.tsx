@@ -12,6 +12,7 @@ import LicenseModal, { LicenseEntry } from '@/components/LicenseModal';
 import PortfolioModal, { PortfolioEntry } from '@/components/PortfolioModal';
 import ConsultantTopNav from '@/components/ConsultantTopNav';
 import ConsultantLayout from '@/components/ConsultantLayout';
+import { useLocation } from 'react-router-dom';
 
 const mockProfile = {
   name: 'Aravind Reddy',
@@ -116,6 +117,9 @@ const mockProfile = {
 };
 
 const ConsultantProfile = () => {
+  const location = useLocation();
+  const isOrganizationView = location.pathname.startsWith('/organization/consultants/');
+
   // Education modal state
   const [educationModalOpen, setEducationModalOpen] = useState(false);
   const [educationEditIndex, setEducationEditIndex] = useState<number | null>(null);
@@ -438,13 +442,15 @@ const ConsultantProfile = () => {
       <div className="relative mb-8">
         <div className="h-40 md:h-56 bg-gradient-to-r from-blue-200 to-green-200 rounded-b-2xl overflow-hidden relative">
           {bannerImage && <img src={bannerImage} alt="Banner" className="absolute inset-0 w-full h-full object-cover" />}
-          <label className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-2 cursor-pointer shadow hover:bg-opacity-100 transition" title="Edit Banner">
-            <Pencil size={20} />
-            <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
-          </label>
+          {!isOrganizationView && (
+            <label className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-2 cursor-pointer shadow hover:bg-opacity-100 transition" title="Edit Banner">
+              <Pencil size={20} />
+              <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
+            </label>
+          )}
         </div>
         <div className="absolute left-8 -bottom-12 flex items-end gap-4">
-          <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center text-5xl font-bold text-gray-500 overflow-hidden relative cursor-pointer" onClick={() => setPhotoModalOpen(true)}>
+          <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center text-5xl font-bold text-gray-500 overflow-hidden relative cursor-pointer" onClick={() => !isOrganizationView && setPhotoModalOpen(true)}>
             {profilePhoto ? <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" /> : mockProfile.name[0]}
           </div>
         </div>
@@ -457,17 +463,21 @@ const ConsultantProfile = () => {
           <div className="text-gray-500 mt-1 flex items-center gap-2">
             <MapPin size={16} /> {mockProfile.location}
           </div>
-          <div className="flex gap-2 mt-3">
-            <button className="px-4 py-2 border rounded-lg font-semibold hover:bg-gray-100" title="Contact Info">Contact Info</button>
-            <button className="px-4 py-2 border rounded-lg font-semibold hover:bg-gray-100" title="Preferences">Preferences</button>
-          </div>
+          {!isOrganizationView && (
+            <div className="flex gap-2 mt-3">
+              <button className="px-4 py-2 border rounded-lg font-semibold hover:bg-gray-100" title="Contact Info">Contact Info</button>
+              <button className="px-4 py-2 border rounded-lg font-semibold hover:bg-gray-100" title="Preferences">Preferences</button>
+            </div>
+          )}
         </div>
       </div>
       {/* About/Bio Card */}
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">About</h3>
-          <button className="p-1 rounded-full hover:bg-gray-100" title="Edit About" onClick={() => { setAboutDraft(aboutText); setAboutModalOpen(true); }}><Pencil size={16} /></button>
+          {!isOrganizationView && (
+            <button className="p-1 rounded-full hover:bg-gray-100" title="Edit About" onClick={() => { setAboutDraft(aboutText); setAboutModalOpen(true); }}><Pencil size={16} /></button>
+          )}
         </div>
         <div className="text-gray-700 whitespace-pre-line">{aboutText}</div>
         {aboutModalOpen && (
@@ -494,7 +504,9 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-2xl">Portfolio</h3>
-          <button className="bg-blue-700 text-white rounded px-4 py-2 text-sm font-semibold hover:bg-blue-800 transition" onClick={handleAddPortfolio}>+ Add Item</button>
+          {!isOrganizationView && (
+            <button className="bg-blue-700 text-white rounded px-4 py-2 text-sm font-semibold hover:bg-blue-800 transition" onClick={handleAddPortfolio}>+ Add Item</button>
+          )}
         </div>
         {/* Carousel logic: show 3 at a time, arrows if more */}
         <div className="relative">
@@ -529,12 +541,14 @@ const ConsultantProfile = () => {
                       )}
                     </p>
                   )}
-                  <button
-                    className="portfolio-button border border-blue-700 text-blue-700 rounded px-3 py-1 text-sm font-medium hover:bg-blue-50 transition w-fit mt-auto"
-                    onClick={() => handleEditPortfolio(portfolioIdx + idx)}
-                  >
-                    View Details →
-                  </button>
+                  {!isOrganizationView && (
+                    <button
+                      className="portfolio-button border border-blue-700 text-blue-700 rounded px-3 py-1 text-sm font-medium hover:bg-blue-50 transition w-fit mt-auto"
+                      onClick={() => handleEditPortfolio(portfolioIdx + idx)}
+                    >
+                      View Details →
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -556,10 +570,12 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Experience</h3>
-          <div className="flex gap-2">
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Add Experience" onClick={handleAddWorkExperience}><Plus size={18} /></button>
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Experience" onClick={() => handleEditWorkExperience(0)}><Pencil size={16} /></button>
-          </div>
+          {!isOrganizationView && (
+            <div className="flex gap-2">
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Add Experience" onClick={handleAddWorkExperience}><Plus size={18} /></button>
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Experience" onClick={() => handleEditWorkExperience(0)}><Pencil size={16} /></button>
+            </div>
+          )}
         </div>
         <ul className="space-y-4">
           {sortedExperienceList.map((exp, idx) => {
@@ -594,7 +610,6 @@ const ConsultantProfile = () => {
                     </div>
                   )}
                 </div>
-                <button className="p-1 rounded-full hover:bg-gray-100 self-start" title="Edit" onClick={() => handleEditWorkExperience(idx)}><Pencil size={16} /></button>
               </li>
             );
           })}
@@ -611,13 +626,15 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Education</h3>
-          <button
-            className="p-1 rounded-full hover:bg-blue-100"
-            title="Add Education"
-            onClick={handleAddEducation}
-          >
-            <Plus size={20} className="text-blue-700" />
-          </button>
+          {!isOrganizationView && (
+            <button
+              className="p-1 rounded-full hover:bg-blue-100"
+              title="Add Education"
+              onClick={handleAddEducation}
+            >
+              <Plus size={20} className="text-blue-700" />
+            </button>
+          )}
         </div>
         <ul className="space-y-4">
           {sortedEducationList.map((edu, idx) => (
@@ -634,7 +651,7 @@ const ConsultantProfile = () => {
                 <div className="text-gray-500 text-sm mb-1">{edu.startYear} - {edu.endYear}</div>
                 {edu.description && (
                   <div className="text-gray-700 text-sm">
-                    {expandedEducationDesc[edu.id] || edu.description.length <= 120
+                    {edu.description.length <= 120
                       ? edu.description
                       : edu.description.slice(0, 120) + '...'}
                     {edu.description.length > 120 && (
@@ -643,13 +660,13 @@ const ConsultantProfile = () => {
                         onClick={() => setExpandedEducationDesc(prev => ({ ...prev, [edu.id]: !prev[edu.id] }))}
                         type="button"
                       >
-                        {expandedEducationDesc[edu.id] ? 'See less' : 'See more'}
+                        {/* If you want to add expand/collapse, implement expandedEducationDesc state */}
+                        See more
                       </button>
                     )}
                   </div>
                 )}
               </div>
-              <button className="p-1 rounded-full hover:bg-gray-100 self-start" title="Edit" onClick={() => handleEditEducation(idx)}><Pencil size={16} /></button>
             </li>
           ))}
         </ul>
@@ -665,10 +682,12 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Licenses</h3>
-          <div className="flex gap-2">
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Add License" onClick={handleAddLicense}><Plus size={18} /></button>
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Edit License" onClick={() => handleEditLicense(0)}><Pencil size={16} /></button>
-          </div>
+          {!isOrganizationView && (
+            <div className="flex gap-2">
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Add License" onClick={handleAddLicense}><Plus size={18} /></button>
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Edit License" onClick={() => handleEditLicense(0)}><Pencil size={16} /></button>
+            </div>
+          )}
         </div>
         <ul className="space-y-4">
           {sortedLicenseList.map(lic => (
@@ -697,10 +716,12 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Certifications</h3>
-          <div className="flex gap-2">
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Add Certification" onClick={handleAddCertification}><Plus size={18} /></button>
-            <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Certification" onClick={() => handleEditCertification(0)}><Pencil size={16} /></button>
-          </div>
+          {!isOrganizationView && (
+            <div className="flex gap-2">
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Add Certification" onClick={handleAddCertification}><Plus size={18} /></button>
+              <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Certification" onClick={() => handleEditCertification(0)}><Pencil size={16} /></button>
+            </div>
+          )}
         </div>
         <ul className="space-y-4">
           {sortedCertList.map(cert => (
@@ -730,7 +751,9 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Skills</h3>
-          <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Skills"><Pencil size={16} /></button>
+          {!isOrganizationView && (
+            <button className="p-1 rounded-full hover:bg-gray-100" title="Edit Skills"><Pencil size={16} /></button>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {mockProfile.skills.map(skill => (
@@ -742,7 +765,9 @@ const ConsultantProfile = () => {
       <div className="bg-white rounded-xl shadow p-6 mb-6 md:mx-0 w-full">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Testimonials</h3>
-          <button className="p-1 rounded-full hover:bg-gray-100" title="Add Testimonial"><Plus size={18} /></button>
+          {!isOrganizationView && (
+            <button className="p-1 rounded-full hover:bg-gray-100" title="Add Testimonial"><Plus size={18} /></button>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <button onClick={prevTestimonial} className="p-2 rounded-full hover:bg-gray-100"><ArrowLeft size={20} /></button>

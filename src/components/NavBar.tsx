@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Home, Menu, User } from 'lucide-react';
+import { Home, Menu, User, Users } from 'lucide-react';
 
 interface NavBarProps {
   isLoggedIn?: boolean;
@@ -47,6 +47,10 @@ const NavBar = ({ isLoggedIn = false, userRole }: NavBarProps) => {
             </Link>
             <Link to="/pricing" className={`${isActive('/pricing') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
               Pricing
+            </Link>
+            <Link to="/people" className={`flex items-center gap-1 ${isActive('/people') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
+              <Users size={18} />
+              <span>People</span>
             </Link>
             <Link to="/contact" className={`${isActive('/contact') ? 'text-brand-blue' : 'text-gray-600'} hover:text-brand-blue transition-colors`}>
               Contact
@@ -97,6 +101,12 @@ const NavBar = ({ isLoggedIn = false, userRole }: NavBarProps) => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/pricing" className="w-full">Pricing</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/people" className="w-full flex items-center gap-1">
+                  <Users size={16} className="mr-1" />
+                  People
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/contact" className="w-full">Contact</Link>

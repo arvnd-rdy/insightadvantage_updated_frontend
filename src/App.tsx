@@ -86,6 +86,9 @@ import AdminSubscriptions from "@/pages/Admin/Subscriptions";
 import AdminAnalytics from "@/pages/Admin/Analytics";
 import AdminSettings from "@/pages/Admin/Settings";
 
+// People page
+import People from "@/pages/Organization/People";
+
 // Subscription pages
 import SubscriptionPlans from "@/pages/Subscription/Plans";
 import SubscriptionBilling from "@/pages/Subscription/Billing";
@@ -170,6 +173,7 @@ const App = () => (
             <Route path="/organization/manage-requests" element={<ManageRequests />} />
             <Route path="/organization/request/:id" element={<RequestDetail />} />
             <Route path="/organization/request/:id/applicants" element={<ApplicantsList />} />
+            <Route path="/organization/people" element={<People />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
