@@ -11,6 +11,7 @@ import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import NotFound from "@/pages/NotFound";
 import ForgotPassword from "@/pages/ForgotPassword";
+import VerifyEmail from '@/pages/Auth/VerifyEmail';
 
 // Static pages
 import About from "@/pages/About";
@@ -50,6 +51,7 @@ import ConsultantStep8PreferencesPricing from "@/pages/Onboarding/Consultant/Ste
 import ConsultantStep9Review from "@/pages/Onboarding/Consultant/Step9Review";
 import ConsultantStep10Verification from "@/pages/Onboarding/Consultant/Step10Verification";
 import ConsultantStep11CompleteRegistration from "@/pages/Onboarding/Consultant/Step11CompleteRegistration";
+import WelcomeOnboarding from '@/pages/Onboarding/Welcome';
 
 // Onboarding - Organization
 import OrganizationStep1BasicInfo from "@/pages/Onboarding/Organization/Step1BasicInfo";
@@ -63,6 +65,7 @@ import OrganizationStep4dBudgetTerms from "@/pages/Onboarding/Organization/Step4
 import OrganizationStep5Review from "@/pages/Onboarding/Organization/Step5Review";
 import OrganizationStep6Verification from "@/pages/Onboarding/Organization/Step6Verification";
 import OrganizationStep7CompleteRegistration from "@/pages/Onboarding/Organization/Step7CompleteRegistration";
+import WelcomeOrganization from '@/pages/Onboarding/WelcomeOrganization';
 
 // Organization pages
 import OrganizationDashboard from "@/pages/Organization/Dashboard";
@@ -106,6 +109,7 @@ const App = () => (
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/register/verify-email" element={<VerifyEmail />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/logout" element={<Home />} />
             
@@ -133,6 +137,7 @@ const App = () => (
             <Route path="/onboarding/consultant/step-9" element={<ConsultantStep9Review />} />
             <Route path="/onboarding/consultant/step-10" element={<ConsultantStep10Verification />} />
             <Route path="/onboarding/consultant/step-11" element={<ConsultantStep11CompleteRegistration />} />
+            <Route path="/onboarding/consultant/welcome" element={<WelcomeOnboarding />} />
             {/* Onboarding - Organization */}
             <Route path="/onboarding/organization/step-1" element={<OrganizationStep1BasicInfo />} />
             <Route path="/onboarding/organization/step-2" element={<OrganizationStep2Contacts />} />
@@ -145,6 +150,7 @@ const App = () => (
             <Route path="/onboarding/organization/step-5" element={<OrganizationStep5Review />} />
             <Route path="/onboarding/organization/step-6" element={<OrganizationStep6Verification />} />
             <Route path="/onboarding/organization/step-7" element={<OrganizationStep7CompleteRegistration />} />
+            <Route path="/onboarding/organization/welcome" element={<WelcomeOrganization />} />
             
             {/* Consultant Routes */}
             <Route path="/consultant/dashboard" element={<ConsultantDashboard />} />

@@ -154,6 +154,54 @@ const ConsultantAvailability = () => {
     });
   };
 
+  const handleDayClick = (date) => {
+    // Don't allow clicking on past dates
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) {
+      toast({
+        title: "Cannot modify past dates",
+        description: "You cannot block or unblock past dates.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Don't allow clicking on booked dates
+    if (isDateBooked(date)) {
+      toast({
+        title: "Cannot modify booked dates",
+        description: "This date has existing bookings and cannot be blocked.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const dateStr = date.toISOString().split('T')[0];
+    const status = getDayStatus(date);
+    
+    if (status === 'blocked') {
+      // Remove from blocked dates
+      setBlockedDates(blockedDates.filter(blocked => blocked.date !== dateStr));
+      toast({
+        title: "Date Unblocked",
+        description: `${date.toLocaleDateString()} is now available for bookings.`,
+      });
+    } else if (status === 'available') {
+      // Add to blocked dates
+      setBlockedDates([...blockedDates, {
+        id: Date.now(),
+        date: dateStr,
+        reason: 'Blocked via calendar',
+        type: 'personal'
+      }]);
+      toast({
+        title: "Date Blocked",
+        description: `${date.toLocaleDateString()} has been blocked for bookings.`,
+      });
+    }
+  };
+
   return (
     <ConsultantLayout>
       <main className="p-6 space-y-6">
@@ -361,8 +409,9 @@ const ConsultantAvailability = () => {
                             ${status === 'booked' ? 'bg-blue-50 border-blue-200' : ''}
                             ${status === 'blocked' ? 'bg-red-50 border-red-200' : ''}
                             ${status === 'unavailable' ? 'bg-gray-50 border-gray-200' : ''}
-                            hover:bg-gray-100 cursor-pointer
+                            hover:bg-gray-100 cursor-pointer transition-colors
                           `}
+                          onClick={() => handleDayClick(date)}
                         >
                           <span className={`${isToday ? 'font-bold' : ''}`}>
                             {date.getDate()}

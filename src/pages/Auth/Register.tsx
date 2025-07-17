@@ -44,10 +44,8 @@ const Register = () => {
         title: "Registration successful",
         description: `Your ${role} account has been created.`,
       });
-      if (role === 'consultant') {
-        navigate('/onboarding/consultant/step-1');
-      } else {
-        navigate('/onboarding/organization/step-1');
+      if (role === 'consultant' || role === 'organization') {
+        navigate('/register/verify-email');
       }
     }, 1500);
   };
