@@ -10,6 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import {
   Search,
@@ -30,7 +35,9 @@ import {
   ThumbsDown,
   Mail,
   Calendar,
-  UserPlus
+  UserPlus,
+  X,
+  Star
 } from 'lucide-react';
 
 const engagements = {
@@ -248,6 +255,16 @@ const engagements = {
 const OrganizationMessages = () => {
   const [selectedEngagementId, setSelectedEngagementId] = useState(null);
   const [activeTab, setActiveTab] = useState('active');
+  const [showCloseEngagementModal, setShowCloseEngagementModal] = useState(false);
+  const [closeFeedback, setCloseFeedback] = useState({
+    rating: '',
+    projectOutcome: '',
+    consultantPerformance: '',
+    communicationQuality: '',
+    wouldRecommend: '',
+    improvements: '',
+    additionalComments: ''
+  });
 
   const selectEngagement = (id) => {
     setSelectedEngagementId(id);
@@ -261,6 +278,30 @@ const OrganizationMessages = () => {
       // Withdraw engagement request from consultant
       alert('Engagement request withdrawn successfully!');
     }
+  };
+
+  const handleCloseEngagement = () => {
+    setShowCloseEngagementModal(true);
+  };
+
+  const handleCloseFeedbackSubmit = () => {
+    console.log('Feedback submitted:', closeFeedback);
+    // Here you would typically send the feedback to your API
+    alert('Engagement closed successfully! Thank you for your feedback.');
+    setShowCloseEngagementModal(false);
+    setCloseFeedback({
+      rating: '',
+      projectOutcome: '',
+      consultantPerformance: '',
+      communicationQuality: '',
+      wouldRecommend: '',
+      improvements: '',
+      additionalComments: ''
+    });
+  };
+
+  const handleFeedbackChange = (field, value) => {
+    setCloseFeedback(prev => ({ ...prev, [field]: value }));
   };
 
   const currentEngagement = engagements[activeTab]?.find(e => e.id === selectedEngagementId);
@@ -509,6 +550,20 @@ const OrganizationMessages = () => {
                   </div>
                 </ScrollArea>
                 <div className="p-4 border-t bg-gradient-to-r from-blue-50 to-purple-50 flex-shrink-0">
+                  {/* Close Engagement Button - Only show for active engagements */}
+                  {activeTab === 'active' && (
+                    <div className="mb-4 flex justify-end">
+                      <Button 
+                        variant="outline" 
+                        onClick={handleCloseEngagement}
+                        className="text-red-600 border-red-300 hover:bg-red-50"
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Close Engagement Thread
+                      </Button>
+                    </div>
+                  )}
+                  
                   <div className="flex items-center gap-2">
                     <Popover>
                       <PopoverTrigger asChild>
@@ -547,6 +602,186 @@ const OrganizationMessages = () => {
           </div>
         </div>
       </Tabs>
+      
+      {/* Close Engagement Feedback Modal */}
+      <Dialog open={showCloseEngagementModal} onOpenChange={setShowCloseEngagementModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <X className="h-6 w-6 text-red-500" />
+              Close Engagement Thread
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                <strong>Engagement:</strong> {currentEngagement?.projectTitle || 'Current Project'}
+              </p>
+              <p className="text-sm text-blue-800">
+                <strong>Consultant:</strong> {currentEngagement?.consultantName || 'Consultant'}
+              </p>
+            </div>
+            
+            {/* Overall Rating */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Overall Rating *</Label>
+              <RadioGroup
+                value={closeFeedback.rating}
+                onValueChange={(value) => handleFeedbackChange('rating', value)}
+                className="flex gap-4"
+              >
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <div key={rating} className="flex items-center space-x-2">
+                    <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} />
+                    <Label htmlFor={`rating-${rating}`} className="flex items-center gap-1">
+                      <Star className="h-4 w-4 text-yellow-400" />
+                      {rating}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+            
+            {/* Project Outcome */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Project Outcome *</Label>
+              <RadioGroup
+                value={closeFeedback.projectOutcome}
+                onValueChange={(value) => handleFeedbackChange('projectOutcome', value)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="exceeded" id="exceeded" />
+                  <Label htmlFor="exceeded">Exceeded expectations</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="met" id="met" />
+                  <Label htmlFor="met">Met expectations</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="below" id="below" />
+                  <Label htmlFor="below">Below expectations</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            {/* Consultant Performance */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Consultant Performance *</Label>
+              <RadioGroup
+                value={closeFeedback.consultantPerformance}
+                onValueChange={(value) => handleFeedbackChange('consultantPerformance', value)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="excellent" id="excellent" />
+                  <Label htmlFor="excellent">Excellent</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="good" id="good" />
+                  <Label htmlFor="good">Good</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="average" id="average" />
+                  <Label htmlFor="average">Average</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="poor" id="poor" />
+                  <Label htmlFor="poor">Poor</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            {/* Communication Quality */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Communication Quality *</Label>
+              <RadioGroup
+                value={closeFeedback.communicationQuality}
+                onValueChange={(value) => handleFeedbackChange('communicationQuality', value)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="excellent" id="comm-excellent" />
+                  <Label htmlFor="comm-excellent">Excellent</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="good" id="comm-good" />
+                  <Label htmlFor="comm-good">Good</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="average" id="comm-average" />
+                  <Label htmlFor="comm-average">Average</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="poor" id="comm-poor" />
+                  <Label htmlFor="comm-poor">Poor</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            {/* Would Recommend */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Would you recommend this consultant? *</Label>
+              <RadioGroup
+                value={closeFeedback.wouldRecommend}
+                onValueChange={(value) => handleFeedbackChange('wouldRecommend', value)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="recommend-yes" />
+                  <Label htmlFor="recommend-yes">Yes, definitely</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="maybe" id="recommend-maybe" />
+                  <Label htmlFor="recommend-maybe">Maybe</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="recommend-no" />
+                  <Label htmlFor="recommend-no">No</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            {/* Improvements */}
+            <div className="space-y-3">
+              <Label htmlFor="improvements" className="text-base font-semibold">Areas for Improvement</Label>
+              <Textarea
+                id="improvements"
+                placeholder="What could the consultant have done better?"
+                value={closeFeedback.improvements}
+                onChange={(e) => handleFeedbackChange('improvements', e.target.value)}
+                className="min-h-[80px]"
+              />
+            </div>
+            
+            {/* Additional Comments */}
+            <div className="space-y-3">
+              <Label htmlFor="comments" className="text-base font-semibold">Additional Comments</Label>
+              <Textarea
+                id="comments"
+                placeholder="Any additional feedback or comments?"
+                value={closeFeedback.additionalComments}
+                onChange={(e) => handleFeedbackChange('additionalComments', e.target.value)}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter className="flex gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowCloseEngagementModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleCloseFeedbackSubmit}
+              disabled={!closeFeedback.rating || !closeFeedback.projectOutcome || !closeFeedback.consultantPerformance || !closeFeedback.communicationQuality || !closeFeedback.wouldRecommend}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Close Engagement
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

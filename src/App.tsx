@@ -67,14 +67,12 @@ import OrganizationStep7CompleteRegistration from "@/pages/Onboarding/Organizati
 // Organization pages
 import OrganizationDashboard from "@/pages/Organization/Dashboard";
 import OrganizationProfile from "@/pages/Organization/Profile";
-import ConsultantSearch from "@/pages/Organization/FindConsultants";
+import PublicOrganizationProfile from "@/pages/Organization/PublicProfile";
 import ConsultantDetail from "@/pages/Organization/ConsultantDetail";
 import OrganizationPreferences from "@/pages/Organization/Preferences";
 import OrganizationMessages from "@/pages/Organization/Messages";
-import OrganizationConsultants from "@/pages/Organization/Consultants";
 import PostConsultingRequest from "@/pages/Organization/PostRequest";
-import PostJob from "@/pages/Organization/PostJob";
-import ManageJobs from "@/pages/Organization/ManageJobs";
+import EditRequest from "@/pages/Organization/EditRequest";
 import ManageRequests from "@/pages/Organization/ManageRequests";
 import RequestDetail from "@/pages/Organization/RequestDetail";
 import ApplicantsList from "@/pages/Organization/ApplicantsList";
@@ -163,17 +161,17 @@ const App = () => (
             {/* Organization Routes */}
             <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
             <Route path="/organization/profile" element={<OrganizationProfile />} />
-            <Route path="/organization/find-consultants" element={<ConsultantSearch />} />
+            <Route path="/organization/profile/public" element={<PublicOrganizationProfile />} />
             <Route path="/organization/consultant/:id" element={<ConsultantDetail />} />
             <Route path="/organization/consultants/:id" element={<ConsultantProfile />} />
             <Route path="/organization/preferences" element={<OrganizationPreferences />} />
             <Route path="/organization/messages" element={<OrganizationMessages />} />
-            <Route path="/organization/consultants" element={<OrganizationConsultants />} />
             <Route path="/organization/post-request" element={<PostConsultingRequest />} />
+            <Route path="/organization/edit-request/:id" element={<EditRequest />} />
             <Route path="/organization/manage-requests" element={<ManageRequests />} />
             <Route path="/organization/request/:id" element={<RequestDetail />} />
             <Route path="/organization/request/:id/applicants" element={<ApplicantsList />} />
-            <Route path="/organization/people" element={<People />} />
+            <Route path="/organization/find-consultants" element={<People />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

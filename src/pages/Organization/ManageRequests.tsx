@@ -17,7 +17,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, Plus, Filter, Eye, Calendar } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Search, Plus, Filter, Eye, Calendar, Edit, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { mockRequests } from '@/mock-data/jobs';
@@ -37,11 +48,24 @@ const ManageRequests = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('datePosted');
+  const [viewMode, setViewMode] = useState('active'); // 'active' or 'past'
+  const [requests, setRequests] = useState(mockRequests);
 
-  const filteredRequests = mockRequests.filter(request => {
+  // Function to determine if a request is active or past
+  const isActiveRequest = (request: any) => {
+    return request.status === 'Open' || request.status === 'Hiring' || request.status === 'Draft';
+  };
+
+  // Function to handle delete request
+  const handleDeleteRequest = (requestId: string) => {
+    setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
+  };
+
+  const filteredRequests = requests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || request.status.toLowerCase() === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesViewMode = viewMode === 'active' ? isActiveRequest(request) : !isActiveRequest(request);
+    return matchesSearch && matchesStatus && matchesViewMode;
   });
 
   return (
@@ -60,6 +84,25 @@ const ManageRequests = () => {
                     Post New Request
                   </Button>
                 </Link>
+              </div>
+
+              {/* Active/Past Toggle */}
+              <div className="flex justify-center mb-6">
+                <div className="bg-gray-100 p-1 rounded-lg">
+                  <Button
+                    variant={viewMode === 'active' ? 'default' : 'ghost'}
+                    onClick={() => setViewMode('active')}
+                    className="mr-1"
+                  >
+                    Active Requests
+                  </Button>
+                  <Button
+                    variant={viewMode === 'past' ? 'default' : 'ghost'}
+                    onClick={() => setViewMode('past')}
+                  >
+                    Past Requests
+                  </Button>
+                </div>
               </div>
 
               {/* Filters and Search */}
@@ -111,7 +154,9 @@ const ManageRequests = () => {
               {/* Requests Table */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Your Consulting Requests ({filteredRequests.length})</CardTitle>
+                  <CardTitle>
+                    {viewMode === 'active' ? 'Active' : 'Past'} Consulting Requests ({filteredRequests.length})
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -167,12 +212,52 @@ const ManageRequests = () => {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Link to={`/organization/request/${request.id}`}>
-                              <Button variant="outline" size="sm">
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Button>
-                            </Link>
+                            <div className="flex gap-2">
+                              <Link to={`/organization/request/${request.id}`}>
+                                <Button variant="outline" size="sm">
+                                  <Eye className="h-4 w-4 mr-1" />
+                                  View
+                                </Button>
+                              </Link>
+                              
+                              {/* Edit Button - only for active requests */}
+                              {isActiveRequest(request) && (
+                                <Link to={`/organization/edit-request/${request.id}`}>
+                                  <Button variant="outline" size="sm" className="text-blue-600 hover:text-blue-700">
+                                    <Edit className="h-4 w-4 mr-1" />
+                                    Edit
+                                  </Button>
+                                </Link>
+                              )}
+                              
+                              {/* Delete Button with confirmation dialog */}
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Delete
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This action cannot be undone. This will permanently delete the request 
+                                      "{request.title}" and all associated applications.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction 
+                                      onClick={() => handleDeleteRequest(request.id)}
+                                      className="bg-red-600 hover:bg-red-700"
+                                    >
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}

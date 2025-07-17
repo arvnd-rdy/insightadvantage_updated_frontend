@@ -32,6 +32,8 @@ const OrganizationDashboard = () => {
         hourlyRate: "$180",
         availability: "Full-time",
         expertise: ["Strategy", "Business Development", "Market Research"],
+        description: "Experienced strategy consultant specializing in business development and market research.",
+        avatarUrl: ""
       },
       {
         id: "2",
@@ -41,6 +43,8 @@ const OrganizationDashboard = () => {
         hourlyRate: "$150",
         availability: "Part-time",
         expertise: ["SEO", "Social Media", "Content Strategy"],
+        description: "Digital marketing specialist with expertise in SEO and content strategy.",
+        avatarUrl: ""
       },
     ],
   };
@@ -60,7 +64,7 @@ const OrganizationDashboard = () => {
       <OrganizationNavBar />
       <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <DashboardSidebar role="organization" />
+        <DashboardSidebar />
         
         <div className="flex-1">
           
@@ -182,6 +186,8 @@ const OrganizationDashboard = () => {
                     hourlyRate={consultant.hourlyRate}
                     availability={consultant.availability}
                     expertise={consultant.expertise}
+                    description={consultant.description || "No description provided."}
+                    avatarUrl={consultant.avatarUrl || ""}
                   />
                 ))}
               </div>

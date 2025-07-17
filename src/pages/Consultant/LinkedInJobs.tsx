@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -419,6 +420,8 @@ const JobCard = ({ job, isSelected, onClick }) => (
 
 // Update JobDetails component to render formatted sections:
 const JobDetails = ({ job }) => {
+    const navigate = useNavigate();
+    
     if (!job) {
         return (
             <div className="h-full flex items-center justify-center">
@@ -426,6 +429,10 @@ const JobDetails = ({ job }) => {
             </div>
         );
     }
+    
+    const handleOrganizationClick = () => {
+        navigate('/organization/profile/public');
+    };
 
     // Helper to render sections from description
     const renderDescription = (desc) => {
@@ -460,30 +467,49 @@ const JobDetails = ({ job }) => {
     };
 
     return (
-        <Card className="h-full shadow-lg">
-            <CardHeader>
+        <Card className="h-full shadow-lg flex flex-col">
+            <CardHeader className="flex-shrink-0">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-2xl font-bold text-gray-900">{job.title}</CardTitle>
-                    <Button>Apply Now</Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
+                        Apply Now
+                    </Button>
                 </div>
                 <p className="text-md text-gray-700 font-semibold">{job.organization}</p>
                 <p className="text-sm text-gray-500 flex items-center"><MapPin className="h-4 w-4 mr-2" />{job.location}</p>
             </CardHeader>
-            <CardContent>
-                <div className="mb-6">
-                    {renderDescription(job.description)}
-                </div>
-                <div className="mb-6">
-                    <h3 className="font-semibold text-gray-800 mb-2">Skills</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {job.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
+            
+            <CardContent className="flex-1 overflow-hidden flex flex-col">
+                {/* Scrollable job description */}
+                <style>{`
+                  .hide-scrollbar::-webkit-scrollbar { display: none; }
+                  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                `}</style>
+                <div className="flex-1 overflow-y-auto mb-6 max-h-[60vh] hide-scrollbar">
+                     <div className="space-y-4">
+                        {renderDescription(job.description)}
                     </div>
-                </div>
-                <Separator />
-                <div className="mt-6 text-sm text-gray-600">
-                    <div className="flex items-center mb-2"><Briefcase className="h-4 w-4 mr-2" /> {job.workMode}</div>
-                    <div className="flex items-center mb-2"><DollarSign className="h-4 w-4 mr-2" /> {job.budget}</div>
-                    <div className="flex items-center"><Users className="h-4 w-4 mr-2" /> {job.applicants} applicants</div>
+                    {/* Company Card at the bottom */}
+                    <Card 
+                      className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                      onClick={handleOrganizationClick}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <Building className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{job.organization}</h4>
+                            <p className="text-sm text-gray-600">{job.location}</p>
+                          </div>
+                        </div>
+                        <p className="mt-3 text-gray-700 text-sm">
+                          {/* Mock company description, replace with job.companyDescription if available */}
+                          {job.companyDescription || 'This organization is a leader in its field, committed to innovation and excellence. Learn more about their mission, values, and opportunities for growth.'}
+                        </p>
+                      </CardContent>
+                    </Card>
                 </div>
             </CardContent>
         </Card>
@@ -519,7 +545,7 @@ export default function Jobs() {
     }, [activeTab]);
 
     return (
-        <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
             <ConsultantTopNav />
             <header className="bg-white shadow-sm flex-shrink-0">
                 <div className="container mx-auto py-4 px-4">

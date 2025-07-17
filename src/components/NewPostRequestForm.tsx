@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useForm,FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -51,7 +51,12 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const NewPostRequestForm = () => {
+interface NewPostRequestFormProps {
+  isEditMode?: boolean;
+  requestId?: string;
+}
+
+const NewPostRequestForm = ({ isEditMode = false, requestId }: NewPostRequestFormProps) => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ndaFileInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +68,40 @@ const NewPostRequestForm = () => {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [ndaFile, setNdaFile] = useState<File | null>(null);
   const [ndaFilePreview, setNdaFilePreview] = useState<string | null>(null);
+  const [existingData, setExistingData] = useState<any>(null);
+
+  // Get existing data for edit mode
+  useEffect(() => {
+    if (isEditMode && requestId) {
+      // In a real app, this would fetch from an API
+      // For now, we'll use mock data based on the requestId
+      const mockExistingData = {
+        requestTitle: 'Senior Vocational Evaluator',
+        requestType: 'Vocational Evaluation',
+        description: 'Seeking a highly experienced vocational evaluator to conduct comprehensive assessments and provide expert testimony.',
+        requiredExpertise: ['Vocational Evaluation', 'Expert Testimony', 'Report Writing'],
+        experienceLevel: 'senior',
+        engagementType: 'project',
+        workMode: 'hybrid',
+        projectScope: 'large',
+        startDate: new Date('2024-09-01'),
+        endDate: new Date('2025-03-01'),
+        applicationDeadline: new Date('2024-08-15'),
+        location: 'Toronto, ON',
+        budgetType: 'fixed',
+        budgetMin: '15000',
+        currency: 'CAD',
+        ndaRequired: true,
+        paymentTerms: 'Net 30 days',
+        contactPerson: 'Jane Doe',
+        contactEmail: 'jane.doe@example.com',
+        contactPhone: '555-123-4567',
+        communicationMethod: 'email',
+      };
+      setExistingData(mockExistingData);
+      setSelectedExpertise(mockExistingData.requiredExpertise);
+    }
+  }, [isEditMode, requestId]);
 
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -78,7 +117,14 @@ const NewPostRequestForm = () => {
     },
   });
 
-  const { register, handleSubmit, formState: { errors }, setValue, watch, trigger } = methods;
+  const { register, handleSubmit, formState: { errors }, setValue, watch, trigger, reset } = methods;
+
+  // Reset form with existing data when in edit mode
+  useEffect(() => {
+    if (isEditMode && existingData) {
+      reset(existingData);
+    }
+  }, [isEditMode, existingData, reset]);
 
   const applicationDeadline = watch('applicationDeadline');
   const startDate = watch('startDate');
@@ -279,10 +325,17 @@ const NewPostRequestForm = () => {
 
   const onSubmit = (data: FormData) => {
     console.log('Form submitted:', data);
-    toast({
-      title: 'Request Published Successfully!',
-      description: 'Your request is now live and visible to consultants.',
-    });
+    if (isEditMode) {
+      toast({
+        title: 'Request Updated Successfully!',
+        description: 'Your request has been updated and is now live.',
+      });
+    } else {
+      toast({
+        title: 'Request Published Successfully!',
+        description: 'Your request is now live and visible to consultants.',
+      });
+    }
   };
 
   const handleSaveDraft = () => {
@@ -799,7 +852,7 @@ const NewPostRequestForm = () => {
           {currentStep === steps.length - 1 && (
             <Button type="submit" className="ml-auto">
               <Send className="h-4 w-4 mr-2" />
-              Publish Request
+              {isEditMode ? 'Update Request' : 'Publish Request'}
             </Button>
           )}
         </div>

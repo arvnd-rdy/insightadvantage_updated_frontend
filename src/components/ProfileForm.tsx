@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,9 +18,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
+import { Plus, Trash2, Upload } from 'lucide-react';
+import OrganizationForm from './OrganizationForm';
 
 interface ProfileFormProps {
   role: 'consultant' | 'organization';
@@ -57,28 +63,62 @@ const ConsultantProfileSchema = z.object({
 });
 
 const OrganizationProfileSchema = z.object({
-  // Basic Company Information
-  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  // Step 1: Basic Company Information
+  organizationName: z.string().min(2, "Organization name must be at least 2 characters"),
   companySize: z.string().min(1, "Company size is required"),
-  industry: z.string().min(2, "Industry is required"),
-  officeLocations: z.string().min(2, "Office locations are required"),
+  serviceAreas: z.array(z.string()).min(1, "At least one service area is required"),
+  website: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+  logo: z.string().optional(),
+  country: z.string().min(1, "Country is required"),
+  state: z.string().min(1, "State/Province is required"),
+  city: z.string().min(1, "City is required"),
+  street: z.string().min(1, "Street address is required"),
+  zipCode: z.string().min(1, "ZIP/Postal code is required"),
+  timezone: z.string().min(1, "Timezone is required"),
   
-  // Contact & Key Personnel
-  contactPerson: z.string().min(2, "Contact person name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  preferredCommunication: z.string().min(1, "Preferred communication method is required"),
+  // Step 2: Contacts (multiple contacts)
+  contacts: z.array(z.object({
+    id: z.string(),
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    jobTitle: z.string().min(1, "Job title is required"),
+    email: z.string().email("Invalid email address"),
+    phone: z.string().min(10, "Phone number must be at least 10 digits"),
+    preferredCommunication: z.string().min(1, "Preferred communication method is required"),
+  })).min(1, "At least one contact is required"),
   
-  // Service Needs & Expertise Areas
-  consultingType: z.string().min(1, "Type of consulting required is required"),
+  // Step 3a: Job Basics
+  consultingTypes: z.array(z.string()).min(1, "At least one consulting type is required"),
   engagementDuration: z.string().min(1, "Engagement duration is required"),
-  budgetRange: z.string().min(1, "Budget range is required"),
-  workModePreferences: z.string().min(1, "Work mode preferences are required"),
-  requiredExpertiseLevel: z.string().min(1, "Required expertise level is required"),
+  budgetStructure: z.string().min(1, "Budget structure is required"),
+  budgetAmount: z.string().min(1, "Budget amount is required"),
+  currency: z.string().min(1, "Currency is required"),
+  workEnvironment: z.array(z.string()).min(1, "At least one work environment preference is required"),
+  expertiseLevel: z.string().min(1, "Expertise level is required"),
+  
+  // Step 3b: Defaults & Preferences
+  defaultBudgetAmount: z.string().min(1, "Default budget amount is required"),
+  defaultCurrency: z.string().min(1, "Default currency is required"),
+  paymentTerms: z.string().min(1, "Payment terms are required"),
+  communicationPreferences: z.array(z.string()).min(1, "At least one communication preference is required"),
+  reportingFrequency: z.string().min(1, "Reporting frequency is required"),
+  customReportingSchedule: z.string().optional(),
+  ndaRequired: z.boolean(),
+  ndaTemplate: z.string().optional(),
+  contractTemplate: z.string().optional(),
+  emailNotifications: z.object({
+    newApplications: z.boolean(),
+    messages: z.boolean(),
+    projectUpdates: z.boolean(),
+    paymentReminders: z.boolean(),
+    systemAlerts: z.boolean(),
+  }),
   
   // Additional Information
-  description: z.string().min(50, "Company description should be at least 50 characters"),
+  description: z.string().min(50, "Organization description should be at least 50 characters"),
 });
+
+export { OrganizationProfileSchema };
 
 // Dropdown options for vocational rehabilitation industry
 const specializationOptions = [
@@ -211,19 +251,58 @@ const ProfileForm = ({ role, onSubmit, defaultValues }: ProfileFormProps) => {
       hourlyRate: '',
       paymentPreferences: '',
     } : {
-      companyName: '',
+      // Step 1: Basic Company Information
+      organizationName: '',
       companySize: '',
-      industry: '',
-      officeLocations: '',
-      contactPerson: '',
-      email: '',
-      phone: '',
-      preferredCommunication: '',
-      consultingType: '',
+      serviceAreas: [],
+      website: '',
+      logo: '',
+      country: '',
+      state: '',
+      city: '',
+      street: '',
+      zipCode: '',
+      timezone: '',
+      
+      // Step 2: Contacts
+      contacts: [{
+        id: '1',
+        firstName: '',
+        lastName: '',
+        jobTitle: '',
+        email: '',
+        phone: '',
+        preferredCommunication: '',
+      }],
+      
+      // Step 3a: Job Basics
+      consultingTypes: [],
       engagementDuration: '',
-      budgetRange: '',
-      workModePreferences: '',
-      requiredExpertiseLevel: '',
+      budgetStructure: '',
+      budgetAmount: '',
+      currency: '',
+      workEnvironment: [],
+      expertiseLevel: '',
+      
+      // Step 3b: Defaults & Preferences
+      defaultBudgetAmount: '',
+      defaultCurrency: '',
+      paymentTerms: '',
+      communicationPreferences: [],
+      reportingFrequency: '',
+      customReportingSchedule: '',
+      ndaRequired: false,
+      ndaTemplate: '',
+      contractTemplate: '',
+      emailNotifications: {
+        newApplications: false,
+        messages: false,
+        projectUpdates: false,
+        paymentReminders: false,
+        systemAlerts: false,
+      },
+      
+      // Additional Information
       description: '',
     })
   });
@@ -562,283 +641,7 @@ const ProfileForm = ({ role, onSubmit, defaultValues }: ProfileFormProps) => {
           </div>
         ) : (
           // Organization form fields
-          <div className="space-y-8">
-            {/* Basic Company Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Basic Company Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Acme Rehabilitation Services" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="companySize"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Size</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select company size" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {companySizeOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="industry"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Industry</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Healthcare, Rehabilitation Services, etc." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="officeLocations"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Office Locations</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Boston, MA; New York, NY" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Contact & Key Personnel */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Contact & Key Personnel</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="contactPerson"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Person</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Jane Smith" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="contact@acme.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Phone</FormLabel>
-                      <FormControl>
-                        <Input placeholder="(555) 123-4567" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="preferredCommunication"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Preferred Communication Method</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select communication method" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="email">Email</SelectItem>
-                          <SelectItem value="phone">Phone</SelectItem>
-                          <SelectItem value="platform">Platform Messaging</SelectItem>
-                          <SelectItem value="video">Video Calls</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Service Needs & Expertise Areas */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Service Needs & Expertise Areas</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="consultingType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Type of Consulting Required</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select consulting type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {consultingTypeOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="engagementDuration"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Expected Engagement Duration</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select duration" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {engagementDurationOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="budgetRange"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Budget Range</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select budget range" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {budgetRangeOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="workModePreferences"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Work Mode Preferences</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select work mode" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {consultingModeOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="requiredExpertiseLevel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Required Expertise Level</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select expertise level" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {expertiseLevelOptions.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Additional Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Additional Information</h3>
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Description</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Describe your company, mission, and specific consulting needs..."
-                        className="min-h-[120px]" 
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
+          <OrganizationForm form={form} />
         )}
         
         <div className="flex justify-end pt-6">

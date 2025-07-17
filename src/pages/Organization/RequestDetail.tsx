@@ -217,40 +217,88 @@ const RequestDetail = () => {
                   </CardContent>
                 </Card>
               </div>
-              {/* Right Side: Apply Button */}
+              {/* Right Side: Management Actions */}
               <div className="flex flex-col gap-6">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="w-full">Apply</Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Apply for this Job</DialogTitle>
-                      <DialogDescription>Submit your application for this consulting opportunity.</DialogDescription>
-                    </DialogHeader>
-                    <form className="space-y-4">
-                      <div>
-                        <label className="block font-medium mb-1">Resume <span className="text-red-500">*</span></label>
-                        <Input type="file" accept=".pdf,.doc,.docx" required />
-                      </div>
-                      <div>
-                        <label className="block font-medium mb-1">Cover Letter</label>
-                        <Input type="file" accept=".pdf,.doc,.docx" />
-                      </div>
-                      <div>
-                        <label className="block font-medium mb-1">Availability for Interview</label>
-                        <Input type="text" placeholder="e.g., Weekdays after 2pm, or specific dates" />
-                      </div>
-                      <div>
-                        <label className="block font-medium mb-1">Short Note (optional)</label>
-                        <Textarea placeholder="Anything you'd like the organization to know?" />
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit" className="w-full">Apply</Button>
-                      </DialogFooter>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                {/* Quick Stats */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Request Analytics</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Total Applications</span>
+                      <span className="font-semibold text-lg">{mockRequest.applicants.length}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Shortlisted</span>
+                      <span className="font-semibold text-lg text-green-600">
+                        {mockRequest.applicants.filter(a => a.status === 'Shortlisted').length}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">New Applications</span>
+                      <span className="font-semibold text-lg text-blue-600">
+                        {mockRequest.applicants.filter(a => a.status === 'Applied').length}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Days Remaining</span>
+                      <span className="font-semibold text-lg text-orange-600">
+                        {Math.ceil((new Date(mockRequest.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Management Actions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Link to={`/organization/request/${id}/applicants`} className="w-full">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Users className="h-4 w-4 mr-2" />
+                        View All Applicants
+                      </Button>
+                    </Link>
+                    <Link to={`/organization/edit-request/${id}`} className="w-full">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit Request
+                      </Button>
+                    </Link>
+                    <Button variant="outline" className="w-full justify-start" onClick={() => console.log('Share request')}>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Share Request
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start text-red-600 hover:text-red-700" onClick={() => console.log('Close request')}>
+                      <Clock className="h-4 w-4 mr-2" />
+                      Close Request
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Contact Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Contact Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Contact Person</label>
+                      <p className="text-sm text-gray-900">{mockRequest.contactPerson}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Email</label>
+                      <p className="text-sm text-gray-900">{mockRequest.contactEmail}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Phone</label>
+                      <p className="text-sm text-gray-900">{mockRequest.contactPhone}</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </main>

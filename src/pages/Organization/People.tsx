@@ -505,20 +505,9 @@ const People = () => {
         
         <div className="max-w-screen-xl mx-auto px-4 py-8">
           {/* Tab Navigation & Meta */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-6 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-400" />
-                <strong>{filteredConsultants.length}</strong> consultants found
-              </div>
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-gray-400" />
-                Avg. response time: <strong>2 hours</strong>
-              </div>
-            </div>
-            
-            {/* Modern Toggle Bar */}
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-8 mb-6">
+            {/* Modern Toggle Bar - now on the left */}
+            <div className="flex items-center gap-2 mb-4 sm:mb-0">
               <div className="bg-gray-100 rounded-full p-1 shadow-inner">
                 <Button 
                   variant={activeTab === 'all' ? 'default' : 'ghost'} 
@@ -546,12 +535,28 @@ const People = () => {
                 </Button>
               </div>
             </div>
+            {/* Meta Info - now to the right of the toggle */}
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-gray-400" />
+                <strong>{filteredConsultants.length}</strong> consultants found
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-gray-400" />
+                Avg. response time: <strong>2 hours</strong>
+              </div>
+            </div>
           </div>
 
           {/* Consultant Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedConsultants.map(consultant => (
-              <ConsultantCard key={consultant.id} {...consultant} />
+              <ConsultantCard
+                key={consultant.id}
+                {...consultant}
+                onSave={toggleSaved}
+                isSaved={savedConsultants.includes(consultant.id)}
+              />
             ))}
           </div>
 

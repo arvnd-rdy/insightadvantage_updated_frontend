@@ -1,6 +1,6 @@
 
 export interface Job {
-  status?: 'Open' | 'Closed';
+  status?: 'Open' | 'Closed' | 'Hiring' | 'Filled' | 'Draft';
   id: string;
   title: string;
   applicationDeadline: string;
@@ -26,4 +26,7 @@ export interface Job {
   contactEmail: string;
   contactPhone: string;
   communicationMethod: string;
+  type: string;
+  datePosted: string;
+  deadline: string;
 }

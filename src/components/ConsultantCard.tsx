@@ -17,6 +17,8 @@ interface ConsultantCardProps {
   availability: string;
   expertise: string[];
   description: string;
+  onSave?: (id: string) => void;
+  isSaved?: boolean;
 }
 
 const ConsultantCard = ({
@@ -28,7 +30,9 @@ const ConsultantCard = ({
   hourlyRate,
   availability,
   expertise,
-  description
+  description,
+  onSave,
+  isSaved
 }: ConsultantCardProps) => {
   const truncatedDescription = description.length > 100
     ? `${description.substring(0, 100)}...`
@@ -98,11 +102,13 @@ const ConsultantCard = ({
             <MessageSquare className="h-4 w-4 mr-2" />
             Message
           </Button>
-          <Link to={`/organization/consultants/${id}`} className="w-full">
-            <Button className="w-full h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-sm hover:shadow-md">
-              View Profile
-            </Button>
-          </Link>
+          <Button
+            className={`w-full h-10 rounded-lg font-semibold transition-all shadow-sm hover:shadow-md ${isSaved ? 'bg-green-100 text-green-700 border border-green-300 cursor-default' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+            onClick={() => !isSaved && onSave && onSave(id)}
+            disabled={isSaved}
+          >
+            {isSaved ? 'Saved' : 'Save'}
+          </Button>
         </div>
       </CardFooter>
     </Card>

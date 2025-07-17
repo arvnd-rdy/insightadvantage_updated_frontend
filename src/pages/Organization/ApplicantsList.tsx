@@ -35,10 +35,10 @@ const ApplicantsList = () => {
     return (
       <main className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-4">
-          <Link to="/organization/manage-jobs">
+          <Link to="/organization/manage-requests">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Job Listings
+              Back
             </Button>
           </Link>
         </div>
@@ -64,34 +64,34 @@ const ApplicantsList = () => {
   };
 
   return (
-    <main className="container mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-6">
+    <main className="container mx-auto py-10 px-6">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Link to="/organization/manage-jobs">
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+          <Link to="/organization/manage-requests">
+            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-gray-900">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Job Listings
+              Back
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-800">Applications for "{job.title}"</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Applications for "{job.title}"</h1>
         </div>
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-          <input type="checkbox" checked={showShortlists} onChange={e => setShowShortlists(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 rounded" />
+        <label className="flex items-center gap-2 text-base text-gray-600 cursor-pointer font-medium">
+          <input type="checkbox" checked={showShortlists} onChange={e => setShowShortlists(e.target.checked)} className="form-checkbox h-5 w-5 text-blue-600 rounded-md focus:ring-blue-500" />
           Show only shortlists
         </label>
       </div>
-      <Card className="shadow-lg rounded-lg overflow-hidden">
-        <CardHeader className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
-          <CardTitle className="text-xl font-semibold text-gray-700">Applicants ({filteredApplicants.length})</CardTitle>
+      <Card className="shadow-xl rounded-xl overflow-hidden border border-gray-200">
+        <CardHeader className="px-6 py-5 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+          <CardTitle className="text-2xl font-semibold text-gray-800">Applicants ({filteredApplicants.length})</CardTitle>
           {selected.length > 0 && (
             <div className="flex gap-3">
-              <Button size="sm" onClick={() => bulkAction('Shortlisted')} className="bg-green-500 hover:bg-green-600 text-white">
+              <Button size="sm" onClick={() => bulkAction('Shortlisted')} className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow-sm">
                 Shortlist Selected
               </Button>
-              <Button size="sm" onClick={() => bulkAction('Rejected')} className="bg-red-500 hover:bg-red-600 text-white">
+              <Button size="sm" onClick={() => bulkAction('Rejected')} className="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md shadow-sm">
                 Reject Selected
               </Button>
-              <Button size="sm" onClick={() => setMessageModal({ open: true })} className="bg-blue-500 hover:bg-blue-600 text-white">
+              <Button size="sm" onClick={() => setMessageModal({ open: true })} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm">
                 Send Message
               </Button>
             </div>
@@ -100,53 +100,53 @@ const ApplicantsList = () => {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" checked={selected.length === filteredApplicants.length && filteredApplicants.length > 0} onChange={e => setSelected(e.target.checked ? filteredApplicants.map(a => a.id) : [])} />
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600 rounded focus:ring-blue-500" checked={selected.length === filteredApplicants.length && filteredApplicants.length > 0} onChange={e => setSelected(e.target.checked ? filteredApplicants.map(a => a.id) : [])} />
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied On</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Resume</th>
-                  <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cover Letter</th>
-                  <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Shortlist</th>
-                  <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Applied On</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Resume</th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Cover Letter</th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Shortlist</th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Message</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredApplicants.length === 0 ? (
-                  <tr><td colSpan={8} className="px-4 py-4 text-center text-gray-500">No applicants found.</td></tr>
+                  <tr><td colSpan={8} className="px-6 py-5 text-center text-gray-500">No applicants found.</td></tr>
                 ) : filteredApplicants.map(applicant => (
-                  <tr key={applicant.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" checked={selected.includes(applicant.id)} onChange={() => handleSelect(applicant.id)} />
+                  <tr key={applicant.id} className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600 rounded focus:ring-blue-500" checked={selected.includes(applicant.id)} onChange={() => handleSelect(applicant.id)} />
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <Link to={`/organization/consultants/${applicant.id}?jobId=${id}`} className="text-sm font-medium text-blue-600 hover:underline">{applicant.name}</Link>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Link to={`/organization/consultants/${applicant.id}?jobId=${id}`} className="text-sm font-medium text-blue-600 hover:underline hover:text-blue-700">{applicant.name}</Link>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{applicant.appliedDate}</td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${applicant.status === 'Shortlisted' ? 'bg-green-100 text-green-800' : applicant.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'}`}>{applicant.status}</span>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{applicant.appliedDate}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${applicant.status === 'Shortlisted' ? 'bg-green-100 text-green-800' : applicant.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'}`}>{applicant.status}</span>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                       {applicant.resumeUrl && (
-                        <a href={applicant.resumeUrl} download className="text-gray-600 hover:text-gray-900" title="Download Resume"><Download className="h-5 w-5" /></a>
+                        <a href={applicant.resumeUrl} download className="text-gray-500 hover:text-gray-700 transition-colors duration-200" title="Download Resume"><Download className="h-5 w-5" /></a>
                       )}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                       {applicant.coverLetterUrl && (
-                        <a href={applicant.coverLetterUrl} download className="text-gray-600 hover:text-gray-900" title="Download Cover Letter"><Download className="h-5 w-5" /></a>
+                        <a href={applicant.coverLetterUrl} download className="text-gray-500 hover:text-gray-700 transition-colors duration-200" title="Download Cover Letter"><FileText className="h-5 w-5" /></a>
                       )}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
-                      <button onClick={() => toggleShortlist(applicant.id)} title={applicant.shortlisted ? "Remove from Shortlist" : "Shortlist Applicant"} className="focus:outline-none">
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                      <button onClick={() => toggleShortlist(applicant.id)} title={applicant.shortlisted ? "Remove from Shortlist" : "Shortlist Applicant"} className="focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 rounded-full">
                         {applicant.shortlisted ? <Star className="h-5 w-5 text-yellow-500" /> : <StarOff className="h-5 w-5 text-gray-400" />}
                       </button>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
-                      <Button size="icon" variant="ghost" onClick={() => setMessageModal({ open: true, applicant })} title="Message Applicant">
-                        <Mail className="h-5 w-5 text-gray-600 hover:text-gray-900" />
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                      <Button size="icon" variant="ghost" onClick={() => setMessageModal({ open: true, applicant })} title="Message Applicant" className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                        <Mail className="h-5 w-5" />
                       </Button>
                     </td>
                   </tr>
@@ -158,18 +158,18 @@ const ApplicantsList = () => {
       </Card>
       {/* Messaging Modal (mock) */}
       {messageModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg transform transition-all sm:my-8 sm:w-full sm:max-w-lg">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Message {messageModal.applicant ? messageModal.applicant.name : 'Selected Applicants'}</h2>
-            <div className="border border-gray-300 rounded-md p-3 h-32 mb-4 overflow-y-auto text-sm text-gray-600 bg-gray-50">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg transform transition-all duration-300 ease-out sm:my-8 sm:w-full sm:max-w-lg">
+            <h2 className="text-2xl font-bold mb-5 text-gray-800">Message {messageModal.applicant ? messageModal.applicant.name : 'Selected Applicants'}</h2>
+            <div className="border border-gray-200 rounded-md p-4 h-36 mb-5 overflow-y-auto text-sm text-gray-600 bg-gray-50 font-mono">
               (Mock) Previous messages for this job will appear here.
             </div>
-            <textarea className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:ring-blue-500 focus:border-blue-500 text-gray-700" rows={4} placeholder="Type your message..."></textarea>
+            <textarea className="w-full border border-gray-300 rounded-md p-3 mb-5 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-400 resize-y" rows={4} placeholder="Type your message..."></textarea>
             <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setMessageModal({ open: false })} className="text-gray-700 border-gray-300 hover:bg-gray-100">
+              <Button variant="outline" onClick={() => setMessageModal({ open: false })} className="text-gray-700 border-gray-300 hover:bg-gray-100 hover:text-gray-800 font-medium">
                 Cancel
               </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
                 Send Message
               </Button>
             </div>

@@ -10,10 +10,8 @@ const ORG_LINKS = [
   { path: '/organization/dashboard', label: 'Dashboard', icon: <Building size={18} /> },
   { path: '/organization/manage-requests', label: 'Requests', icon: <FileText size={18} /> },
   { path: '/organization/post-request', label: 'Post Request', icon: <Plus size={18} /> },
-  { path: '/organization/consultants', label: 'Consultants', icon: <Users size={18} /> },
-  { path: '/organization/people', label: 'People', icon: <Users size={18} /> },
+  { path: '/organization/find-consultants', label: 'Find Consultants', icon: <Users size={18} /> },
   { path: '/organization/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
-  { path: '/organization/find-consultants', label: 'Find Consultants', icon: <Search size={18} /> },
 ];
 
 export default function OrganizationNavBar() {
